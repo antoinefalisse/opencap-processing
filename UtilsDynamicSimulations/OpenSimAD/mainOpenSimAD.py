@@ -301,6 +301,18 @@ def run_tracking(baseDir, dataDir, subject, settings, case='0',
     ipopt_tolerance = 4
     if 'ipopt_tolerance' in settings:
         ipopt_tolerance = settings['ipopt_tolerance']
+       
+    # TODO: GRF tracking
+    trackingGRF = False
+    if 'trackingGRF' in settings:
+        trackingGRF = settings['trackingGRF']
+    if trackingGRF:
+        weights['grfTrackingTerm'] = 1
+        weights['grmTrackingTerm'] = 1
+        if 'grfTrackingTerm' in settings['weights']:
+            weights['grfTrackingTerm'] = settings['weights']['grfTrackingTerm']
+        if 'grmTrackingTerm' in settings['weights']:
+            weights['grmTrackingTerm'] = settings['weights']['grmTrackingTerm']
 
     # %% Paths and dirs.
     pathOSData = os.path.join(dataDir, subject, 'OpenSimData')
@@ -572,6 +584,15 @@ def run_tracking(baseDir, dataDir, subject, settings, case='0',
     from utilsOpenSimAD import scaleDataFrame, selectFromDataFrame     
     dataToTrack_Qs_nsc = selectFromDataFrame(
         Qs_toTrack, coordinates_toTrack_l).to_numpy()[:,1::].T
+    
+    # TODO
+    # %% GRF data to track
+    pathGRFFolder = os.path.join(dataDir, subject, 'ForceData')
+    if trackingGRF:   
+        from utilsOpenSimAD import getGRFAll
+        pathGRFFile = os.path.join(pathGRFFolder, trialName + '.mot')
+        if os.path.exists(pathGRFFile):
+            grfToTrack = getGRFAll(pathGRFFile, timeIntervals, N)
         
     # %% Polynomial approximations.
     # Muscle-tendon lengths, velocities, and moment arms are estimated based
@@ -757,7 +778,11 @@ def run_tracking(baseDir, dataDir, subject, settings, case='0',
     idxGroundPelvisJointsinF = [F_map['residuals'][joint] 
                                 for joint in groundPelvisJoints]    
     idxJoints4F = [joints.index(joint) 
-                   for joint in list(F_map['residuals'].keys())]    
+                   for joint in list(F_map['residuals'].keys())]
+    
+    if trackingGRF:
+        idx_GRF = list(F_map['GRFs']['right']) + list(F_map['GRFs']['left'])
+        idx_GRM = list(F_map['GRMs']['right']) + list(F_map['GRMs']['left'])
    
     # %% Helper CasADi functions
     from functionCasADiOpenSimAD import normSumSqr
@@ -772,7 +797,9 @@ def run_tracking(baseDir, dataDir, subject, settings, case='0',
         f_nArmJointsSum2 = normSumSqr(nArmJoints)
     if withLumbarCoordinateActuators:
         f_nLumbarJointsSum2 = normSumSqr(nLumbarJoints)  
-    f_diffTorques = diffTorques()  
+    f_diffTorques = diffTorques()
+    if trackingGRF:
+        f_NGRToTrackSum2 = normSumSqr(6) 
     
     # %% OPTIMAL CONTROL PROBLEM FORMULATION
     # We use an orthogonal third-order radau collocation scheme.
@@ -870,6 +897,14 @@ def run_tracking(baseDir, dataDir, subject, settings, case='0',
         uw['Offset'], lw['Offset'] = bounds.getBoundsOffset(scaling['Offset'])
         uw['Offsetk'] = uw['Offset'].to_numpy()
         lw['Offsetk'] = lw['Offset'].to_numpy()
+        
+    if trackingGRF:        
+        _, _, scaling['GRF'] = bounds.getBoundsGR(
+            grfToTrack['df_interp']['forces']['all'], 
+            grfToTrack['headers']['forces']['all'])
+        _, _, scaling['GRM'] = bounds.getBoundsGR(
+            grfToTrack['df_interp']['torques_G']['all'],
+            grfToTrack['headers']['torques']['all']) 
     
     # %% Initial guess of the optimal control problem.
     from initialGuessOpenSimAD import dataDrivenGuess_tracking
@@ -978,6 +1013,20 @@ def run_tracking(baseDir, dataDir, subject, settings, case='0',
         Qds_spline_interp, joints).to_numpy()[:,1::].T            
     refData_Qdds_nsc = selectFromDataFrame(
         Qdds_spline_interp, joints).to_numpy()[:,1::].T
+    
+    if trackingGRF:
+        grfToTrack_sc = scaleDataFrame(
+            grfToTrack['df_interp']['forces']['all'], scaling['GRF'], 
+            grfToTrack['headers']['forces']['all']).to_numpy()[:,1::].T
+        # grfToTrack_nsc = selectFromDataFrame(
+        #     grfToTrack['df_interp']['forces']['all'], 
+        #     grfToTrack['headers']['forces']['all']).to_numpy()[:,1::].T        
+        grmToTrack_sc = scaleDataFrame(
+            grfToTrack['df_interp']['torques_G']['all'], scaling['GRM'], 
+            grfToTrack['headers']['torques']['all']).to_numpy()[:,1::].T
+        # grmToTrack_nsc = selectFromDataFrame(
+        #     grfToTrack['df_interp']['torques_G']['all'], 
+        #     grfToTrack['headers']['torques']['all']).to_numpy()[:,1::].T    
             
     # %% Update bounds if coordinate constraints.
     if coordinate_constraints:
@@ -1153,13 +1202,20 @@ def run_tracking(baseDir, dataDir, subject, settings, case='0',
                 assert np.alltrue(uw['rActk'][c_j] >= ca.vec(w0['rAct'][c_j].to_numpy().T).full()), "Issue with upper bound reserve actuators"
             
         # %% Plots initial guess vs bounds.
-        plotGuessVsBounds = False
+        plotGuessVsBounds = True
         if plotGuessVsBounds: 
             from plotsOpenSimAD import plotGuessVSBounds
             plotGuessVSBounds(lw, uw, w0, nJoints, N, d, guessQsEnd, 
                               guessQdsEnd, withArms=withArms, 
                               withLumbarCoordinateActuators=
                               withLumbarCoordinateActuators)
+            
+            from utilsOpenSimAD import plotVSBounds
+            lwp = lw['A'].to_numpy().T
+            uwp = uw['A'].to_numpy().T
+            y = w0['A'].to_numpy().T
+            title='Muscle activation at mesh points'            
+            plotVSBounds(y,lwp,uwp,title) 
             
         # %% Unscale design variables.
         nF_nsc = nF * (scaling['F'].to_numpy().T * np.ones((1, N+1)))
@@ -1308,6 +1364,10 @@ def run_tracking(baseDir, dataDir, subject, settings, case='0',
             else:
                 Tk = F(ca.vertcat(QsQdskj_nsc[:, 0], 
                                    Qddsk_nsc[idxJoints4F]))
+                
+            if trackingGRF:
+                GRFk = Tk[idx_GRF] 
+                GRMk = Tk[idx_GRM]
                     
             # Loop over collocation points.
             for j in range(d):                    
@@ -1398,6 +1458,19 @@ def run_tracking(baseDir, dataDir, subject, settings, case='0',
                           (vGRF_ratio_l) * h * B[j + 1])
                     J += (weights['vGRFRatioTerm'] * 
                           (vGRF_ratio_r) * h * B[j + 1])
+                    
+                if trackingGRF:                    
+                    grfTrackingTerm = f_NGRToTrackSum2(
+                        (GRFk / (scaling['GRF'].to_numpy().T)) - 
+                        grfToTrack_sc[:, k])
+                    J += (weights['grfTrackingTerm'] * grfTrackingTerm * 
+                          h * B[j + 1])                   
+                    
+                    grmTrackingTerm = f_NGRToTrackSum2(
+                        (GRMk / (scaling['GRM'].to_numpy().T)) - 
+                        grmToTrack_sc[:, k])
+                    J += (weights['grmTrackingTerm'] * grmTrackingTerm * 
+                          h * B[j + 1])
              
             # Note: we only impose the following constraints at the mesh
             # points. To be fully consistent with an orthogonal radau
@@ -1444,9 +1517,13 @@ def run_tracking(baseDir, dataDir, subject, settings, case='0',
             # Mtp joints.
             if withMTP:
                 for joint in mtpJoints:
+                    if withReserveActuators and joint in reserveActuatorCoordinates:
+                        reserveMtp_k = rActk_nsc[joint]
+                    else:
+                        reserveMtp_k = 0
                     diffTk_joint = f_diffTorques(
                         Tk[F_map['residuals'][joint] ], 
-                        0, (passiveTorque_k[joint] +  
+                        reserveMtp_k, (passiveTorque_k[joint] +  
                             linearPassiveTorqueMtp_k[joint]))
                     opti.subject_to(diffTk_joint == 0)
             
@@ -2233,6 +2310,24 @@ def run_tracking(baseDir, dataDir, subject, settings, case='0',
         if computeMCF:
             MCF_BW = MCF / BW * 100
             
+        # %% Check if solution is hitting bounds.
+        plotSolutionVsBounds = True
+        if plotSolutionVsBounds: 
+            from plotsOpenSimAD import plotOptimalSolutionVSBounds, plotVSBounds
+            
+            w_opt_all = {}
+            w_opt_all['A'] = a_opt
+            w_opt_all['Aj'] = a_col_opt
+            plotOptimalSolutionVSBounds(lw, uw, w_opt_all)
+            
+            lwp = lw['A'].to_numpy().T
+            uwp = uw['A'].to_numpy().T
+            y = a_opt
+            title='Muscle activation at mesh points'            
+            plotVSBounds(y,lwp,uwp,title)  
+        
+        
+            
         # %% Save optimal trajectories.
         if not os.path.exists(os.path.join(pathResults,
                                            'optimaltrajectories.npy')): 
@@ -2274,7 +2369,7 @@ def run_tracking(baseDir, dataDir, subject, settings, case='0',
             optimaltrajectories[case]['MCF'] = MCF
             optimaltrajectories[case]['MCF_BW'] = MCF_BW
             optimaltrajectories[case]['MCF_labels'] = MCF_labels              
-    optimaltrajectories[case]['iter'] = stats['iter_count']
+        optimaltrajectories[case]['iter'] = stats['iter_count']
             
     np.save(os.path.join(pathResults, 'optimaltrajectories.npy'),
             optimaltrajectories)

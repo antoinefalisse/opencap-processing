@@ -370,3 +370,30 @@ class bounds_tracking:
                                          columns=['offset_y'])
         
         return upperBoundsOffset, lowerBoundsOffset
+    
+    def getBoundsGR(self, GR, headers):
+        upperBoundsGR = pd.DataFrame()   
+        lowerBoundsGR = pd.DataFrame() 
+        scalingGR = pd.DataFrame() 
+        for count, header in enumerate(headers):             
+            if (header[0] == 'R' or header[0] == 'L'):        
+                ub = max(max(GR['R' + header[1:]]), 
+                         max(GR['L' + header[1:]]))
+                lb = min(min(GR['R' + header[1:]]), 
+                         min(GR['L' + header[1:]]))                              
+            else:
+                raise ValueError("Problem bounds GR")
+            r = abs(ub - lb)
+            ub = ub + r
+            lb = lb - r                        
+            upperBoundsGR.insert(count, header, [ub])
+            lowerBoundsGR.insert(count, header, [lb]) 
+                
+            # Scaling                       
+            s = pd.concat([abs(upperBoundsGR[header]), 
+                           abs(lowerBoundsGR[header])]).max(level=0)
+            scalingGR.insert(count, header, s)
+            lowerBoundsGR[header] /= scalingGR[header]
+            upperBoundsGR[header] /= scalingGR[header]
+                
+        return upperBoundsGR, lowerBoundsGR, scalingGR
