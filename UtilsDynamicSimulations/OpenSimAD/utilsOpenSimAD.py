@@ -510,7 +510,7 @@ def getIndices(mylist, items):
 # %% Generate external function.
 def generateExternalFunction(
         baseDir, dataDir, subject, 
-        OpenSimModel="LaiArnoldModified2017_poly_withArms_weldHand",
+        OpenSimModel="LaiUhlrich2022",
         treadmill=False, build_externalFunction=True, verifyID=True, 
         externalFunctionName='F', overwrite=False):
 
@@ -619,17 +619,12 @@ def generateExternalFunction(
         
         f.write('constexpr int nCoordinates = %i; \n' % nCoordinates)
         f.write('constexpr int NX = nCoordinates*2; \n')
-        f.write('constexpr int NU = nCoordinates; \n')
+        f.write('constexpr int NU = nCoordinates; \n\n')
         if treadmill:
             nCoordinates_treadmill = nCoordinates + 1
             f.write('constexpr int nCoordinates_treadmill = %i; \n' % nCoordinates_treadmill)
             f.write('constexpr int NX_treadmill = nCoordinates_treadmill*2; \n')
-            f.write('constexpr int NU_treadmill = nCoordinates_treadmill; \n')
-        
-        # Residuals (joint torques), 3D GRFs (combined), 3D GRMs (combined),
-        # 3D GRFs (per sphere), 3D COP (per sphere), and 3D body origins.
-        nOutputs = nCoordinates + 3*(2+2+2*nContacts+nBodies)
-        f.write('constexpr int NR = %i; \n\n' % (nOutputs))
+            f.write('constexpr int NU_treadmill = nCoordinates_treadmill; \n\n')
     
         f.write('template<typename T> \n')
         f.write('T value(const Recorder& e) { return e; }; \n')
@@ -1126,9 +1121,15 @@ def generateExternalFunction(
             f.write('\n')
             
         # Contacts
-        f.write('\t// Definition of contacts.\n')   
+        f.write('\t// Definition of contacts.\n')
+        rightFootContact = False
+        leftFootContact = False
+        rightFootContactBodies = []
+        leftFootContactBodies = []
+        nRightContacts = 0
+        nLeftContacts = 0
         for i in range(forceSet.getSize()):        
-            c_force_elt = forceSet.get(i)        
+            c_force_elt = forceSet.get(i)
             if c_force_elt.getConcreteClassName() == "SmoothSphereHalfSpaceForce":            
                 c_force_elt_obj =  opensim.SmoothSphereHalfSpaceForce.safeDownCast(c_force_elt) 	
                 
@@ -1183,6 +1184,19 @@ def generateExternalFunction(
                     f.write('\t%s->connectSocket_half_space_frame(*%s);\n' % (c_force_elt.getName(), geo0_frameName))
                 f.write('\tmodel->addComponent(%s);\n' % (c_force_elt.getName()))
                 f.write('\n')
+
+                # Check if there are right and left foot contacts
+                if c_force_elt.getName()[-2:] == '_r':
+                    nRightContacts += 1
+                    rightFootContactBodies.append(geo1_frameName)
+                    if not rightFootContact:
+                        rightFootContact = True
+                if c_force_elt.getName()[-2:] == '_l':
+                    nLeftContacts += 1
+                    leftFootContactBodies.append(geo1_frameName)
+                    if not leftFootContact:
+                        leftFootContact = True
+        nContacts = nRightContacts + nLeftContacts
            
         # Compute residuals (joint torques).
         f.write('\t// Initialize system.\n')
@@ -1304,7 +1318,10 @@ def generateExternalFunction(
             
         # Get GRFs.
         f.write('\t/// Ground reaction forces.\n')
-        f.write('\tVec3 GRF_r(0), GRF_l(0);\n')
+        if rightFootContact:
+            f.write('\tVec3 GRF_r(0);\n')
+        if leftFootContact:
+            f.write('\tVec3 GRF_l(0);\n')
         count = 0
         for i in range(forceSet.getSize()):        
             c_force_elt = forceSet.get(i)  
@@ -1321,7 +1338,10 @@ def generateExternalFunction(
             
         # Get GRMs.
         f.write('\t/// Ground reaction moments.\n')
-        f.write('\tVec3 GRM_r(0), GRM_l(0);\n')
+        if rightFootContact:
+            f.write('\tVec3 GRM_r(0);\n')
+        if leftFootContact:
+            f.write('\tVec3 GRM_l(0);\n')
         f.write('\tVec3 normal(0, 1, 0);\n\n')
         count = 0
         geo1_frameNames = []
@@ -1375,31 +1395,48 @@ def generateExternalFunction(
         count_acc = nCoordinates
         
         # Export GRFs.
-        f.write('\t/// Ground reaction forces.\n')
-        f.write('\tfor (int i = 0; i < 3; ++i) res[0][i + %i] = value<T>(GRF_r[i]);\n' % (count_acc))
-        f.write('\tfor (int i = 0; i < 3; ++i) res[0][i + %i] = value<T>(GRF_l[i]);\n' % (count_acc+3))
-        F_map['GRFs'] = {}      
-        F_map['GRFs']['right'] = range(count_acc, count_acc+3)
-        F_map['GRFs']['left'] = range(count_acc+3, count_acc+6)
-        count_acc += 6
+        f.write('\t/// Ground reaction forces.\n')        
+        F_map['GRFs'] = {} 
+        F_map['GRFs']['nContactSpheres'] = nContacts
+        F_map['GRFs']['nRightContactSpheres'] = nRightContacts
+        F_map['GRFs']['nLeftContactSpheres'] = nLeftContacts
+        if rightFootContact:
+            f.write('\tfor (int i = 0; i < 3; ++i) res[0][i + %i] = value<T>(GRF_r[i]);\n' % (count_acc))
+            F_map['GRFs']['right'] = range(count_acc, count_acc+3)
+            count_acc += 3
+        if leftFootContact:
+            f.write('\tfor (int i = 0; i < 3; ++i) res[0][i + %i] = value<T>(GRF_l[i]);\n' % (count_acc))
+            F_map['GRFs']['left'] = range(count_acc, count_acc+3)
+            count_acc += 3       
         
         # Export GRMs.
         f.write('\t/// Ground reaction moments.\n')
-        f.write('\tfor (int i = 0; i < 3; ++i) res[0][i + %i] = value<T>(GRM_r[i]);\n' % (count_acc))
-        f.write('\tfor (int i = 0; i < 3; ++i) res[0][i + %i] = value<T>(GRM_l[i]);\n' % (count_acc+3))
         F_map['GRMs'] = {}
-        F_map['GRMs']['right'] = range(count_acc, count_acc+3)
-        F_map['GRMs']['left'] = range(count_acc+3, count_acc+6)
-        count_acc += 6
+        if rightFootContact:
+            f.write('\tfor (int i = 0; i < 3; ++i) res[0][i + %i] = value<T>(GRM_r[i]);\n' % (count_acc))
+            F_map['GRMs']['right'] = range(count_acc, count_acc+3)
+            count_acc += 3
+        if leftFootContact:
+            f.write('\tfor (int i = 0; i < 3; ++i) res[0][i + %i] = value<T>(GRM_l[i]);\n' % (count_acc))
+            F_map['GRMs']['left'] = range(count_acc, count_acc+3)
+            count_acc += 3
         
         # Export individual GRFs.
         f.write('\t/// Ground reaction forces per sphere.\n')
         count = 0
+        F_map['GRFs']['rightContactSpheres'] = []
+        F_map['GRFs']['leftContactSpheres'] = []
+        F_map['GRFs']['rightContactSphereBodies'] = rightFootContactBodies
+        F_map['GRFs']['leftContactSphereBodies'] = leftFootContactBodies        
         for i in range(forceSet.getSize()):
             c_force_elt = forceSet.get(i) 
             if c_force_elt.getConcreteClassName() == "SmoothSphereHalfSpaceForce":
                 f.write('\tfor (int i = 0; i < 3; ++i) res[0][i + %i] = value<T>(GRF_%i[1][i]);\n' % (count_acc, count))
-                F_map['GRFs']['Sphere_{}'.format(count)] = range(count_acc, count_acc+3)
+                F_map['GRFs'][c_force_elt.getName()] = range(count_acc, count_acc+3)
+                if c_force_elt.getName()[-2:] == "_r":
+                    F_map['GRFs']['rightContactSpheres'].append(c_force_elt.getName())
+                elif c_force_elt.getName()[-2:] == "_l":
+                    F_map['GRFs']['leftContactSpheres'].append(c_force_elt.getName())
                 count += 1
                 count_acc += 3
         f.write('\n')
@@ -1412,7 +1449,7 @@ def generateExternalFunction(
             c_force_elt = forceSet.get(i) 
             if c_force_elt.getConcreteClassName() == "SmoothSphereHalfSpaceForce":
                 f.write('\tfor (int i = 0; i < 3; ++i) res[0][i + %i] = value<T>(locationCP_G_adj_%i[i]);\n' % (count_acc, count))
-                F_map['COPs']['Sphere_{}'.format(count)] = range(count_acc, count_acc+3)
+                F_map['COPs'][c_force_elt.getName()] = range(count_acc, count_acc+3)
                 count += 1
                 count_acc += 3
         f.write('\n')
@@ -1434,6 +1471,15 @@ def generateExternalFunction(
         f.write('\n')
         f.write('\treturn 0;\n')
         f.write('}\n\n')
+        
+        # Residuals (joint torques), 3D GRFs (combined), 3D GRMs (combined),
+        # 3D GRFs (per sphere), 3D COP (per sphere), and 3D body origins.
+        nOutputs = nCoordinates + 3*(2*nContacts+nBodies)
+        if rightFootContact:
+            nOutputs += 2*3
+        if leftFootContact:
+            nOutputs += 2*3
+        f.write('constexpr int NR = %i; \n\n' % (nOutputs))
         
         f.write('int main() {\n')
         f.write('\tRecorder x[NX];\n')
@@ -1904,8 +1950,9 @@ def plotResultsDC(dataDir, subject, motion_filename, settings,
         if i < NMuscles:
             color=iter(plt.cm.rainbow(np.linspace(0,1,len(cases))))
             for c, case in enumerate(cases):
-                ax.plot(optimaltrajectories[case]['time'][0,:-1].T,
-                        optimaltrajectories[case]['muscle_activations'][i:i+1,:-1].T, c=next(color), label='video-based DC ' + cases[c])         
+                if 'muscle_activations' in optimaltrajectories[case]:
+                    ax.plot(optimaltrajectories[case]['time'][0,:-1].T,
+                            optimaltrajectories[case]['muscle_activations'][i:i+1,:-1].T, c=next(color), label='video-based DC ' + cases[c])         
             ax.set_title(muscles[i])
             ax.set_ylim((0,1))
             handles, labels = ax.get_legend_handles_labels()
@@ -1964,19 +2011,33 @@ def processInputsOpenSimAD(baseDir, dataFolder, session_id, trial_name,
     pathTrial = os.path.join(sessionFolder, 'OpenSimData', 'Kinematics', 
                              trial_name + '.mot') 
     if not os.path.exists(pathTrial) or overwrite:
-        _ = download_kinematics(session_id, sessionFolder, 
-                                trialNames=[trial_name])
+        _, _ = download_kinematics(session_id, sessionFolder, 
+                                   trialNames=[trial_name])
+        
+    # Get metadata
+    metadata = import_metadata(os.path.join(sessionFolder, 'sessionMetadata.yaml'))
+    OpenSimModel = metadata['openSimModel']
+    
+    # TODO: support new shoulder model
+    if 'shoulder' in OpenSimModel:
+        raise ValueError("""
+         The full body model with the ISB shoulder is not yet supported for
+         dynamic simulations (https://github.com/stanfordnmbl/opencap-processing/issues/61).
+         Consider using the default Full body model instead (LaiUhlrich2022).""")
     
     # Prepare inputs for dynamic simulations.
     # Adjust muscle wrapping.
     print('Adjust muscle wrapping surfaces.')
-    adjustMuscleWrapping(baseDir, dataFolder, session_id, overwrite=overwrite)
+    adjustMuscleWrapping(baseDir, dataFolder, session_id,
+                         OpenSimModel=OpenSimModel, overwrite=overwrite)
     # Add foot-ground contacts to musculoskeletal model.
     print('Add foot-ground contacts.')
-    generateModelWithContacts(dataFolder, session_id, overwrite=overwrite)
+    generateModelWithContacts(dataFolder, session_id, 
+                              OpenSimModel=OpenSimModel, overwrite=overwrite)
     # Generate external function.
     print('Generate external function to leverage automatic differentiation.')
-    generateExternalFunction(baseDir, dataFolder, session_id, 
+    generateExternalFunction(baseDir, dataFolder, session_id,
+                             OpenSimModel=OpenSimModel,
                              overwrite=overwrite, 
                              treadmill=bool(treadmill_speed))
     
@@ -2011,8 +2072,7 @@ def processInputsOpenSimAD(baseDir, dataFolder, session_id, trial_name,
             
     settings['timeInterval'] = time_window
     
-    # Get demographics.
-    metadata = import_metadata(os.path.join(sessionFolder, 'sessionMetadata.yaml'))
+    # Get demographics.    
     settings['mass_kg'] = metadata['mass_kg']
     settings['height_m'] = metadata['height_m']
     
@@ -2021,6 +2081,9 @@ def processInputsOpenSimAD(baseDir, dataFolder, session_id, trial_name,
     
     # Trial name
     settings['trial_name'] = trial_name
+    
+    # OpenSim model name
+    settings['OpenSimModel'] = OpenSimModel
     
     return settings
 
