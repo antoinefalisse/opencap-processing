@@ -20,10 +20,17 @@ sys.path.append(opensimADDir)
 
 from utilsOpenSimAD import getGRF
 
-session_ids = ['subject12_v45_openpose_1x1008_4scales']
-legends = ['subject12_v45_openpose_1x1008_4scales']
+# session_ids = ['subject2_v2_mmpose'] #'subject2_v2_mmpose']#,'subject2_v54_mmpose']
+# legends = ["mocap"]#['Deployed']#, 'Latest']
+
+# session_ids = ['subject2_mocap'] #'subject2_v2_mmpose']#,'subject2_v54_mmpose']
+# legends = ["mocap"]#['Deployed']#, 'Latest']
+
+session_ids = ['subject2_v2_mmpose','subject2_v54_mmpose','subject2_mocap']
+legends = ['Deployed', 'Latest',"mocap"]
+
 colors = sns.color_palette('colorblind', len(session_ids))
-case = '2'
+case = '0'
 trial_name = 'DJ1'
 
 GRF_headers = ['R_ground_force_vx', 'R_ground_force_vy', 'R_ground_force_vz',
@@ -37,7 +44,7 @@ elif trial_name == 'DJ2':
 
 
 GRFs, times = {}, {}
-fig, axs = plt.subplots(2, 3, figsize=(15, 10))
+fig, axs = plt.subplots(2, 3, figsize=(15, 10), sharex=True)
 handles_dict = {}
 labels_dict = {}
 for idx_sess, session_id in enumerate(session_ids):
@@ -82,20 +89,26 @@ for idx_sess, session_id in enumerate(session_ids):
             else:
                 handles_dict[label] = [handle]
                 labels_dict[label] = label
-            axs[i, j].set_title(GRF_labels[i*3+j])
+            axs[i, j].set_title(GRF_labels[i*3+j], fontsize=14, fontweight='bold')
+
+            axs[i, j].spines['top'].set_visible(False)
+            axs[i, j].spines['right'].set_visible(False)
+            axs[i, j].tick_params(axis='both', which='major', labelsize=14)
+            axs[i, j].tick_params(axis='both', which='minor', labelsize=14)
+
     # Set the x and y labels of the subplots
-    axs[0, 0].set_ylabel('GRF (N)')
-    axs[1, 0].set_ylabel('GRF (N)')
-    axs[1, 0].set_xlabel('Time (s)')
-    axs[1, 1].set_xlabel('Time (s)')
-    axs[1, 2].set_xlabel('Time (s)')
+    axs[0, 0].set_ylabel('GRF (N)', fontsize=14, fontweight='bold')
+    axs[1, 0].set_ylabel('GRF (N)', fontsize=14, fontweight='bold')
+    axs[1, 0].set_xlabel('Time (s)', fontsize=14, fontweight='bold')
+    axs[1, 1].set_xlabel('Time (s)', fontsize=14, fontweight='bold')
+    axs[1, 2].set_xlabel('Time (s)', fontsize=14, fontweight='bold')
 
 # Add legend to the plot
 handles = []
 for label in handles_dict:
     handles.append(handles_dict[label][0])
     labels_dict[label] = label
-fig.legend(handles=handles, labels=list(labels_dict.values()))
+fig.legend(handles=handles, labels=list(labels_dict.values()), fontsize=14)
 plt.show()
     
 # fig, axs = plt.subplots(2, 3, figsize=(15, 10))
