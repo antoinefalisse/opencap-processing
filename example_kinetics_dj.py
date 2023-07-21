@@ -124,11 +124,11 @@ Please contact us for any questions: https://www.opencap.ai/#contact
 #       - macOS   (Monterey 12.2): converged in 869 iterations
 #       - Linux   (Ubuntu 20.04):  converged in 856 iterations 
 # Select which example you would like to run.
-session_id = "subject12_v45_openpose_1x1008_4scales"
-case = '0' # Change this to compare across settings.
+session_id = "subject2_mocap"
+case = '1' # Change this to compare across settings.
 # Options are 'squat', 'STS', and 'jump'.
 trial_name = 'DJ1' # Jump  
-motion_type = 'drop_jump'
+motion_type = 'drop_jump_torque_driven'
 
 if trial_name == 'DJ1':
     time_window = [1.25, 2.24] #DJ1
@@ -136,7 +136,7 @@ elif trial_name == 'DJ2':
     time_window = [0.85,1.9] #DJ2
 
 # Set to True to solve the optimal control problem.
-solveProblem = False
+solveProblem = True
 # Set to True to analyze the results of the optimal control problem. If you
 # solved the problem already, and only want to analyze/process the results, you
 # can set solveProblem to False and run this script with analyzeResults set to
@@ -157,10 +157,138 @@ if not 'treadmill_speed' in locals():
 settings = processInputsOpenSimAD(baseDir, dataFolder, session_id, trial_name, 
                                   motion_type, time_window, repetition,
                                   treadmill_speed)
+test=1
+
+# Testing
+
+if case == '1':
+    settings['weights'] =  {
+                'positionTrackingTerm': 50,
+                'velocityTrackingTerm': 1,
+                'accelerationTrackingTerm': 10,
+                'armExcitationTerm': 0.001,
+                'lumbarExcitationTerm': 0.001,
+                'jointAccelerationTerm': 0.001,
+                'coordinateExcitationTerm': 0.001}
+    settings['coordinates_toTrack'] = {
+            'pelvis_tilt': {"weight": 10},
+            'pelvis_list': {"weight": 1},
+            'pelvis_rotation': {"weight": 1},
+            'pelvis_tx': {"weight": 1},
+            'pelvis_ty': {"weight": 10},
+            'pelvis_tz': {"weight": 1}, 
+            'hip_flexion_l': {"weight": 10},
+            'hip_adduction_l': {"weight": 1},
+            'hip_rotation_l': {"weight": 1},
+            'hip_flexion_r': {"weight": 10},
+            'hip_adduction_r': {"weight": 1},
+            'hip_rotation_r': {"weight": 1},
+            'knee_angle_l': {"weight": 10},
+            'knee_angle_r': {"weight": 10},
+            'ankle_angle_l': {"weight": 10},
+            'ankle_angle_r': {"weight": 10},
+            'subtalar_angle_l': {"weight": 1},
+            'subtalar_angle_r': {"weight": 1},
+            'lumbar_extension': {"weight": 10},
+            'lumbar_bending': {"weight": 1},
+            'lumbar_rotation': {"weight": 1},
+            'arm_flex_l': {"weight": 50},
+            'arm_add_l': {"weight": 50},
+            'arm_rot_l': {"weight": 50},
+            'arm_flex_r': {"weight": 50},
+            'arm_add_r': {"weight": 50},
+            'arm_rot_r': {"weight": 50},
+            'elbow_flex_l': {"weight": 50},
+            'elbow_flex_r': {"weight": 50},
+            'pro_sup_l': {"weight": 50},
+            'pro_sup_r': {"weight": 50}}
+elif case == '2':
+    settings['weights'] =  {
+                'positionTrackingTerm': 50,
+                'velocityTrackingTerm': 1,
+                'accelerationTrackingTerm': 50,
+                'armExcitationTerm': 0.001,
+                'lumbarExcitationTerm': 0.001,
+                'jointAccelerationTerm': 0.001,
+                'coordinateExcitationTerm': 0.001}
+    settings['coordinates_toTrack'] = {
+            'pelvis_tilt': {"weight": 10},
+            'pelvis_list': {"weight": 1},
+            'pelvis_rotation': {"weight": 1},
+            'pelvis_tx': {"weight": 1},
+            'pelvis_ty': {"weight": 10},
+            'pelvis_tz': {"weight": 1}, 
+            'hip_flexion_l': {"weight": 10},
+            'hip_adduction_l': {"weight": 1},
+            'hip_rotation_l': {"weight": 1},
+            'hip_flexion_r': {"weight": 10},
+            'hip_adduction_r': {"weight": 1},
+            'hip_rotation_r': {"weight": 1},
+            'knee_angle_l': {"weight": 10},
+            'knee_angle_r': {"weight": 10},
+            'ankle_angle_l': {"weight": 10},
+            'ankle_angle_r': {"weight": 10},
+            'subtalar_angle_l': {"weight": 1},
+            'subtalar_angle_r': {"weight": 1},
+            'lumbar_extension': {"weight": 10},
+            'lumbar_bending': {"weight": 1},
+            'lumbar_rotation': {"weight": 1},
+            'arm_flex_l': {"weight": 50},
+            'arm_add_l': {"weight": 50},
+            'arm_rot_l': {"weight": 50},
+            'arm_flex_r': {"weight": 50},
+            'arm_add_r': {"weight": 50},
+            'arm_rot_r': {"weight": 50},
+            'elbow_flex_l': {"weight": 50},
+            'elbow_flex_r': {"weight": 50},
+            'pro_sup_l': {"weight": 50},
+            'pro_sup_r': {"weight": 50}}
+elif case == '3':
+    settings['weights'] =  {
+                'positionTrackingTerm': 50,
+                'velocityTrackingTerm': 1,
+                'accelerationTrackingTerm': 500,
+                'armExcitationTerm': 0.001,
+                'lumbarExcitationTerm': 0.001,
+                'jointAccelerationTerm': 0.001,
+                'coordinateExcitationTerm': 0.001}
+    settings['coordinates_toTrack'] = {
+            'pelvis_tilt': {"weight": 10},
+            'pelvis_list': {"weight": 1},
+            'pelvis_rotation': {"weight": 1},
+            'pelvis_tx': {"weight": 1},
+            'pelvis_ty': {"weight": 10},
+            'pelvis_tz': {"weight": 1}, 
+            'hip_flexion_l': {"weight": 10},
+            'hip_adduction_l': {"weight": 1},
+            'hip_rotation_l': {"weight": 1},
+            'hip_flexion_r': {"weight": 10},
+            'hip_adduction_r': {"weight": 1},
+            'hip_rotation_r': {"weight": 1},
+            'knee_angle_l': {"weight": 10},
+            'knee_angle_r': {"weight": 10},
+            'ankle_angle_l': {"weight": 10},
+            'ankle_angle_r': {"weight": 10},
+            'subtalar_angle_l': {"weight": 1},
+            'subtalar_angle_r': {"weight": 1},
+            'lumbar_extension': {"weight": 10},
+            'lumbar_bending': {"weight": 1},
+            'lumbar_rotation': {"weight": 1},
+            'arm_flex_l': {"weight": 50},
+            'arm_add_l': {"weight": 50},
+            'arm_rot_l': {"weight": 50},
+            'arm_flex_r': {"weight": 50},
+            'arm_add_r': {"weight": 50},
+            'arm_rot_r': {"weight": 50},
+            'elbow_flex_l': {"weight": 50},
+            'elbow_flex_r': {"weight": 50},
+            'pro_sup_l': {"weight": 50},
+            'pro_sup_r': {"weight": 50}}
+
 
 # %% Simulation.
-run_tracking(baseDir, dataFolder, session_id, settings, case=case, 
-              solveProblem=solveProblem, analyzeResults=analyzeResults)
+# run_tracking(baseDir, dataFolder, session_id, settings, case=case, 
+#               solveProblem=solveProblem, analyzeResults=analyzeResults)
 test=1
 
 # %% Plots.

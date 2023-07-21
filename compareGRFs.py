@@ -26,11 +26,15 @@ from utilsOpenSimAD import getGRF
 # session_ids = ['subject2_mocap'] #'subject2_v2_mmpose']#,'subject2_v54_mmpose']
 # legends = ["mocap"]#['Deployed']#, 'Latest']
 
-session_ids = ['subject2_v2_mmpose','subject2_v54_mmpose','subject2_mocap']
-legends = ['Deployed', 'Latest',"mocap"]
+# session_ids = ['subject2_v2_mmpose','subject2_v54_mmpose','subject2_mocap']
+# legends = ['Deployed', 'Latest',"mocap"]
 
-colors = sns.color_palette('colorblind', len(session_ids))
-case = '0'
+session_ids_all = ['subject2_mocap__1', 'subject2_mocap__2', 'subject2_mocap__3']
+legends = session_ids_all
+# legends = ["mocap"]
+
+colors = sns.color_palette('colorblind', len(session_ids_all))
+# case = '2'
 trial_name = 'DJ1'
 
 GRF_headers = ['R_ground_force_vx', 'R_ground_force_vy', 'R_ground_force_vz',
@@ -40,23 +44,27 @@ if trial_name == 'DJ1':
     time_zoom = [1.5, 2.3]
 elif trial_name == 'DJ2':
     time_zoom = [1.1,1.9]
-
-
-
+    
+    
+session_ids = [i.split('__')[0] for i in session_ids_all]
 GRFs, times = {}, {}
 fig, axs = plt.subplots(2, 3, figsize=(15, 10), sharex=True)
 handles_dict = {}
 labels_dict = {}
-for idx_sess, session_id in enumerate(session_ids):
+for idx_sess, session_id_t in enumerate(session_ids_all):
+
+    # session_id is what is before __ in session_id_t
+    session_id = session_id_t.split('__')[0]
+    case = session_id_t.split('__')[1]
 
     pathOSData = os.path.join(dataDir, session_id, 'OpenSimData')
     c_pathResults = os.path.join(pathOSData, 'Dynamics', trial_name)    
     c_tr = np.load(os.path.join(c_pathResults, 'optimaltrajectories.npy'),
                     allow_pickle=True).item()   
     optimaltrajectory = c_tr[case]
-    GRFs[session_id] = optimaltrajectory['GRF']
+    GRFs[session_id_t] = optimaltrajectory['GRF']
     GRF_labels = optimaltrajectory['GRF_labels']
-    times[session_id] = optimaltrajectory['time'][:,:-1]
+    times[session_id_t] = optimaltrajectory['time'][:,:-1]
 
     pathForceData = os.path.join(dataDir, session_id, 'ForceData')
     c_pathGRF = os.path.join(pathForceData, trial_name + '.mot') 
@@ -66,17 +74,17 @@ for idx_sess, session_id in enumerate(session_ids):
 
     # Get indices of time window from 1.5 to 2.3 seconds
     idx = np.where((exp_time >= time_zoom[0]) & (exp_time <= time_zoom[1]))[0]
-    # Get indices of time window from 1.5 to 2.3 seconds in times[session_id]
-    idx2 = np.where((times[session_id][0,:] >= time_zoom[0]) & (times[session_id][0,:] <= time_zoom[1]))[0]
+    # Get indices of time window from 1.5 to 2.3 seconds in times[session_id_t]
+    idx2 = np.where((times[session_id_t][0,:] >= time_zoom[0]) & (times[session_id_t][0,:] <= time_zoom[1]))[0]
 
 
-    # Create a 2x3 array of subplots and plot GRFs[session_id] with titles GRF_labels    
+    # Create a 2x3 array of subplots and plot GRFs[session_id_t] with titles GRF_labels    
     for i in range(2):
         for j in range(3):
-            # axs[i, j].plot(times[session_id][0,idx2].T, GRFs[session_id][i*3+j,idx2])
-            # Plot this axs[i, j].plot(times[session_id][0,idx2].T, GRFs[session_id][i*3+j,idx2]) but keep handle for legend
-            handle, = axs[i, j].plot(times[session_id][0,idx2].T, GRFs[session_id][i*3+j,idx2],color=colors[idx_sess])
-            label = legends[session_ids.index(session_id)]
+            # axs[i, j].plot(times[session_id_t][0,idx2].T, GRFs[session_id_t][i*3+j,idx2])
+            # Plot this axs[i, j].plot(times[session_id_t][0,idx2].T, GRFs[session_id_t][i*3+j,idx2]) but keep handle for legend
+            handle, = axs[i, j].plot(times[session_id_t][0,idx2].T, GRFs[session_id_t][i*3+j,idx2],color=colors[idx_sess])
+            label = legends[session_ids_all.index(session_id_t)]
             if label in handles_dict:
                 handles_dict[label].append(handle)
             else:

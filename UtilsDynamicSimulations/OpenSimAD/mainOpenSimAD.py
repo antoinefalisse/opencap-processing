@@ -1309,7 +1309,7 @@ def run_tracking(baseDir, dataDir, subject, settings, case='0',
                 assert np.alltrue(uw['rActk'][c_j] >= ca.vec(w0['rAct'][c_j].to_numpy().T).full()), "Issue with upper bound reserve actuators"
             
         # %% Plots initial guess vs bounds.
-        plotGuessVsBounds = True
+        plotGuessVsBounds = False
         if plotGuessVsBounds: 
             from plotsOpenSimAD import plotGuessVSBounds
             plotGuessVSBounds(lw, uw, w0, nJoints, N, d, guessQsEnd, 
@@ -1317,13 +1317,6 @@ def run_tracking(baseDir, dataDir, subject, settings, case='0',
                               withLumbarCoordinateActuators=
                               withLumbarCoordinateActuators,
                               torque_driven_model=torque_driven_model)
-            
-            from utilsOpenSimAD import plotVSBounds
-            lwp = lw['A'].to_numpy().T
-            uwp = uw['A'].to_numpy().T
-            y = w0['A'].to_numpy().T
-            title='Muscle activation at mesh points'            
-            plotVSBounds(y,lwp,uwp,title) 
             
         # %% Unscale design variables.
         if not torque_driven_model:
@@ -1854,7 +1847,7 @@ def run_tracking(baseDir, dataDir, subject, settings, case='0',
         assert (starti == w_opt.shape[0]), "error when extracting results"
         
         # %% Visualize results against bounds.
-        visualizeResultsBounds = False
+        visualizeResultsBounds = True
         if visualizeResultsBounds:
             from plotsOpenSimAD import plotOptimalSolutionVSBounds
             c_wopt = {'Qs_opt': Qs_opt, 'Qs_col_opt': Qs_col_opt,
@@ -2505,24 +2498,6 @@ def run_tracking(baseDir, dataDir, subject, settings, case='0',
             KAM_BWht = KAM / BW_ht * 100
         if computeMCF:
             MCF_BW = MCF / BW * 100
-            
-        # %% Check if solution is hitting bounds.
-        plotSolutionVsBounds = True
-        if plotSolutionVsBounds: 
-            from plotsOpenSimAD import plotOptimalSolutionVSBounds, plotVSBounds
-            
-            w_opt_all = {}
-            w_opt_all['A'] = a_opt
-            w_opt_all['Aj'] = a_col_opt
-            plotOptimalSolutionVSBounds(lw, uw, w_opt_all)
-            
-            lwp = lw['A'].to_numpy().T
-            uwp = uw['A'].to_numpy().T
-            y = a_opt
-            title='Muscle activation at mesh points'            
-            plotVSBounds(y,lwp,uwp,title)  
-        
-        
             
         # %% Save optimal trajectories.
         if not os.path.exists(os.path.join(pathResults,
