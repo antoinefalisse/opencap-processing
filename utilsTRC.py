@@ -265,6 +265,13 @@ class TRCFile(object):
             self.data[self.marker_names[imarker] + '_ty'] = temp_rot[:,1]
             self.data[self.marker_names[imarker] + '_tz'] = temp_rot[:,2]
             
+    def set_value(self, name, value):
+        
+        self.data[name + '_tx'] = value[:, 0]
+        self.data[name + '_ty'] = value[:, 1]
+        self.data[name + '_tz'] = value[:, 2]       
+        
+            
     def offset(self, axis, value):
         """ offset the data.
 

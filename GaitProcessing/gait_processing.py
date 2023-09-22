@@ -44,12 +44,19 @@ from mainOpenSimAD import run_tracking
 
 from utilsKineticsOpenSimAD import kineticsOpenSimAD 
 
+from utilsTRC import TRCFile
+
+from scipy.spatial.transform import Rotation as R
+
 # %% Paths.
 dataFolder = os.path.join(baseDir, 'Data')
 
 # %% User-defined variables.
-session_id = 'bca0aad8-c129-4a62-bef3-b5de1659df5e'
-trial_name = '10mwt'
+# session_id = 'bca0aad8-c129-4a62-bef3-b5de1659df5e'
+# trial_name = '10mwt'
+
+session_id = 'a08ec9d6-24f8-44f7-a59c-f603b7517e4d'
+trial_name = '10mwrt_2'
 
 scalar_names = {'gait_speed','stride_length','step_width','cadence',
                 'single_support_time','double_support_time'}
@@ -67,7 +74,7 @@ filter_frequency = 6
 # solveProblem = True
 # analyzeResults = True
 motion_type = 'walking_periodic'
-case = '10'
+case = '13'
 solveProblem = True
 analyzeResults = True
 
@@ -100,37 +107,177 @@ for leg in legs:
     gaitResults[leg]['scalars'] = gait[leg].compute_scalars(scalar_names)
     # Get gait events.
     gaitResults[leg]['events'] = gait[leg].get_gait_events()
-    # Setup dynamic optimization problem.
-    time_window = [float(gaitResults[leg]['events']['ipsilateralTime'][0, 0]),
-                   float(gaitResults[leg]['events']['ipsilateralTime'][0, -1])]
-    test= [1.2, 2.4] 
-    settings = processInputsOpenSimAD(
-        baseDir, dataFolder, session_id, trial_name, 
-        motion_type, time_window=time_window, 
-        contact_configuration=contact_configuration)
+
+    pathTRCFile = os.path.join(sessionDir, 'MarkerData', trialName + '.trc')
+
+    trc_file = TRCFile(pathTRCFile)
     
-    settings['contact_configuration'] = contact_configuration
-    if case == '4':    
-        settings['tendon_compliances'] =  {'soleus_r': 17.5, 'gaslat_r': 17.5, 'gasmed_r': 17.5,
-                                           'soleus_l': 17.5, 'gaslat_l': 17.5, 'gasmed_l': 17.5}
-    if case == '5' or case == '6' or case == '7':
-        settings['weights']['activationTerm'] = 10 
-
-    if case == '7':
-        settings['weights']['accelerationTrackingTerm'] = 10 
-
-    if case == '8':
-        settings['weights']['positionTrackingTerm'] = 20
-    if case == '9':
-        settings['weights']['positionTrackingTerm'] = 50
-    if case == '10':
-        settings['weights']['positionTrackingTerm'] = 100
+    C7 = trc_file.marker('C7_study')
+    
+    from scipy import signal
+    import numpy as np
+    from scipy.spatial.transform import Rotation
+    peaks, _ = signal.find_peaks(C7[:,1], distance=10, width=10, prominence=0.05)
+    diff_peaks = np.diff([peaks])
+    # Select diff_peak from which the difference with the previous diff_peak is
+    # lower than 10 percent. We take the last peak as reference.
+    for i in range(len(diff_peaks[0])-2, 0, -1):
+        if np.abs(diff_peaks[0][i]-diff_peaks[0][i+1]) > 0.2*diff_peaks[0][i+1]:
+            break
         
-    # Simulation.
-    run_tracking(baseDir, dataFolder, session_id, settings, case=case, 
-                  solveProblem=solveProblem, analyzeResults=analyzeResults)
+    peak_start = peaks[i+1]
+    peak_end = peaks[-1]
+    
+    # Extract marker data
+    pos_start = C7[peak_start, :]
+    pos_end = C7[peak_end, :]
+    
+    # Calculate the original vector
+    original_vector = pos_end - pos_start
+    
+    vector_A = np.array([1, 0, 0])  # Replace with your vector's coordinates
+    vector_B = original_vector # Replace with your vector's coordinates
+    
+    # Calculate the dot product of the two vectors
+    dot_product = np.dot(vector_A, vector_B)
+    
+    # Calculate the magnitudes (lengths) of the vectors
+    magnitude_A = np.linalg.norm(vector_A)
+    magnitude_B = np.linalg.norm(vector_B)
+    
+    # Calculate the angle between the two vectors in radians
+    angle_rad = np.arccos(dot_product / (magnitude_A * magnitude_B))
+    
+    # Convert the angle from radians to degrees if needed
+    angle_deg = np.degrees(angle_rad)
+    
+    # Print the angle in radians and degrees
+    print("Angle between vectors (radians):", angle_rad)
+    print("Angle between vectors (degrees):", angle_deg)
+    
+    trc_file.rotate('z', angle_deg)
+    pathTRCFile_out = os.path.join(sessionDir, 'MarkerData', trialName + '_rotated.trc')
+    trc_file.write(pathTRCFile_out)
+    
+    
+    C7_out = trc_file.marker('C7_study')
+    pos_start = C7_out[peak_start, :]
+    pos_end = C7_out[peak_end, :]
+        
+    
+    # def get_rotation_matrix(vec2, vec1=np.array([1, 0, 0])):
+    #     """get rotation matrix between two vectors using scipy"""
+    #     vec1 = np.reshape(vec1, (1, -1))
+    #     vec2 = np.reshape(vec2, (1, -1))
+    #     r = R.align_vectors(vec2, vec1)
+    #     return r[0]
+    
+    # # Faster version of rotateArraySphere3
+    # def rotateArray(data, ref_vec, unit_vec=np.array([0,0,0])):    
+    #     assert np.mod(data.shape[1],3) == 0, 'wrong dimension rotateArray'
+        
+    #     if not np.any(unit_vec):
+    #         unit_vec = data[0, :3]
+        
+    #     r_align = get_rotation_matrix(vec1=unit_vec, vec2=ref_vec)
+    #     data_out = np.zeros((data.shape[0], data.shape[1]))
+    #     for i in range(int(data.shape[1]/3)):    
+    #         unit_vec_align = r_align.apply(data[:, i*3:(i+1)*3])
+    #         data_out[:,i*3:(i+1)*3] = unit_vec_align
+            
+    #     return data_out, unit_vec
+    
+    # markers = trc_file.marker_names
+    # for marker in markers:    
+    #     data_out, _ = rotateArray(trc_file.marker(marker), original_vector, [1,0,0])
+    #     trc_file.set_value(marker, data_out)
+        
+    # pathTRCFile_out = os.path.join(sessionDir, 'MarkerData', trialName + '_rotated.trc')
+    # trc_file.write(pathTRCFile_out)
+        
+    
+    
+    # # Calculate the angle of rotation (in radians) to align with Y-axis
+    # angle_rad = np.arctan2(-original_vector[0], original_vector[2])
+    
+    # # Create a Rotation object for the rotation about the X-axis
+    # rotation = Rotation.from_euler('y', angle_rad)
+    
+    # # Apply the rotation to the original vector
+    # rotated_vector = rotation.apply(original_vector)
+    
+    # # Calculate the new position of pos_end (new_point2)
+    # new_point2 = pos_start + rotated_vector
+    
+    # # Print the rotated vector and new coordinates of pos_end
+    # print("pos_start:", pos_start)
+    # print("new_point2:", new_point2)
+    
+    
+    # from scipy.spatial.transform import Rotation
+    # original_vector = pos_end - pos_start
+    # angle_rad = np.arctan2(original_vector[0], original_vector[2])
+    # rotation = Rotation.from_euler('x', angle_rad)
+    # rotated_vector = rotation.apply(original_vector)
+    # new_point2 = pos_start + rotated_vector
+    
+    # angle_deg = angle_rad * 180 / np.pi    
+    
+    
+    
+    
 
-# plotResultsOpenSimAD(dataFolder, session_id, trial_name, cases=['6', '7'])
+#     # Apply the rotation to the original vector
+    
+    
+#     # Calculate the new position of point2
+    
+    
+    
+    
+#     trc_file.rotate('x', angle_deg)
+    
+    
+#     pathTRCFile_out = os.path.join(sessionDir, 'MarkerData', trialName + '_rotated.trc')
+#     trc_file.write(pathTRCFile_out)
+    
+#     # rotated_time_series_data = rotation.apply(time_series_data)
+    
+
+
+
+
+    # # Setup dynamic optimization problem.
+    # time_window = [float(gaitResults[leg]['events']['ipsilateralTime'][0, 0]),
+    #                 float(gaitResults[leg]['events']['ipsilateralTime'][0, -1])]
+    # test= [1.2, 2.4] 
+    # settings = processInputsOpenSimAD(
+    #     baseDir, dataFolder, session_id, trial_name, 
+    #     motion_type, time_window=time_window, 
+    #     contact_configuration=contact_configuration)
+    
+    # settings['contact_configuration'] = contact_configuration
+    # if case == '4':    
+    #     settings['tendon_compliances'] =  {'soleus_r': 17.5, 'gaslat_r': 17.5, 'gasmed_r': 17.5,
+    #                                         'soleus_l': 17.5, 'gaslat_l': 17.5, 'gasmed_l': 17.5}
+    # if case == '5' or case == '6' or case == '7' or case == '11' or case == '12' or case == '13':
+    #     settings['weights']['activationTerm'] = 10 
+
+    # if case == '7':
+    #     settings['weights']['accelerationTrackingTerm'] = 10 
+
+    # if case == '8' or case == '11':
+    #     settings['weights']['positionTrackingTerm'] = 20
+    # if case == '9' or case == '12':
+    #     settings['weights']['positionTrackingTerm'] = 50
+    # if case == '10' or case == '13':
+    #     settings['weights']['positionTrackingTerm'] = 100
+        
+    # # Simulation.
+    # run_tracking(baseDir, dataFolder, session_id, settings, case=case, 
+    #               solveProblem=solveProblem, analyzeResults=analyzeResults)
+
+# plotResultsOpenSimAD(dataFolder, session_id, trial_name, cases=['9', '10'])
     # test=1
 
 # # %% Print scalar results.
