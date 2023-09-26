@@ -112,12 +112,42 @@ for leg in legs:
 
     trc_file = TRCFile(pathTRCFile)
     
-    C7 = trc_file.marker('C7_study')
-    
+    from utilsProcessing import lowPassFilter
+    import scipy.interpolate as interpolate
     from scipy import signal
     import numpy as np
-    from scipy.spatial.transform import Rotation
-    peaks, _ = signal.find_peaks(C7[:,1], distance=10, width=10, prominence=0.05)
+    from utilsProcessing import lowPassFilter
+    
+    C7 = trc_file.marker('C7_study')
+    C7_filt = lowPassFilter(trc_file.time, C7, 6, order=4)
+    spline = interpolate.InterpolatedUnivariateSpline(trc_file.time, C7_filt[:,1], k=3)
+    splineD1 = spline.derivative(n=1)
+    C7_speed = splineD1(trc_file.time) 
+    
+    m1 = trc_file.marker('r.ASIS_study')
+    m2 = trc_file.marker('L.ASIS_study')
+    mid_asis = (m1+m2)/2
+    mid_asis_filt = lowPassFilter(trc_file.time, mid_asis, 6, order=4)
+    spline = interpolate.InterpolatedUnivariateSpline(trc_file.time, mid_asis_filt[:,1], k=3)
+    splineD1 = spline.derivative(n=1)
+    mid_asis_speed = splineD1(trc_file.time) 
+    
+    m1 = trc_file.marker('r.PSIS_study')
+    m2 = trc_file.marker('L.PSIS_study')
+    mid_psis = (m1+m2)/2
+    mid_psis_filt = lowPassFilter(trc_file.time, mid_psis, 6, order=4)
+    spline = interpolate.InterpolatedUnivariateSpline(trc_file.time, mid_psis_filt[:,1], k=3)
+    splineD1 = spline.derivative(n=1)
+    mid_psis_speed = splineD1(trc_file.time)
+    
+    test_value = mid_psis_filt
+    test_speed = mid_psis_speed
+    
+    # spline = interpolate.InterpolatedUnivariateSpline(trc_file.time, C7_filt[:,1], k=3)
+    # splineD1 = spline.derivative(n=1)
+    # C7_speed = splineD1(trc_file.time) 
+
+    peaks, _ = signal.find_peaks(test_speed, distance=30, width=15, prominence=0.1)
     diff_peaks = np.diff([peaks])
     # Select diff_peak from which the difference with the previous diff_peak is
     # lower than 10 percent. We take the last peak as reference.
@@ -129,8 +159,8 @@ for leg in legs:
     peak_end = peaks[-1]
     
     # Extract marker data
-    pos_start = C7[peak_start, :]
-    pos_end = C7[peak_end, :]
+    pos_start = test_value[peak_start, :]
+    pos_end = test_value[peak_end, :]
     
     # Calculate the original vector
     original_vector = pos_end - pos_start
