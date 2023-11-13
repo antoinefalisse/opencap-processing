@@ -101,11 +101,11 @@ elif case == '5':
     buffer_end = 0.3
 
 # %% Gait segmentation and kinematic analysis.
-# ii = 91
+ii = 149
 # trials_to_run = [137] # [0, 3, 13, 35, 48, 62]
 
-# trials_info = get_data_info(trial_indexes=[i for i in range(ii,ii+1)])
-trials_info = get_data_info(trial_indexes=[i for i in range(100,101)])
+trials_info = get_data_info(trial_indexes=[i for i in range(ii,ii+1)])
+# trials_info = get_data_info(trial_indexes=[i for i in range(100,101)])
 # trials_info = get_data_info(trial_indexes=trials_to_run)
 
 trials_info_problems = get_data_info_problems()
@@ -303,7 +303,7 @@ for trial in trials_info:
             trialName_aligned = trial_name + '_' + suffixOutputFileName
         else:
             trialName_aligned = trial_name
-        plotResultsOpenSimAD(sessionDir, trialName_aligned, cases=['5_r', '5_l'], mainPlots=True)
+        plotResultsOpenSimAD(sessionDir, trialName_aligned, cases=['2_r', '2_l'], mainPlots=True)
         test=1
 
 # # %% Print scalar results.
