@@ -41,6 +41,8 @@ def get_data_case():
     data = {
         25: {"r": '3', "l": '3'},
         86: {"l": '5'},
+        94: {"r": '5',"l": '5'},
+        96: {"r": '5',"l": '5'}
     }
 
     return data
@@ -197,83 +199,212 @@ def get_data_select_window():
 
 def get_data_manual_alignment():
     
-    data = {
-        89: {"angle": 4},
-        90: {"angle": 4},
-        91: {"angle": 0}, # not re-aligment but cutting end
-        21: {"angle": 2.5},
-        24: {"angle": 2},
-        31: {"angle": 2},
-        43: {"angle": 2},
-        51: {"angle": 5.25},
-        53: {"angle": 1},
-        57: {"angle": 1},
-        4: {"angle": 1},
-        66: {"angle": 0.75},
-        85: {"angle": 2},
-        86: {"angle": 0.5},
-        70: {"angle": 1},
-        62: {"angle": 1},
-        48: {"angle": 1},
-        35: {"angle": 0},
-        13: {"angle": -0.25},
-        3: {"angle": 0},
-        0: {"angle": 0.5},
-
-        100: {"angle": 1.75}, # session with calibration: "bf33bc40-d6e8-499e-b060-94b720133e3a"
-        101: {"angle": 1.75}, # session with calibration: "bf33bc40-d6e8-499e-b060-94b720133e3a"
-        103: {"angle": 1.75}, # session with calibration: "bf33bc40-d6e8-499e-b060-94b720133e3a"
-        105: {"angle": 1.75}, # session with calibration: "bf33bc40-d6e8-499e-b060-94b720133e3a"
-        107: {"angle": 1.75}, # session with calibration: "bf33bc40-d6e8-499e-b060-94b720133e3a"
-        109: {"angle": 1.75}, # session with calibration: "bf33bc40-d6e8-499e-b060-94b720133e3a"
-        111: {"angle": 1.75}, # session with calibration: "bf33bc40-d6e8-499e-b060-94b720133e3a"
-        113: {"angle": 1.75}, # session with calibration: "bf33bc40-d6e8-499e-b060-94b720133e3a"
-        115: {"angle": 1.75}, # session with calibration: "bf33bc40-d6e8-499e-b060-94b720133e3a"
-        116: {"angle": 1.75}, # session with calibration: "bf33bc40-d6e8-499e-b060-94b720133e3a"
-        117: {"angle": 1.75}, # session with calibration: "bf33bc40-d6e8-499e-b060-94b720133e3a"
-        118: {"angle": 1.75}, # session with calibration: "bf33bc40-d6e8-499e-b060-94b720133e3a"
-        120: {"angle": 1.75}, # session with calibration: "bf33bc40-d6e8-499e-b060-94b720133e3a"
-        122: {"angle": 1.75}, # session with calibration: "bf33bc40-d6e8-499e-b060-94b720133e3a"
-        124: {"angle": 1.75}, # session with calibration: "bf33bc40-d6e8-499e-b060-94b720133e3a"
-        126: {"angle": 1.75}, # session with calibration: "bf33bc40-d6e8-499e-b060-94b720133e3a"
-        129: {"angle": 1.75}, # session with calibration: "bf33bc40-d6e8-499e-b060-94b720133e3a"
-        131: {"angle": 1.75}, # session with calibration: "bf33bc40-d6e8-499e-b060-94b720133e3a"
-        133: {"angle": 1.75}, # session with calibration: "bf33bc40-d6e8-499e-b060-94b720133e3a"
-
-        102: {"angle": 1.25}, # session with calibration: "a384272c-bc90-4150-ab94-a2af8f5a9315"
-        104: {"angle": 1.25}, # session with calibration: "a384272c-bc90-4150-ab94-a2af8f5a9315"
-        106: {"angle": 1.25}, # session with calibration: "a384272c-bc90-4150-ab94-a2af8f5a9315"
-        108: {"angle": 1.25}, # session with calibration: "a384272c-bc90-4150-ab94-a2af8f5a9315"
-        110: {"angle": 1.25}, # session with calibration: "a384272c-bc90-4150-ab94-a2af8f5a9315"
-        112: {"angle": 1.25}, # session with calibration: "a384272c-bc90-4150-ab94-a2af8f5a9315"
-        114: {"angle": 1.25}, # session with calibration: "a384272c-bc90-4150-ab94-a2af8f5a9315"
-        119: {"angle": 1.25}, # session with calibration: "a384272c-bc90-4150-ab94-a2af8f5a9315"
-        121: {"angle": 1.25}, # session with calibration: "a384272c-bc90-4150-ab94-a2af8f5a9315"
-        123: {"angle": 1.25}, # session with calibration: "a384272c-bc90-4150-ab94-a2af8f5a9315"
-        125: {"angle": 1.25}, # session with calibration: "a384272c-bc90-4150-ab94-a2af8f5a9315"
-        127: {"angle": 1.25}, # session with calibration: "a384272c-bc90-4150-ab94-a2af8f5a9315"
-        128: {"angle": 1.25}, # session with calibration: "a384272c-bc90-4150-ab94-a2af8f5a9315"
-        130: {"angle": 1.25}, # session with calibration: "a384272c-bc90-4150-ab94-a2af8f5a9315"
-        132: {"angle": 1.25}, # session with calibration: "a384272c-bc90-4150-ab94-a2af8f5a9315"
-        134: {"angle": 1.25}, # session with calibration: "a384272c-bc90-4150-ab94-a2af8f5a9315"
-        136: {"angle": 1.25}, # session with calibration: "a384272c-bc90-4150-ab94-a2af8f5a9315"
-        139: {"angle": 1.25}, # session with calibration: "a384272c-bc90-4150-ab94-a2af8f5a9315"
-        141: {"angle": 1.25}, # session with calibration: "a384272c-bc90-4150-ab94-a2af8f5a9315"
-        143: {"angle": 1.25}, # session with calibration: "a384272c-bc90-4150-ab94-a2af8f5a9315"
-        145: {"angle": 1.25}, # session with calibration: "a384272c-bc90-4150-ab94-a2af8f5a9315"
-        146: {"angle": 1.25}, # session with calibration: "a384272c-bc90-4150-ab94-a2af8f5a9315"
-        147: {"angle": 1.25}, # session with calibration: "a384272c-bc90-4150-ab94-a2af8f5a9315"
-        148: {"angle": 1.25}, # session with calibration: "a384272c-bc90-4150-ab94-a2af8f5a9315"
-        
-        135: {"angle": 0.5}, # session with calibration: "9e22db8f-6356-46c0-a118-d8f2741f97be"
-        137: {"angle": 0.5}, # session with calibration: "9e22db8f-6356-46c0-a118-d8f2741f97be"
-        138: {"angle": 0.5}, # session with calibration: "9e22db8f-6356-46c0-a118-d8f2741f97be"
-        140: {"angle": 0.5}, # session with calibration: "9e22db8f-6356-46c0-a118-d8f2741f97be"
-        142: {"angle": 0.5}, # session with calibration: "9e22db8f-6356-46c0-a118-d8f2741f97be"
-        144: {"angle": 0.5}, # session with calibration: "9e22db8f-6356-46c0-a118-d8f2741f97be"
+    # Define alignments for sessions with unique calibrations
+    alignment_unique = {
+    '9f19fa3b-9dd5-426f-bed2-7825148f2cf6': 0,
+    'd6b90c12-92a9-4e5b-9500-54655dde7e63': 0,
+    '057d10da-34c7-4fb7-a127-6040010dde06': 0,
+    '522fa7c2-6d12-4c67-b383-f3096aa3017f': 0,
+    '4911bbab-78ee-4b6e-8da6-52a189dea747': 0,
+    'c793b4dc-940e-4d2e-bfed-bbbb16443b01': 0,
+    'a118e69e-f652-42e0-9b4c-009ba60b4f86': 0,
+    '8f745d21-b747-4c3c-b6c6-b69c223e1f80': 0,
+    '725e0d28-d043-44bd-9f3e-0e58338a6bc4': 0,
+    'a4679c46-2f38-4cc5-86b4-bdd3f01791ab': 0,
+    'dc497821-4eac-49e0-87ac-c088d1245edb': 0,
+    '8b7b2366-0d1e-4336-a867-59d9b6e576de': 0,
+    '9c4666be-57f4-4a6b-9c51-7e394f4a53e1': 0,
+    'c3e8706c-47ea-463c-b14e-0326553a10ed': 0,
+    'a7675b05-88da-4bb0-b27b-5357c3ec5807': 0,
+    'a08ec9d6-24f8-44f7-a59c-f603b7517e4d': 0,
+    'ba7d94c8-dccb-486d-90d5-b3dcc237bfce': 0,
+    '59f3fc4e-674f-43cc-9fdc-e9a2cf0a109e': 0,
+    '5cddbc88-bf08-4408-80df-4248578ae373': 0,
+    'b26b073c-9528-4052-a117-cbc226de83d1': 0,
+    '18f57fa8-41a0-4d8d-b7a3-d0c838516f24': 0,
+    '3a681925-50b5-470e-a44a-c1cab743f58b': 0,
+    'f77e0358-c94e-47ee-8b23-a9bbcadafde2': 0,
+    'dac69d8a-0790-48ea-9296-66b5903d9ba8': 0,
+    'e91690d8-1a0d-4031-a7ad-3fb1e23d7c36': 0,
+    '6a0fbe94-23aa-4302-89bb-d878517f1cc8': 0,
+    "bf33bc40-d6e8-499e-b060-94b720133e3a": 1.75,
+    "a384272c-bc90-4150-ab94-a2af8f5a9315": 1.25,
+    "9e22db8f-6356-46c0-a118-d8f2741f97be": 0.5,
+    "28811d60-1973-427c-8814-db521690c051": 2.5
+    }
     
-        149: {"angle": 2.5}, # session with calibration: "28811d60-1973-427c-8814-db521690c051"
-
+    data = {
+        ## Initial manual alignments
+        # 89: {"angle": 4},
+        # 90: {"angle": 4},
+        # 91: {"angle": 0}, # not re-aligment but cutting end
+        # 21: {"angle": 2.5},
+        # 24: {"angle": 2},
+        # 31: {"angle": 2},
+        # 43: {"angle": 2},
+        # 51: {"angle": 5.25},
+        # 53: {"angle": 1},
+        # 57: {"angle": 1},
+        # 4: {"angle": 1},
+        # 66: {"angle": 0.75},
+        # 85: {"angle": 2},
+        # 86: {"angle": 0.5},
+        # 70: {"angle": 1},
+        # 62: {"angle": 1},
+        # 48: {"angle": 1},
+        # 35: {"angle": 0},
+        # 13: {"angle": -0.25},
+        # 3: {"angle": 0},
+        # 0: {"angle": 0.5},
+        
+        0: {'angle':alignment_unique['9f19fa3b-9dd5-426f-bed2-7825148f2cf6']},
+        1: {'angle':alignment_unique['d6b90c12-92a9-4e5b-9500-54655dde7e63']},
+        2: {'angle':alignment_unique['057d10da-34c7-4fb7-a127-6040010dde06']},
+        3: {'angle':alignment_unique['522fa7c2-6d12-4c67-b383-f3096aa3017f']},
+        4: {'angle':alignment_unique['9f19fa3b-9dd5-426f-bed2-7825148f2cf6']},
+        5: {'angle':alignment_unique['4911bbab-78ee-4b6e-8da6-52a189dea747']},
+        6: {'angle':alignment_unique['c793b4dc-940e-4d2e-bfed-bbbb16443b01']},
+        7: {'angle':alignment_unique['522fa7c2-6d12-4c67-b383-f3096aa3017f']},
+        8: {'angle':alignment_unique['522fa7c2-6d12-4c67-b383-f3096aa3017f']},
+        9: {'angle':alignment_unique['522fa7c2-6d12-4c67-b383-f3096aa3017f']},
+        10: {'angle':alignment_unique['a118e69e-f652-42e0-9b4c-009ba60b4f86']},
+        11: {'angle':alignment_unique['522fa7c2-6d12-4c67-b383-f3096aa3017f']},
+        12: {'angle':alignment_unique['a118e69e-f652-42e0-9b4c-009ba60b4f86']},
+        13: {'angle':alignment_unique['522fa7c2-6d12-4c67-b383-f3096aa3017f']},
+        14: {'angle':alignment_unique['a118e69e-f652-42e0-9b4c-009ba60b4f86']},
+        15: {'angle':alignment_unique['8f745d21-b747-4c3c-b6c6-b69c223e1f80']},
+        16: {'angle':alignment_unique['725e0d28-d043-44bd-9f3e-0e58338a6bc4']},
+        17: {'angle':alignment_unique['a4679c46-2f38-4cc5-86b4-bdd3f01791ab']},
+        18: {'angle':alignment_unique['dc497821-4eac-49e0-87ac-c088d1245edb']},
+        19: {'angle':alignment_unique['a4679c46-2f38-4cc5-86b4-bdd3f01791ab']},
+        20: {'angle':alignment_unique['8f745d21-b747-4c3c-b6c6-b69c223e1f80']},
+        21: {'angle':alignment_unique['8f745d21-b747-4c3c-b6c6-b69c223e1f80']},
+        22: {'angle':alignment_unique['8f745d21-b747-4c3c-b6c6-b69c223e1f80']},
+        23: {'angle':alignment_unique['a4679c46-2f38-4cc5-86b4-bdd3f01791ab']},
+        24: {'angle':alignment_unique['8f745d21-b747-4c3c-b6c6-b69c223e1f80']},
+        25: {'angle':alignment_unique['a4679c46-2f38-4cc5-86b4-bdd3f01791ab']},
+        26: {'angle':alignment_unique['a4679c46-2f38-4cc5-86b4-bdd3f01791ab']},
+        27: {'angle':alignment_unique['8f745d21-b747-4c3c-b6c6-b69c223e1f80']},
+        28: {'angle':alignment_unique['a4679c46-2f38-4cc5-86b4-bdd3f01791ab']},
+        29: {'angle':alignment_unique['a4679c46-2f38-4cc5-86b4-bdd3f01791ab']},
+        30: {'angle':alignment_unique['8f745d21-b747-4c3c-b6c6-b69c223e1f80']},
+        31: {'angle':alignment_unique['8f745d21-b747-4c3c-b6c6-b69c223e1f80']},
+        32: {'angle':alignment_unique['8f745d21-b747-4c3c-b6c6-b69c223e1f80']},
+        33: {'angle':alignment_unique['a4679c46-2f38-4cc5-86b4-bdd3f01791ab']},
+        34: {'angle':alignment_unique['8b7b2366-0d1e-4336-a867-59d9b6e576de']},
+        35: {'angle':alignment_unique['a4679c46-2f38-4cc5-86b4-bdd3f01791ab']},
+        36: {'angle':alignment_unique['a4679c46-2f38-4cc5-86b4-bdd3f01791ab']},
+        37: {'angle':alignment_unique['8b7b2366-0d1e-4336-a867-59d9b6e576de']},
+        38: {'angle':alignment_unique['a4679c46-2f38-4cc5-86b4-bdd3f01791ab']},
+        39: {'angle':alignment_unique['8b7b2366-0d1e-4336-a867-59d9b6e576de']},
+        40: {'angle':alignment_unique['8b7b2366-0d1e-4336-a867-59d9b6e576de']},
+        41: {'angle':alignment_unique['a4679c46-2f38-4cc5-86b4-bdd3f01791ab']},
+        42: {'angle':alignment_unique['a4679c46-2f38-4cc5-86b4-bdd3f01791ab']},
+        43: {'angle':alignment_unique['8b7b2366-0d1e-4336-a867-59d9b6e576de']},
+        44: {'angle':alignment_unique['a4679c46-2f38-4cc5-86b4-bdd3f01791ab']},
+        45: {'angle':alignment_unique['a4679c46-2f38-4cc5-86b4-bdd3f01791ab']},
+        46: {'angle':alignment_unique['8b7b2366-0d1e-4336-a867-59d9b6e576de']},
+        47: {'angle':alignment_unique['8b7b2366-0d1e-4336-a867-59d9b6e576de']},
+        48: {'angle':alignment_unique['9c4666be-57f4-4a6b-9c51-7e394f4a53e1']},
+        49: {'angle':alignment_unique['c3e8706c-47ea-463c-b14e-0326553a10ed']},
+        50: {'angle':alignment_unique['a7675b05-88da-4bb0-b27b-5357c3ec5807']},
+        51: {'angle':alignment_unique['a08ec9d6-24f8-44f7-a59c-f603b7517e4d']},
+        52: {'angle':alignment_unique['ba7d94c8-dccb-486d-90d5-b3dcc237bfce']},
+        53: {'angle':alignment_unique['c3e8706c-47ea-463c-b14e-0326553a10ed']},
+        54: {'angle':alignment_unique['ba7d94c8-dccb-486d-90d5-b3dcc237bfce']},
+        55: {'angle':alignment_unique['dc497821-4eac-49e0-87ac-c088d1245edb']},
+        56: {'angle':alignment_unique['c3e8706c-47ea-463c-b14e-0326553a10ed']},
+        57: {'angle':alignment_unique['9c4666be-57f4-4a6b-9c51-7e394f4a53e1']},
+        58: {'angle':alignment_unique['9c4666be-57f4-4a6b-9c51-7e394f4a53e1']},
+        59: {'angle':alignment_unique['ba7d94c8-dccb-486d-90d5-b3dcc237bfce']},
+        60: {'angle':alignment_unique['c3e8706c-47ea-463c-b14e-0326553a10ed']},
+        61: {'angle':alignment_unique['c3e8706c-47ea-463c-b14e-0326553a10ed']},
+        62: {'angle':alignment_unique['9c4666be-57f4-4a6b-9c51-7e394f4a53e1']},
+        63: {'angle':alignment_unique['c3e8706c-47ea-463c-b14e-0326553a10ed']},
+        64: {'angle':alignment_unique['c3e8706c-47ea-463c-b14e-0326553a10ed']},
+        65: {'angle':alignment_unique['9c4666be-57f4-4a6b-9c51-7e394f4a53e1']},
+        66: {'angle':alignment_unique['9c4666be-57f4-4a6b-9c51-7e394f4a53e1']},
+        67: {'angle':alignment_unique['9c4666be-57f4-4a6b-9c51-7e394f4a53e1']},
+        68: {'angle':alignment_unique['ba7d94c8-dccb-486d-90d5-b3dcc237bfce']},
+        69: {'angle':alignment_unique['c3e8706c-47ea-463c-b14e-0326553a10ed']},
+        70: {'angle':alignment_unique['c3e8706c-47ea-463c-b14e-0326553a10ed']},
+        71: {'angle':alignment_unique['c3e8706c-47ea-463c-b14e-0326553a10ed']},
+        72: {'angle':alignment_unique['c3e8706c-47ea-463c-b14e-0326553a10ed']},
+        73: {'angle':alignment_unique['59f3fc4e-674f-43cc-9fdc-e9a2cf0a109e']},
+        74: {'angle':alignment_unique['c3e8706c-47ea-463c-b14e-0326553a10ed']},
+        75: {'angle':alignment_unique['9c4666be-57f4-4a6b-9c51-7e394f4a53e1']},
+        76: {'angle':alignment_unique['5cddbc88-bf08-4408-80df-4248578ae373']},
+        77: {'angle':alignment_unique['522fa7c2-6d12-4c67-b383-f3096aa3017f']},
+        78: {'angle':alignment_unique['b26b073c-9528-4052-a117-cbc226de83d1']},
+        79: {'angle':alignment_unique['c3e8706c-47ea-463c-b14e-0326553a10ed']},
+        80: {'angle':alignment_unique['18f57fa8-41a0-4d8d-b7a3-d0c838516f24']},
+        81: {'angle':alignment_unique['b26b073c-9528-4052-a117-cbc226de83d1']},
+        82: {'angle':alignment_unique['9c4666be-57f4-4a6b-9c51-7e394f4a53e1']},
+        83: {'angle':alignment_unique['c3e8706c-47ea-463c-b14e-0326553a10ed']},
+        84: {'angle':alignment_unique['9c4666be-57f4-4a6b-9c51-7e394f4a53e1']},
+        85: {'angle':alignment_unique['3a681925-50b5-470e-a44a-c1cab743f58b']},
+        86: {'angle':alignment_unique['f77e0358-c94e-47ee-8b23-a9bbcadafde2']},
+        87: {'angle':alignment_unique['dac69d8a-0790-48ea-9296-66b5903d9ba8']},
+        88: {'angle':alignment_unique['e91690d8-1a0d-4031-a7ad-3fb1e23d7c36']},
+        89: {'angle':alignment_unique['dc497821-4eac-49e0-87ac-c088d1245edb']},
+        90: {'angle':alignment_unique['dc497821-4eac-49e0-87ac-c088d1245edb']},
+        91: {'angle':alignment_unique['6a0fbe94-23aa-4302-89bb-d878517f1cc8']},
+        92: {'angle':alignment_unique['a118e69e-f652-42e0-9b4c-009ba60b4f86']},
+        93: {'angle':alignment_unique['a118e69e-f652-42e0-9b4c-009ba60b4f86']},
+        94: {'angle':alignment_unique['8b7b2366-0d1e-4336-a867-59d9b6e576de']},
+        95: {'angle':alignment_unique['9c4666be-57f4-4a6b-9c51-7e394f4a53e1']},
+        96: {'angle':alignment_unique['9c4666be-57f4-4a6b-9c51-7e394f4a53e1']},
+        97: {'angle':alignment_unique['b26b073c-9528-4052-a117-cbc226de83d1']},
+        100: {'angle':alignment_unique['bf33bc40-d6e8-499e-b060-94b720133e3a']},
+        101: {'angle':alignment_unique['bf33bc40-d6e8-499e-b060-94b720133e3a']},
+        102: {'angle':alignment_unique['a384272c-bc90-4150-ab94-a2af8f5a9315']},
+        103: {'angle':alignment_unique['bf33bc40-d6e8-499e-b060-94b720133e3a']},
+        104: {'angle':alignment_unique['a384272c-bc90-4150-ab94-a2af8f5a9315']},
+        105: {'angle':alignment_unique['bf33bc40-d6e8-499e-b060-94b720133e3a']},
+        106: {'angle':alignment_unique['a384272c-bc90-4150-ab94-a2af8f5a9315']},
+        107: {'angle':alignment_unique['bf33bc40-d6e8-499e-b060-94b720133e3a']},
+        108: {'angle':alignment_unique['a384272c-bc90-4150-ab94-a2af8f5a9315']},
+        109: {'angle':alignment_unique['bf33bc40-d6e8-499e-b060-94b720133e3a']},
+        110: {'angle':alignment_unique['a384272c-bc90-4150-ab94-a2af8f5a9315']},
+        111: {'angle':alignment_unique['bf33bc40-d6e8-499e-b060-94b720133e3a']},
+        112: {'angle':alignment_unique['a384272c-bc90-4150-ab94-a2af8f5a9315']},
+        113: {'angle':alignment_unique['bf33bc40-d6e8-499e-b060-94b720133e3a']},
+        114: {'angle':alignment_unique['a384272c-bc90-4150-ab94-a2af8f5a9315']},
+        115: {'angle':alignment_unique['bf33bc40-d6e8-499e-b060-94b720133e3a']},
+        116: {'angle':alignment_unique['bf33bc40-d6e8-499e-b060-94b720133e3a']},
+        117: {'angle':alignment_unique['bf33bc40-d6e8-499e-b060-94b720133e3a']},
+        118: {'angle':alignment_unique['bf33bc40-d6e8-499e-b060-94b720133e3a']},
+        119: {'angle':alignment_unique['a384272c-bc90-4150-ab94-a2af8f5a9315']},
+        120: {'angle':alignment_unique['bf33bc40-d6e8-499e-b060-94b720133e3a']},
+        121: {'angle':alignment_unique['a384272c-bc90-4150-ab94-a2af8f5a9315']},
+        122: {'angle':alignment_unique['bf33bc40-d6e8-499e-b060-94b720133e3a']},
+        123: {'angle':alignment_unique['a384272c-bc90-4150-ab94-a2af8f5a9315']},
+        124: {'angle':alignment_unique['bf33bc40-d6e8-499e-b060-94b720133e3a']},
+        125: {'angle':alignment_unique['a384272c-bc90-4150-ab94-a2af8f5a9315']},
+        126: {'angle':alignment_unique['bf33bc40-d6e8-499e-b060-94b720133e3a']},
+        127: {'angle':alignment_unique['a384272c-bc90-4150-ab94-a2af8f5a9315']},
+        128: {'angle':alignment_unique['a384272c-bc90-4150-ab94-a2af8f5a9315']},
+        129: {'angle':alignment_unique['bf33bc40-d6e8-499e-b060-94b720133e3a']},
+        130: {'angle':alignment_unique['a384272c-bc90-4150-ab94-a2af8f5a9315']},
+        131: {'angle':alignment_unique['bf33bc40-d6e8-499e-b060-94b720133e3a']},
+        132: {'angle':alignment_unique['a384272c-bc90-4150-ab94-a2af8f5a9315']},
+        133: {'angle':alignment_unique['bf33bc40-d6e8-499e-b060-94b720133e3a']},
+        134: {'angle':alignment_unique['a384272c-bc90-4150-ab94-a2af8f5a9315']},
+        135: {'angle':alignment_unique['9e22db8f-6356-46c0-a118-d8f2741f97be']},
+        136: {'angle':alignment_unique['a384272c-bc90-4150-ab94-a2af8f5a9315']},
+        137: {'angle':alignment_unique['9e22db8f-6356-46c0-a118-d8f2741f97be']},
+        138: {'angle':alignment_unique['9e22db8f-6356-46c0-a118-d8f2741f97be']},
+        139: {'angle':alignment_unique['a384272c-bc90-4150-ab94-a2af8f5a9315']},
+        140: {'angle':alignment_unique['9e22db8f-6356-46c0-a118-d8f2741f97be']},
+        141: {'angle':alignment_unique['a384272c-bc90-4150-ab94-a2af8f5a9315']},
+        142: {'angle':alignment_unique['9e22db8f-6356-46c0-a118-d8f2741f97be']},
+        143: {'angle':alignment_unique['a384272c-bc90-4150-ab94-a2af8f5a9315']},
+        144: {'angle':alignment_unique['9e22db8f-6356-46c0-a118-d8f2741f97be']},
+        145: {'angle':alignment_unique['a384272c-bc90-4150-ab94-a2af8f5a9315']},
+        146: {'angle':alignment_unique['a384272c-bc90-4150-ab94-a2af8f5a9315']},
+        147: {'angle':alignment_unique['a384272c-bc90-4150-ab94-a2af8f5a9315']},
+        148: {'angle':alignment_unique['a384272c-bc90-4150-ab94-a2af8f5a9315']},
+        149: {'angle':alignment_unique['28811d60-1973-427c-8814-db521690c051']}
         }
     
     return data
