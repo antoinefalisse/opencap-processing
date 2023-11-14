@@ -199,8 +199,6 @@ def get_data_manual_alignment():
     
     # Define alignments for sessions with unique calibrations
     alignment_unique = {
-        
-        # Done
         '9f19fa3b-9dd5-426f-bed2-7825148f2cf6': 0.5, # 0
         'd6b90c12-92a9-4e5b-9500-54655dde7e63': 0, # 1
         '057d10da-34c7-4fb7-a127-6040010dde06': 1, # 2
@@ -220,17 +218,13 @@ def get_data_manual_alignment():
         'ba7d94c8-dccb-486d-90d5-b3dcc237bfce': 0.5, # 52
         '59f3fc4e-674f-43cc-9fdc-e9a2cf0a109e': 0, # bad trial (single)
         '5cddbc88-bf08-4408-80df-4248578ae373': 0.75, # 76
-
-        # TODO
         'b26b073c-9528-4052-a117-cbc226de83d1': 0, # 78
         '18f57fa8-41a0-4d8d-b7a3-d0c838516f24': 0, # 80
         '3a681925-50b5-470e-a44a-c1cab743f58b': 2, # 85
         'f77e0358-c94e-47ee-8b23-a9bbcadafde2': 0.5, # 86
-        'dac69d8a-0790-48ea-9296-66b5903d9ba8': 0, # 87
-        'e91690d8-1a0d-4031-a7ad-3fb1e23d7c36': 0, # 88
-        '6a0fbe94-23aa-4302-89bb-d878517f1cc8': 0, # 91
-
-        # Done
+        'dac69d8a-0790-48ea-9296-66b5903d9ba8': 1, # 87
+        'e91690d8-1a0d-4031-a7ad-3fb1e23d7c36': 2, # 88
+        '6a0fbe94-23aa-4302-89bb-d878517f1cc8': 0.5, # 91
         "bf33bc40-d6e8-499e-b060-94b720133e3a": 1.75,
         "a384272c-bc90-4150-ab94-a2af8f5a9315": 1.25,
         "9e22db8f-6356-46c0-a118-d8f2741f97be": 0.5,

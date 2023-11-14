@@ -101,7 +101,7 @@ elif case == '5':
 # %% Gait segmentation and kinematic analysis.
 # ii = 2
 
-trials_to_run = [76]
+trials_to_run = [91]
 # trials_to_run = [3,5,6,10,16,17]
 # trials_to_run = [15,18,34,48,49,50,51,52,73,76,78,80,85,86,87,88,91]
 
