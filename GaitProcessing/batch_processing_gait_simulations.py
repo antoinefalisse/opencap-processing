@@ -71,13 +71,13 @@ filter_frequency = 6
 # Settings for dynamic simulation.
 motion_type = 'walking_periodic_formulation_0'
 case = '2'
-legs = ['r']
+legs = ['r', 'l']
 runProblem = True
-overwrite_aligned_data = True
-overwrite_gait_results = True
-overwrite_tracked_motion_file = True
-processInputs = False
-runSimulation = False
+overwrite_aligned_data = False
+overwrite_gait_results = False
+overwrite_tracked_motion_file = False
+processInputs = True
+runSimulation = True
 solveProblem = True
 analyzeResults = True
 
@@ -101,13 +101,13 @@ elif case == '5':
 # %% Gait segmentation and kinematic analysis.
 # ii = 2
 
-trials_to_run = [91]
+# trials_to_run = [91]
 # trials_to_run = [3,5,6,10,16,17]
 # trials_to_run = [15,18,34,48,49,50,51,52,73,76,78,80,85,86,87,88,91]
 
 # trials_info = get_data_info(trial_indexes=[i for i in range(ii,ii+1)])
-# trials_info = get_data_info(trial_indexes=[i for i in range(100,101)])
-trials_info = get_data_info(trial_indexes=trials_to_run)
+trials_info = get_data_info(trial_indexes=[i for i in range(26,46)])
+# trials_info = get_data_info(trial_indexes=trials_to_run)
 
 trials_info_problems = get_data_info_problems()
 # trials_info_alignment = get_data_alignment()
