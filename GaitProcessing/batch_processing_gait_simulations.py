@@ -70,7 +70,7 @@ filter_frequency = 6
 
 # Settings for dynamic simulation.
 motion_type = 'walking_periodic_formulation_0'
-case = '5'
+case = '6'
 legs = ['r']
 runProblem = True
 overwrite_aligned_data = False
@@ -97,15 +97,19 @@ elif case == '5':
     # Buffers
     buffer_start = 0.7
     buffer_end = 0.3
-
+elif case == '6':
+    # Buffers
+    buffer_start = 1.0
+    buffer_end = 0.3
+    
 # %% Gait segmentation and kinematic analysis.
-# ii = 25
+# ii = 41
 
 # dhd
 # # case 5: left
 # trials_to_run = [3,10,24,27] Running
 # case 5: right
-# trials_to_run = [2,27,35,41] Running
+# trials_to_run = [2,27,35,41] done
 # # case 3: left
 # trials_to_run = [8,25] # done
 # # case 3: right
@@ -115,11 +119,17 @@ elif case == '5':
 # # case 5: left
 # trials_to_run = [118,124,129,131,132,145,147] # Running
 # case 5: right
-trials_to_run = [107,118,119,125,126,128,130,132,145,148] # Running
+# trials_to_run = [107,118,119,125,126,128,130,132,145,148] # Running
 # # case 3: left
 # trials_to_run = []
 # # case 3: right
 # trials_to_run = [111] # done
+
+# TODO
+# # case 6: left
+# trials_to_run = [10]
+# # case 6: right
+trials_to_run = [35, 41]
 
 # 
 # trials_info = get_data_info(trial_indexes=[i for i in range(ii,ii+1)])
@@ -324,7 +334,7 @@ for trial in trials_info:
         trialName_aligned = trial_name + '_' + suffixOutputFileName
         # else:
         #     trialName_aligned = trial_name
-        plotResultsOpenSimAD(sessionDir, trialName_aligned, cases=['3_r', '2_l'], mainPlots=True)
+        plotResultsOpenSimAD(sessionDir, trialName_aligned, cases=['5_r', '2_l'], mainPlots=True)
         test=1
 
 # # %% Print scalar results.
