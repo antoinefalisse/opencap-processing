@@ -71,8 +71,8 @@ filter_frequency = 6
 # Settings for dynamic simulation.
 motion_type = 'walking_periodic_formulation_0'
 case = '6'
-legs = ['r']
-runProblem = True
+legs = ['l']
+runProblem = False
 overwrite_aligned_data = False
 overwrite_gait_results = False
 overwrite_tracked_motion_file = False
@@ -103,38 +103,22 @@ elif case == '6':
     buffer_end = 0.3
     
 # %% Gait segmentation and kinematic analysis.
-# ii = 41
-
-# dhd
-# # case 5: left
-# trials_to_run = [3,10,24,27] Running
-# case 5: right
-# trials_to_run = [2,27,35,41] done
-# # case 3: left
-# trials_to_run = [8,25] # done
-# # case 3: right
-# trials_to_run = [8,25,32] # done
-
-# mdf
-# # case 5: left
-# trials_to_run = [118,124,129,131,132,145,147] # Running
-# case 5: right
-# trials_to_run = [107,118,119,125,126,128,130,132,145,148] # Running
-# # case 3: left
-# trials_to_run = []
-# # case 3: right
-# trials_to_run = [111] # done
+ii = 148
 
 # TODO
+# # case 5: left
+# trials_to_run = [148]
+# # case 5: right
+# trials_to_run = [130]
 # # case 6: left
-# trials_to_run = [10]
+# trials_to_run = [131, 145, 147]
 # # case 6: right
-trials_to_run = [35, 41]
+# trials_to_run = [132]
 
 # 
-# trials_info = get_data_info(trial_indexes=[i for i in range(ii,ii+1)])
+trials_info = get_data_info(trial_indexes=[i for i in range(ii,ii+1)])
 # trials_info = get_data_info(trial_indexes=[i for i in range(23,26)])
-trials_info = get_data_info(trial_indexes=trials_to_run)
+# trials_info = get_data_info(trial_indexes=trials_to_run)
 
 trials_info_problems = get_data_info_problems()
 # trials_info_alignment = get_data_alignment()
