@@ -47,14 +47,20 @@ def get_data_case():
         3: {"l": '5'},
         8: {"r": '3', "l": '3'},
         10: {"l": '6'},
+        24: {"l": '6'},
         25: {"r": '3', "l": '3'},
+        27: {"l": '6'},
         35: {"r": '6'},
+        107: {"r": '6'},
         111: {"r": '3'},
         119: {"r": '5'},
+        124: {"l": '6'},
         125: {"r": '5'},
         126: {"r": '5'},
         128: {"r": '5'},
         129: {"l": '5'},
+        132: {"r": '6'},
+        148: {"l": '5'},
     }
 
     return data
@@ -174,6 +180,7 @@ def get_data_select_window():
         111: [-1, 6.75],
         112: [-1, 6.9],
         113: [-1, 8.7],
+        114: [-1, 6.46],
         115: [-1, 9.65],
         116: [-1, 8.4],
         117: [-1, 8.9],
@@ -458,7 +465,10 @@ def get_data_info_problems():
     data = {
         26: {"leg": ['r', 'l']},    # Bad kinematics - flying model
         34: {"leg": ['r', 'l']},    # Bad kinematics - problem feet
-        73: {"leg": ['r', 'l']},    # jittery legs throughout trial
+        73: {"leg": ['r', 'l']},    # Jittery legs throughout trial
+        110: {"leg": ['r', 'l']},   # Model is sliding
+        121: {"leg": ['r', 'l']},   # Model is sliding
+        142: {"leg": ['r', 'l']},   # Bad kinematics
 
         # From old simulations, let's re-run and confirm
         # 55: {"leg": ['r', 'l'],"just_kinematics":['r','l']},    # No decent simulations / Glitch
