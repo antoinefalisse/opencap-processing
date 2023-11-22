@@ -70,14 +70,14 @@ filter_frequency = 6
 
 # Settings for dynamic simulation.
 motion_type = 'walking_periodic_formulation_0'
-case = '2'
-legs = ['r', 'l']
+case = '5'
+legs = ['l']
 runProblem = False
 overwrite_aligned_data = False
 overwrite_gait_results = False
 overwrite_tracked_motion_file = False
-processInputs = False
-runSimulation = False
+processInputs = True
+runSimulation = True
 solveProblem = True
 analyzeResults = True
 
@@ -100,6 +100,10 @@ elif case == '5':
 elif case == '6':
     # Buffers
     buffer_start = 1.0
+    buffer_end = 0.3
+elif case == '7':
+    # Buffers
+    buffer_start = 1.2
     buffer_end = 0.3
     
 # %% Gait segmentation and kinematic analysis.
@@ -318,7 +322,7 @@ for trial in trials_info:
         trialName_aligned = trial_name + '_' + suffixOutputFileName
         # else:
         #     trialName_aligned = trial_name
-        plotResultsOpenSimAD(sessionDir, trialName_aligned, cases=['2_r',  '2_l'], mainPlots=True)
+        plotResultsOpenSimAD(sessionDir, trialName_aligned, cases=['3_r',  '3_l'], mainPlots=True)
         test=1
 
 # # %% Print scalar results.
