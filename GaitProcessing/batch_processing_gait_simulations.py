@@ -53,8 +53,8 @@ from utilsKineticsOpenSimAD import kineticsOpenSimAD
 from utilsKinematics import kinematics
 
 # %% Paths.
-# driveDir = 'G:/.shortcut-targets-by-id/1PsjYe9HAdckqeTmAhxFd6F7Oad1qgZNy/ParkerStudy/'
-driveDir = 'C:/MyDriveSym/Projects/ParkerStudy'
+driveDir = 'G:/.shortcut-targets-by-id/1PsjYe9HAdckqeTmAhxFd6F7Oad1qgZNy/ParkerStudy/'
+# driveDir = 'C:/MyDriveSym/Projects/ParkerStudy'
 dataFolder = os.path.join(driveDir, 'Data')
 
 # %% User-defined variables.
@@ -115,7 +115,10 @@ elif case == '9':
     buffer_end = 0.5
     
 # %% Gait segmentation and kinematic analysis.
-ii = 147
+ii = 56
+import matplotlib.pyplot as plt
+plt.close('all')
+plotCases = ['2_r','2_l']
 
 # TODO
 # # case 5: left
@@ -330,7 +333,7 @@ for trial in trials_info:
         trialName_aligned = trial_name + '_' + suffixOutputFileName
         # else:
         #     trialName_aligned = trial_name
-        plotResultsOpenSimAD(sessionDir, trialName_aligned, cases=['3_r', '6_l'], mainPlots=True)
+        plotResultsOpenSimAD(sessionDir, trialName_aligned, cases=plotCases, mainPlots=True)
         test=1
 
 # # %% Print scalar results.
