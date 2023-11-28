@@ -53,8 +53,8 @@ from utilsKineticsOpenSimAD import kineticsOpenSimAD
 from utilsKinematics import kinematics
 
 # %% Paths.
-# driveDir = 'G:/.shortcut-targets-by-id/1PsjYe9HAdckqeTmAhxFd6F7Oad1qgZNy/ParkerStudy/'
-driveDir = 'C:/MyDriveSym/Projects/ParkerStudy'
+driveDir = 'G:/.shortcut-targets-by-id/1PsjYe9HAdckqeTmAhxFd6F7Oad1qgZNy/ParkerStudy/'
+# driveDir = 'C:/MyDriveSym/Projects/ParkerStudy'
 dataFolder = os.path.join(driveDir, 'Data')
 
 # %% User-defined variables.
@@ -69,10 +69,10 @@ n_gait_cycles = 1
 filter_frequency = 6
 
 # Settings for dynamic simulation.
-motion_type = 'walking_periodic_formulation_0'
-case = '9'
-legs = ['l']
-runProblem = False
+motion_type = 'walking_periodic_formulation_1'
+case = '5'
+legs = ['l','r']
+runProblem = True
 overwrite_aligned_data = False
 overwrite_gait_results = False
 overwrite_tracked_motion_file = False
@@ -115,7 +115,7 @@ elif case == '9':
     buffer_end = 0.5
     
 # %% Gait segmentation and kinematic analysis.
-ii = 147
+ii = 48
 
 # TODO
 # # case 5: left
