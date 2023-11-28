@@ -70,9 +70,9 @@ filter_frequency = 6
 
 # Settings for dynamic simulation.
 motion_type = 'walking_periodic_formulation_0'
-case = '9'
+case = '5'
 legs = ['l']
-runProblem = False
+runProblem = True
 overwrite_aligned_data = False
 overwrite_gait_results = False
 overwrite_tracked_motion_file = False
@@ -113,9 +113,12 @@ elif case == '9':
     # Buffers
     buffer_start = 1.2
     buffer_end = 0.5
-    
+elif case == '101': # starting Scott's cases
+    buffer_start = 0.7
+    buffer_end = 0.3
+    motion_type = 'walking_periodic_formulation_1'
 # %% Gait segmentation and kinematic analysis.
-ii = 56
+ii = 55
 import matplotlib.pyplot as plt
 plt.close('all')
 plotCases = ['2_r','2_l']

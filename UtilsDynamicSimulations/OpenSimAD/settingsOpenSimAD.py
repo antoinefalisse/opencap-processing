@@ -399,7 +399,7 @@ def get_setup(motion_type):
             'pelvis_list': {"weight": 10},
             'pelvis_rotation': {"weight": 10},
             'pelvis_tx': {"weight": 50},
-            'pelvis_ty': {"weight": 20}, #changed from 5
+            'pelvis_ty': {"weight": 50}, #changed from 5, to 20
             'pelvis_tz': {"weight": 50}, 
             'hip_flexion_l': {"weight": 100},
             'hip_adduction_l': {"weight": 50},
@@ -409,7 +409,7 @@ def get_setup(motion_type):
             'hip_rotation_r': {"weight": 10},
             'knee_angle_l': {"weight": 100},
             'knee_angle_r': {"weight": 100},
-            'ankle_angle_l': {"weight": 20}, #changed from 100
+            'ankle_angle_l': {"weight": 5}, #changed from 100, to 20
             'ankle_angle_r': {"weight": 100},
             'subtalar_angle_l': {"weight": 5},
             'subtalar_angle_r': {"weight": 5},
