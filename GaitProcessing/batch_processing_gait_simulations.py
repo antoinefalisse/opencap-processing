@@ -53,8 +53,8 @@ from utilsKineticsOpenSimAD import kineticsOpenSimAD
 from utilsKinematics import kinematics
 
 # %% Paths.
-driveDir = 'G:/.shortcut-targets-by-id/1PsjYe9HAdckqeTmAhxFd6F7Oad1qgZNy/ParkerStudy/'
-# driveDir = 'C:/MyDriveSym/Projects/ParkerStudy'
+# driveDir = 'G:/.shortcut-targets-by-id/1PsjYe9HAdckqeTmAhxFd6F7Oad1qgZNy/ParkerStudy/'
+driveDir = 'C:/MyDriveSym/Projects/ParkerStudy'
 dataFolder = os.path.join(driveDir, 'Data')
 
 # %% User-defined variables.
@@ -69,7 +69,7 @@ n_gait_cycles = 1
 filter_frequency = 6
 
 # Settings for dynamic simulation.
-motion_type = 'walking_periodic_formulation_1'
+motion_type = 'walking_periodic_formulation_0'
 case = '5'
 legs = ['l','r']
 runProblem = True
