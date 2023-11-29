@@ -107,5 +107,3 @@ plot_dataframe_with_shading(
     xlabel = '% gait cycle',
     title = 'kinematics (m or deg)',
     legend_entries = ['right','left'])
-
-test = 1
