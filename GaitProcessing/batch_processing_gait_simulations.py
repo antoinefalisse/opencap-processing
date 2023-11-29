@@ -119,17 +119,7 @@ elif case == '102':
     
     
 # %% Gait segmentation and kinematic analysis.
-ii = 48
-
-# TODO
-# # case 5: left
-# trials_to_run = [130, 148] Running
-# # case 5: right
-# trials_to_run = []
-# # case 6: left
-# trials_to_run = [131, 145, 147]
-# # case 6: right
-# trials_to_run = [132] Running
+ii = 72
 
 trials_info = get_data_info(trial_indexes=[i for i in range(ii,ii+1)])
 # trials_info = get_data_info(trial_indexes=[i for i in range(23,26)])
