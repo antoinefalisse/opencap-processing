@@ -34,25 +34,41 @@
 # print("SID List:", sid_list)
 # print("Trial List:", trial_list)
 
-# %% Test
-
+# %% Specific cases
 def get_data_case():
 
-    data = {
-        # 25: {"r": '3', "l": '3'},
-        # 86: {"l": '5'},
-        # 94: {"r": '5',"l": '5'},
-        # 96: {"r": '5',"l": '5'}
-        
+    data = { 
+        # DHD       
+        2: {"r": '5'},
         3: {"l": '5'},
         8: {"r": '3', "l": '3'},
         10: {"l": '6'},
         24: {"l": '6'},
         25: {"r": '3', "l": '3'},
-        27: {"l": '6'},
+        27: {"r": '5', "l": '6'},
         35: {"r": '6'},
+        41: {"r": '6'},
+        48: {"r": '5', "l": '5'},
+        56: {"r": '4'},
+        63: {"l": '5'},
+        66: {"r": '4', "l": '4'},
+        68: {"r": '5', "l": '5'},
+        69: {"r": '5', "l": '102'},
+        72: {"l": '6'},
+        76: {"r": '6'},
+        77: {"l": '5'},
+        80: {"l": '4'},
+        83: {"r": '6'},
+        88: {"r": '5'},
+        89: {"l": '4'},
+        90: {"l": '5'},
+        91: {"r": '6'},
+        92: {"r": '5', "l": '3'},
+        94: {"r": '6', "l": '6'},
+        # MDF
         107: {"r": '6'},
         111: {"r": '3'},
+        114: {"l": '8'},
         115: {"r": '3', "l": '3'},
         119: {"r": '5'},
         124: {"l": '6'},
@@ -63,6 +79,7 @@ def get_data_case():
         130: {"r": '5', "l": '6'},
         131: {"l": '6'},
         132: {"r": '6'},
+        145: {"r": '5', "l": '9'},
         147: {"r": '3', "l": '6'},
         148: {"l": '5'},
     }
@@ -72,6 +89,7 @@ def get_data_case():
 def get_data_select_window():
     
     data = {
+        # DHD
         0: [-1.0, 7.80],
         1: [-1.0, 7.72],
         2: [-1.0, 7.48],
@@ -141,7 +159,7 @@ def get_data_select_window():
         66: [-1.0, 13.70],
         67: [-1.0, 7.10],
         68: [-1.0, 7.62],
-        69: [-1.0, 7.19],
+        69: [-1.0, 7.23],
         70: [-1.0, 8.60],
         71: [-1.0, 6.28],
         72: [-1.0, 4.92],
@@ -170,7 +188,7 @@ def get_data_select_window():
         95: [-1.0, 5.85],
         96: [-1.0, 7.17],
         97: [-1.0, 5.75],
-
+        # Mdf
         100: [-1, 9.85],
         101: [-1, 9.05],
         102: [-1, 7.1],
@@ -254,30 +272,7 @@ def get_data_manual_alignment():
         "28811d60-1973-427c-8814-db521690c051": 2.5
     }
     
-    data = {
-        ## Initial manual alignments
-        # 89: {"angle": 4},
-        # 90: {"angle": 4},
-        # 91: {"angle": 0}, # not re-aligment but cutting end
-        # 21: {"angle": 2.5},
-        # 24: {"angle": 2},
-        # 31: {"angle": 2},
-        # 43: {"angle": 2},
-        # 51: {"angle": 5.25},
-        # 53: {"angle": 1},
-        # 57: {"angle": 1},
-        # 4: {"angle": 1},
-        # 66: {"angle": 0.75},
-        # 85: {"angle": 2},
-        # 86: {"angle": 0.5},
-        # 70: {"angle": 1},
-        # 62: {"angle": 1},
-        # 48: {"angle": 1},
-        # 35: {"angle": 0},
-        # 13: {"angle": -0.25},
-        # 3: {"angle": 0},
-        # 0: {"angle": 0.5},
-        
+    data = {        
         0: {'angle':alignment_unique['9f19fa3b-9dd5-426f-bed2-7825148f2cf6']},
         1: {'angle':alignment_unique['d6b90c12-92a9-4e5b-9500-54655dde7e63']},
         2: {'angle':alignment_unique['057d10da-34c7-4fb7-a127-6040010dde06']},
@@ -433,55 +428,21 @@ def get_data_manual_alignment():
 
 def get_data_select_previous_cycle():
     
-    data = {
-        # 2: {"leg": ['r']},
-        # 33: {"leg": ['r']},
-        # 39: {"leg": ['r']},
-        # 41: {"leg": ['r', 'l']},
-        # 55: {"leg": ['l']},
-        # 83: {"leg": ['l']},
-        # 89: {"leg": ['l', 'r']},
-        # 90: {"leg": ['r']},
-        }
+    data = {}
     
     return data
-    
-
-# def get_data_alignment():
-
-#     # Trials that need re-aligment
-#     data = [0, 2, 3, 4, 13, 15, 18, 20, 21, 22, 24, 26, 27, 30, 31, 32, 35, 37, 39, 40, 43, 46, 47, 48, 49, 50, 51, 52, 53, 55, 57, 58,
-#             62, 63, 64, 66, 67, 70, 71, 72, 73, 75, 76, 83, 85, 86, 89, 90, 91, 92,94,96,97,
-            
-#             100,101,103,105,107,109,111,113,115,116,117,118,120,122,124,126,129,131,133,            
-#             102,104,106,108,110,112,114,119,121,123,125,127,128,130,132,134,136,139,141,143,145,146,147,148,
-            
-#             135,137,138,140,142,144,
-
-#             149
-            
-#             ]
-
-#     return data
 
 def get_data_info_problems():
 
     data = {
         26: {"leg": ['r', 'l']},    # Bad kinematics - flying model
         34: {"leg": ['r', 'l']},    # Bad kinematics - problem feet
+        55: {"leg": ['r', 'l']},    # Bad kinematics - problem feet
         73: {"leg": ['r', 'l']},    # Jittery legs throughout trial
+        86: {"leg": ['r', 'l']},    # Bad kinematics
         110: {"leg": ['r', 'l']},   # Model is sliding
         121: {"leg": ['r', 'l']},   # Model is sliding
         142: {"leg": ['r', 'l']},   # Bad kinematics
-
-        # From old simulations, let's re-run and confirm
-        # 55: {"leg": ['r', 'l'],"just_kinematics":['r','l']},    # No decent simulations / Glitch
-        # 73: {"leg": ['r', 'l']},    # Glitch
-        # 77: {"leg": ['r', 'l']},    # Glitch
-        # 85: {"leg": ['r']},         # No decent simulations / Glitch
-        # 86: {"leg": ['r'],"just_kinematics":['r','l']},         # No decent simulations / Glitch
-        # 87: {"leg": ['r', 'l']},    # Glitch
-        # 88: {"leg": ['r', 'l']},    # Glitch91: {"leg": ['l']},         # No decent simulations / Glitch
     }   
 
     return data
@@ -491,6 +452,7 @@ def get_data_info_problems():
 def get_data_info(trial_indexes=[]):
 
     data = {
+        # DHD
         0: {"pid": "p011", "sid": "ee23fbb3-a991-4aa4-9a2f-a213ec9ec6c5", "trial": "10mwt", "trial_clean": "10mwt"},    # Okay kinematics, decent simulations
         1: {"pid": "p012", "sid": "d6b90c12-92a9-4e5b-9500-54655dde7e63", "trial": "10mwt", "trial_clean": "10mwt"},    # Okay kinematics, RERUN
         2: {"pid": "p013", "sid": "057d10da-34c7-4fb7-a127-6040010dde06", "trial": "10mwt_2", "trial_clean": "10mwt"},  # Not great kinematics, not great simulations
@@ -591,14 +553,7 @@ def get_data_info(trial_indexes=[]):
         96: {"pid": "p091", "sid": "04cad9b0-796a-40ec-aa24-346c71e8ff37", "trial": "10mwt", "trial_clean": "10mwt"},
         97: {"pid": "p098", "sid": "84aef447-6982-4842-8f95-e63459993fcf", "trial": "10mwt", "trial_clean": "10mwt"},        
 
-
         # MDF
-        # Sesssions w/ calibration trials:
-        #   "bf33bc40-d6e8-499e-b060-94b720133e3a"
-        #   "a384272c-bc90-4150-ab94-a2af8f5a9315"
-        #   "9e22db8f-6356-46c0-a118-d8f2741f97be"
-        #   "28811d60-1973-427c-8814-db521690c051"
-
         100: {"pid": "mdf_005", "sid": "dfa1c060-df8d-40e8-90e6-107078621c7c", "trial": "10mwt", "trial_clean": "10mwt"}, #session with calibration: 0 "bf33bc40-d6e8-499e-b060-94b720133e3a"
         101: {"pid": "mdf_006", "sid": "ce0fdd88-53b6-4974-92fb-a720b93d1623", "trial": "10mwt", "trial_clean": "10mwt"}, #session with calibration: 0 "bf33bc40-d6e8-499e-b060-94b720133e3a"
         102: {"pid": "mdf_006", "sid": "fa8c8348-4ceb-41ee-9c48-5f3701f84996", "trial": "10mwt", "trial_clean": "10mwt"}, #session with calibration: 1 "a384272c-bc90-4150-ab94-a2af8f5a9315"
@@ -656,7 +611,3 @@ def get_data_info(trial_indexes=[]):
         return {trial_index: data[trial_index] for trial_index in trial_indexes}
     else:
         return data
-
-
-# %%
-#
