@@ -380,6 +380,8 @@ def get_setup(motion_type):
         'use_same_weight_individual_coordinate_value_speed': False,
         'meshDensity': 100}
     
+    
+    
     setups['walking_periodic_torque_driven'] = {
         'ipopt_tolerance': 3,
         'weights': {
