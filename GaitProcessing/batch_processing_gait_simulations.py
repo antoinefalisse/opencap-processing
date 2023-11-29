@@ -53,8 +53,8 @@ from utilsKineticsOpenSimAD import kineticsOpenSimAD
 from utilsKinematics import kinematics
 
 # %% Paths.
-driveDir = 'G:/.shortcut-targets-by-id/1PsjYe9HAdckqeTmAhxFd6F7Oad1qgZNy/ParkerStudy/'
-# driveDir = 'C:/MyDriveSym/Projects/ParkerStudy'
+# driveDir = 'G:/.shortcut-targets-by-id/1PsjYe9HAdckqeTmAhxFd6F7Oad1qgZNy/ParkerStudy/'
+driveDir = 'C:/MyDriveSym/Projects/ParkerStudy'
 dataFolder = os.path.join(driveDir, 'Data')
 
 # %% User-defined variables.
@@ -113,14 +113,9 @@ elif case == '9':
     # Buffers
     buffer_start = 1.2
     buffer_end = 0.5
-elif case == '101': # starting Scott's cases. for 48 with bad l ankle angle
-    buffer_start = 0.7
-    buffer_end = 0.3
-    motion_type = 'walking_periodic_formulation_1'
-elif case == '102': # for 69 with bad r ankle angle
+elif case == '102': 
     buffer_start = 0.7
     buffer_end = .27
-    motion_type = 'walking_periodic_formulation_0'
 
     
 # %% Gait segmentation and kinematic analysis.
