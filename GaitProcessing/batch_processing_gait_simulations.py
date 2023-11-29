@@ -70,7 +70,7 @@ filter_frequency = 6
 
 # Settings for dynamic simulation.
 motion_type = 'walking_periodic_formulation_0'
-case = '5'
+case = '102'
 legs = ['l']
 runProblem = True
 overwrite_aligned_data = False
@@ -113,12 +113,18 @@ elif case == '9':
     # Buffers
     buffer_start = 1.2
     buffer_end = 0.5
-elif case == '101': # starting Scott's cases
+elif case == '101': # starting Scott's cases. for 48 with bad l ankle angle
     buffer_start = 0.7
     buffer_end = 0.3
     motion_type = 'walking_periodic_formulation_1'
+elif case == '102': # for 69 with bad r ankle angle
+    buffer_start = 0.7
+    buffer_end = .27
+    motion_type = 'walking_periodic_formulation_0'
+
+    
 # %% Gait segmentation and kinematic analysis.
-ii = 55
+ii = 69
 import matplotlib.pyplot as plt
 plt.close('all')
 plotCases = ['2_r','2_l']
