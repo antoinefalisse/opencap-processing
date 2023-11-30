@@ -74,7 +74,7 @@ case = '2'
 legs = ['r','l']
 runProblem = True
 overwrite_aligned_data = False
-overwrite_gait_results = True
+overwrite_gait_results = False
 overwrite_tracked_motion_file = False
 processInputs = False
 runSimulation = False
@@ -199,7 +199,7 @@ for trial in trials_info:
             
             # Gait segmentation and analysis.
             # Purposefuly save with trialName and not trialName_aligned, since trialName is the trial actually being analysed.
-            pathOutputJsonFile = os.path.join(pathKinematicsFolder, '{}_kinematic_features_{}.json'.format(trialName, leg))
+            pathOutputJsonFile = os.path.join(pathKinematicsFolder, '{}_kinematic_features_{}_new.json'.format(trialName, leg))
             # Do if not already done.
             if not os.path.exists(pathOutputJsonFile) or overwrite_gait_results:
                 try:
