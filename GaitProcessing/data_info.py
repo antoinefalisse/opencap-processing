@@ -428,7 +428,10 @@ def get_data_manual_alignment():
 
 def get_data_select_previous_cycle():
     
-    data = {}
+    data = {
+        115: {"leg": ['r']},
+        147: {"leg": ['l']}
+        }
     
     return data
 

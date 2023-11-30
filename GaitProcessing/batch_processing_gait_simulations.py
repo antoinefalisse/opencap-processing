@@ -70,14 +70,14 @@ filter_frequency = 6
 
 # Settings for dynamic simulation.
 motion_type = 'walking_periodic_formulation_0'
-case = '5'
-legs = ['l','r']
+case = '2'
+legs = ['r','l']
 runProblem = True
 overwrite_aligned_data = False
-overwrite_gait_results = False
+overwrite_gait_results = True
 overwrite_tracked_motion_file = False
-processInputs = True
-runSimulation = True
+processInputs = False
+runSimulation = False
 solveProblem = True
 analyzeResults = True
 
@@ -119,10 +119,10 @@ elif case == '102':
     
     
 # %% Gait segmentation and kinematic analysis.
-ii = 72
+# ii = 100
 
-trials_info = get_data_info(trial_indexes=[i for i in range(ii,ii+1)])
-# trials_info = get_data_info(trial_indexes=[i for i in range(23,26)])
+# trials_info = get_data_info(trial_indexes=[i for i in range(ii,ii+1)])
+trials_info = get_data_info(trial_indexes=[i for i in range(76,77)])
 # trials_info = get_data_info(trial_indexes=trials_to_run)
 
 trials_info_problems = get_data_info_problems()
@@ -260,15 +260,22 @@ for trial in trials_info:
                 with open(pathOutputJsonFile) as json_file:
                     gaitResults = json.load(json_file)
 
-            # # Temporary check to see if something has changed
-            # temp1 = gaitResults['events']['ipsilateralTime']
-            # pathOutputJsonFile_old =  os.path.join(pathKinematicsFolder, 'gaitResults_{}.json'.format(leg))
+            # Temporary check to see if something has changed in gait analysis
+            # pathOutputJsonFile_old =  os.path.join(pathKinematicsFolder, '{}_kinematic_features_{}.json'.format(trialName, leg))
             # with open(pathOutputJsonFile_old) as json_file:
-            #     gaitResults_old = json.load(json_file)
-            # temp2 = gaitResults_old['events']['ipsilateralTime']
-            # # Check that both lists are the same
-            # if temp1 != temp2:
-            #     raise ValueError('Something has changed in the gait analysis, please check {}.'.format(session_id))            
+            #     gaitResults_old = json.load(json_file)            
+            # for scalar in scalar_names:
+            #     temp1 = gaitResults['scalars'][scalar]['value']
+            #     print('{}: {}'.format(scalar, temp1))
+            #     temp2 = gaitResults_old['scalars'][scalar]['value']
+            #     print('{}: {}'.format(scalar, temp2))
+            #     if not scalar == 'step_width':
+            #         # Check that both lists are the same
+            #         if temp1 != temp2:
+            #             raise ValueError('Something has changed in the gait analysis, please check {}.'.format(session_id))
+            # # Delete pathOutputJsonFile_old and rename pathOutputJsonFile to pathOutputJsonFile_old
+            # os.remove(pathOutputJsonFile_old)
+            # os.rename(pathOutputJsonFile, pathOutputJsonFile_old)
 
             # Setup dynamic optimization problem.
             time_window = [
