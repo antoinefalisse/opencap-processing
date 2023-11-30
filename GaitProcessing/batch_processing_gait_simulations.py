@@ -1,10 +1,10 @@
 '''
     ---------------------------------------------------------------------------
-    OpenCap processing: example_gait_analysis.py
+    OpenCap processing: batch_processing_giat_simulations.py
     ---------------------------------------------------------------------------
     Copyright 2023 Stanford University and the Authors
     
-    Author(s): Scott Uhlrich
+    Author(s): Scott Uhlrich & Antoine Falisse
     
     Licensed under the Apache License, Version 2.0 (the "License"); you may not
     use this file except in compliance with the License. You may obtain a copy
@@ -13,14 +13,7 @@
     distributed under the License is distributed on an "AS IS" BASIS,
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
-    limitations under the License.
-                
-    Please contact us for any questions: https://www.opencap.ai/#contact
-
-    This example shows how to run a kinematic analysis of gait data. It works
-    with either treadmill or overground gait. You can compute scalar metrics 
-    as well as gait cycle-averaged kinematic curves.
-    
+    limitations under the License.    
 '''
 
 import os
@@ -72,7 +65,7 @@ filter_frequency = 6
 motion_type = 'walking_periodic_formulation_0'
 case = '2'
 legs = ['r','l']
-runProblem = True
+runProblem = False
 overwrite_aligned_data = False
 overwrite_gait_results = False
 overwrite_tracked_motion_file = False
@@ -115,18 +108,15 @@ elif case == '9':
     buffer_end = 0.5
 elif case == '102': 
     buffer_start = 0.7
-    buffer_end = .27
-    
+    buffer_end = .27    
     
 # %% Gait segmentation and kinematic analysis.
-# ii = 100
-
-# trials_info = get_data_info(trial_indexes=[i for i in range(ii,ii+1)])
-trials_info = get_data_info(trial_indexes=[i for i in range(76,77)])
+ii = 0
+trials_info = get_data_info(trial_indexes=[i for i in range(ii,ii+1)])
+# trials_info = get_data_info(trial_indexes=[i for i in range(125,126)])
 # trials_info = get_data_info(trial_indexes=trials_to_run)
 
 trials_info_problems = get_data_info_problems()
-# trials_info_alignment = get_data_alignment()
 trials_select_previous_cycle = get_data_select_previous_cycle()
 trials_manual_alignment = get_data_manual_alignment()
 trials_select_window = get_data_select_window()
@@ -151,11 +141,7 @@ for trial in trials_info:
             print(f"Error downloading trial {trial_id}: {e}")
             continue
         
-        # We align all trials.
-        # if trial in trials_info_alignment:
-        # print("Skipping trial {} because it is an alignment trial.".format(trial))
-        # continue
-        # Align markers with ground.
+        # We align all trials with ground.
         suffixOutputFileName = 'aligned'
         trialName_aligned = trialName + '_' + suffixOutputFileName
         
@@ -186,8 +172,6 @@ for trial in trials_info:
             except Exception as e:
                 print(f"Error alignement trial {trial_id}: {e}")
                 continue
-        # else:
-        #     trialName_aligned = trialName
                     
         # Data processing.
         print('Processing data...')        
@@ -199,7 +183,7 @@ for trial in trials_info:
             
             # Gait segmentation and analysis.
             # Purposefuly save with trialName and not trialName_aligned, since trialName is the trial actually being analysed.
-            pathOutputJsonFile = os.path.join(pathKinematicsFolder, '{}_kinematic_features_{}_new.json'.format(trialName, leg))
+            pathOutputJsonFile = os.path.join(pathKinematicsFolder, '{}_kinematic_features_{}.json'.format(trialName, leg))
             # Do if not already done.
             if not os.path.exists(pathOutputJsonFile) or overwrite_gait_results:
                 try:
@@ -207,7 +191,7 @@ for trial in trials_info:
                     gait = gait_analysis(
                         sessionDir, trialName_aligned, leg=leg,
                         lowpass_cutoff_frequency_for_coordinate_values=filter_frequency,
-                        n_gait_cycles=n_gait_cycles)
+                        n_gait_cycles=n_gait_cycles, gait_style='overground')
                     # Compute scalars.
                     gaitResults['scalars'] = gait.compute_scalars(scalar_names)
                     # Get gait events.
@@ -260,7 +244,7 @@ for trial in trials_info:
                 with open(pathOutputJsonFile) as json_file:
                     gaitResults = json.load(json_file)
 
-            # Temporary check to see if something has changed in gait analysis
+            # Temporary check to see if something has changed in gait analysis after updating code
             # pathOutputJsonFile_old =  os.path.join(pathKinematicsFolder, '{}_kinematic_features_{}.json'.format(trialName, leg))
             # with open(pathOutputJsonFile_old) as json_file:
             #     gaitResults_old = json.load(json_file)            
@@ -269,7 +253,7 @@ for trial in trials_info:
             #     print('{}: {}'.format(scalar, temp1))
             #     temp2 = gaitResults_old['scalars'][scalar]['value']
             #     print('{}: {}'.format(scalar, temp2))
-            #     if not scalar == 'step_width':
+            #     if not scalar == 'step_width': # We know that one has changed.
             #         # Check that both lists are the same
             #         if temp1 != temp2:
             #             raise ValueError('Something has changed in the gait analysis, please check {}.'.format(session_id))
@@ -322,38 +306,8 @@ for trial in trials_info:
                 except Exception as e:
                     print(f"Error during dynamic optimization for trial {trial_id}: {e}")
                     continue
-            test=1
         
     else:
-        # if trial in trials_info_alignment:
         suffixOutputFileName = 'aligned'
         trialName_aligned = trial_name + '_' + suffixOutputFileName
-        # else:
-        #     trialName_aligned = trial_name
-        plotResultsOpenSimAD(sessionDir, trialName_aligned, cases=['2_r','6_l'], mainPlots=True)
-        test=1
-
-# # %% Print scalar results.
-# print('\nRight foot gait metrics:')
-# print('(units: m and s)')
-# print('-----------------')
-# for key, value in gaitResults['scalars_r'].items():
-#     rounded_value = round(value, 2)
-#     print(f"{key}: {rounded_value}")
-    
-# print('\nLeft foot gait metrics:')
-# print('(units: m and s)')
-# print('-----------------')
-# for key, value in gaitResults['scalars_l'].items():
-#     rounded_value = round(value, 2)
-#     print(f"{key}: {rounded_value}")
-
-    
-# # %% You can plot multiple curves, in this case we compare right and left legs.
-# plot_dataframe_with_shading(
-#     [gaitResults['curves_r']['mean'], gaitResults['curves_l']['mean']],
-#     [gaitResults['curves_r']['sd'], gaitResults['curves_l']['sd']],
-#     leg = ['r','l'],
-#     xlabel = '% gait cycle',
-#     title = 'kinematics (m or deg)',
-#     legend_entries = ['right','left'])
+        plotResultsOpenSimAD(sessionDir, trialName_aligned, cases=['2_r','2_l'], mainPlots=True)
