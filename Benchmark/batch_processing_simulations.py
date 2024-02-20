@@ -36,7 +36,7 @@ from mainOpenSimAD import run_tracking
 
 # %% Paths.
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
-subjects = ['subject' + str(i) for i in range(2, 3)]
+subjects = ['subject' + str(i) for i in range(2, 5)]
 
 
 trials = {'subject2': ['walking1', 'walking2', 'walking3', 'walking_TS1', 'walking_TS2', 'walking_TS4'],

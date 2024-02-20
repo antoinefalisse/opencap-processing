@@ -2318,7 +2318,7 @@ def processInputsOpenSimAD(baseDir, dataFolder, session_id, trial_name,
         if time_window[1] > motion_file['time'][-1]:
             time_window[1] = motion_file['time'][-1]
             
-    settings['timeInterval'] = time_window
+    settings['timeInterval'] = [float(i) for i in time_window]
     
     # Get demographics.    
     settings['mass_kg'] = metadata['mass_kg']
