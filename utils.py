@@ -71,6 +71,15 @@ def get_user_sessions():
     
     return sessions
 
+# Returns a list of all sessions of the user.
+# TODO: this also contains public sessions of other users.
+def get_user_sessions_all(user_token=API_TOKEN):
+    sessions = requests.get(
+        API_URL + "sessions/", 
+        headers = {"Authorization": "Token {}".format(user_token)}).json()
+    
+    return sessions
+
 def get_trial_json(trial_id):
     trialJson = requests.get(
         API_URL + "trials/{}/".format(trial_id),
@@ -170,8 +179,8 @@ def get_motion_data(trial_id, session_path):
         markerFolder = os.path.join(session_path, 'MarkerData')
         markerPath = os.path.join(markerFolder, trial_name + '.trc')
         os.makedirs(markerFolder, exist_ok=True)
-        markerURL = trial['results'][resultTags.index('marker_data')]['media']
         if not os.path.exists(markerPath):
+            markerURL = trial['results'][resultTags.index('marker_data')]['media']
             download_file(markerURL, markerPath)
     
     # IK data.
@@ -179,8 +188,8 @@ def get_motion_data(trial_id, session_path):
         ikFolder = os.path.join(session_path, 'OpenSimData', 'Kinematics')
         ikPath = os.path.join(ikFolder, trial_name + '.mot')
         os.makedirs(ikFolder, exist_ok=True)
-        ikURL = trial['results'][resultTags.index('ik_results')]['media']
         if not os.path.exists(ikPath):
+            ikURL = trial['results'][resultTags.index('ik_results')]['media']
             download_file(ikURL, ikPath)
         
     # Main settings
@@ -188,9 +197,9 @@ def get_motion_data(trial_id, session_path):
         settingsFolder = os.path.join(session_path, 'MarkerData', 'Settings')
         settingsPath = os.path.join(settingsFolder, 'settings_' + trial_name + '.yaml')
         os.makedirs(settingsFolder, exist_ok=True)
-        settingsURL = trial['results'][resultTags.index('main_settings')]['media']
         if not os.path.exists(settingsPath):
-            download_file(settingsURL, settingsPath)  
+            settingsURL = trial['results'][resultTags.index('main_settings')]['media']
+            download_file(settingsURL, settingsPath)
         
         
 def get_geometries(session_path, modelName='LaiUhlrich2022_scaled'):
