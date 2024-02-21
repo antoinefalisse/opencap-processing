@@ -45,7 +45,7 @@ trials = {'subject2': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkin
           'subject5': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
           'subject6': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
           'subject7': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
-          'subject8': ['walkingTS2'], # 'walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'
+          'subject8': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS3'], #walkingTS2 excluded
           'subject9': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
           'subject10': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
           'subject11': ['walking2', 'walking3', 'walking4', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
@@ -60,7 +60,7 @@ case = '0'
 runProblem = True
 processInputs = True
 runSimulation = True
-solveProblem = True
+solveProblem = False
 analyzeResults = True
 plotResults = False
     

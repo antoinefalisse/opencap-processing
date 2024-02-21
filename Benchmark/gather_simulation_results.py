@@ -25,13 +25,13 @@ dataDir = os.path.join(baseDir, 'Data', 'Benchmark')
 # sys.path.append(repoDir) # utilities from base repository directory
 
 trials = {
-    # 'subject2': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS4'],
-    # 'subject3': ['walking1', 'walking2', 'walking3', 'walkingTS2', 'walkingTS3', 'walkingTS4'],
-    # 'subject4': ['walking1', 'walking2', 'walking4', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
-    # 'subject5': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
-    # 'subject6': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
-    # 'subject7': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
-    # 'subject8': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
+    'subject2': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS4'],
+    'subject3': ['walking1', 'walking2', 'walking3', 'walkingTS2', 'walkingTS3', 'walkingTS4'],
+    'subject4': ['walking1', 'walking2', 'walking4', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
+    'subject5': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
+    'subject6': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
+    'subject7': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
+    'subject8': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS3'],
     'subject9': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
     'subject10': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
     'subject11': ['walking2', 'walking3', 'walking4', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
@@ -90,8 +90,14 @@ for iSub, subject in enumerate(subjects):
             if not  os.path.isdir(pathOSData):
                 raise Exception('The data is not found in ' + dataDir + '. Download it from https://simtk.org/projects/opencap, and save to the the repository directory. E.g., Data/LabValidation')
 
-                
-            trialNames = [i + '_videoAndMocap' for i in trials[subject]]
+            trialNamesAll = [i + '_videoAndMocap' for i in trials[subject]]
+
+            for i in trialNamesAll:
+                if motion_type == 'walking':
+                    trialNames = [i for i in trialNamesAll if motion_type in i and not 'walkingTS' in i]
+                else:
+                    trialNames = [i for i in trialNamesAll if motion_type in i]
+            
             
             # possiblePaths = glob.glob(os.path.join(pathOSData,motion_type+'*/'))
             # trialNames = []

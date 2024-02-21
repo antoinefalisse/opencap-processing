@@ -44,6 +44,19 @@ from itertools import combinations
 from utilsDataPostprocessing import (segmentSquats, segmentWalkStance, segmentDJ,
                                      getIndsFromTimes, calc_LSI, interpolateNumpyArray)
 
+trials = {
+    'subject2': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS4'],
+    'subject3': ['walking1', 'walking2', 'walking3', 'walkingTS2', 'walkingTS3', 'walkingTS4'],
+    'subject4': ['walking1', 'walking2', 'walking4', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
+    'subject5': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
+    'subject6': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
+    'subject7': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
+    'subject8': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS3'],
+    'subject9': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
+    'subject10': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
+    'subject11': ['walking2', 'walking3', 'walking4', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
+          }
+
 
 # %% Settings
 fieldStudy = False # True to process field study results, false to process LabValidation results
@@ -61,7 +74,7 @@ if fieldStudy:
     invert_left_right = False
     
 else:
-    subjects = ['subject' + str(sub) for sub in range(2,12)]
+    subjects = list(trials.keys())
     # motion_types = motion_types = ['DJ', 'DJAsym', 'walking', 'walkingTS', 
     #                                'squats','squatsAsym','STS','STSweakLegs']
     motion_types = motion_types = ['walking', 'walkingTS']
@@ -149,7 +162,7 @@ for iSub,subject in enumerate(subjects):
         for case in cases:
             # Walking - identify first L toe-off, first L HS, second L toe-off. add swing to end.
             if 'walking' in motion_type:
-                forcesFilePath = osDir = os.path.join(dataDir, 'LabValidation',subject, 'ForceData',case.replace('_videoAndMocap','') + '_forces.mot')
+                forcesFilePath = osDir = os.path.join(dataDir, subject, 'ForceData',case.replace('_videoAndMocap','') + '_forces.mot')
                 _, sfTimes = segmentWalkStance(forcesFilePath)
                 resTimeIdx = results_sel['video']['positions'][case]['headers'].index('time')
                 timeVec = results_sel['video']['positions'][case][segSource][resTimeIdx,:]
