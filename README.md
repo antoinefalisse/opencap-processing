@@ -13,7 +13,7 @@ Archived code base corresponding to publication: https://zenodo.org/record/74199
 1. Open Anaconda prompt
 2. Create environment (python 3.9 recommended): `conda create -n opencap-processing-py39 python=3.9`
 3. Activate environment: `conda activate opencap-processing`
-4. Install OpenSim: `conda install -c opensim-org opensim=4.5=py39np121`
+4. Install OpenSim: `conda install -c opensim-org opensim=4.5=py39np120`
     - Test that OpenSim was successfully installed:
         - Start python: `python`
         - Import OpenSim: `import opensim`
