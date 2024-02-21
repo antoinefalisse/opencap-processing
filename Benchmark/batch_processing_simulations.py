@@ -36,7 +36,7 @@ from mainOpenSimAD import run_tracking
 
 # %% Paths.
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
-subjects = ['subject' + str(i) for i in range(2,12)]
+subjects = ['subject' + str(i) for i in range(8,9)]
 
 
 trials = {'subject2': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS4'],
@@ -45,7 +45,7 @@ trials = {'subject2': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkin
           'subject5': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
           'subject6': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
           'subject7': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
-          'subject8': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
+          'subject8': ['walkingTS2'], # 'walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'
           'subject9': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
           'subject10': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
           'subject11': ['walking2', 'walking3', 'walking4', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
@@ -60,7 +60,7 @@ case = '0'
 runProblem = True
 processInputs = True
 runSimulation = True
-solveProblem = False
+solveProblem = True
 analyzeResults = True
 plotResults = False
     
