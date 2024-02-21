@@ -139,6 +139,21 @@ def computeKAM(pathGenericTemplates, outputDir, modelPath, IDPath, IKPath,
                     model.addForce(newForce)
                 elif i==0:
                     print('GRFs were not applied b/c spheres were used.')
+    elif grfType == 'experimental':
+        appliedToBody = ['calcn']
+        for leg in ['R','L']:
+            for i in range(len(appliedToBody)):
+                newForce = opensim.ExternalForce()
+                newForce.setName('GRF' + '_' + leg + '_' + str(i)) 
+                newForce.set_applied_to_body(appliedToBody[i] + '_' + 
+                                             leg.lower()) 
+                newForce.set_force_expressed_in_body('ground') 
+                newForce.set_point_expressed_in_body('ground')
+                newForce.set_force_identifier(leg + '_ground_force_v')
+                newForce.set_torque_identifier(leg + '_ground_torque_')
+                newForce.set_point_identifier(leg + '_ground_force_p')
+                newForce.setDataSource(dataSource)
+                model.addForce(newForce)
     else:
         raise ValueError("TODO")
     # if grfType == 'sphere':
@@ -176,21 +191,7 @@ def computeKAM(pathGenericTemplates, outputDir, modelPath, IDPath, IKPath,
     #             newForce.set_point_identifier('ground_force_' + leg + '_p')
     #             newForce.setDataSource(dataSource)
     #             model.addForce(newForce)
-    # elif grfType == 'experimental':
-    #     appliedToBody = ['calcn']
-    #     for leg in ['R','L']:
-    #         for i in range(len(appliedToBody)):
-    #             newForce = opensim.ExternalForce()
-    #             newForce.setName('GRF' + '_' + leg + '_' + str(i)) 
-    #             newForce.set_applied_to_body(appliedToBody[i] + '_' + 
-    #                                          leg.lower()) 
-    #             newForce.set_force_expressed_in_body('ground') 
-    #             newForce.set_point_expressed_in_body('ground')
-    #             newForce.set_force_identifier(leg + '_ground_force_v')
-    #             newForce.set_torque_identifier(leg + '_ground_torque_')
-    #             newForce.set_point_identifier(leg + '_ground_force_p')
-    #             newForce.setDataSource(dataSource)
-    #             model.addForce(newForce)
+    
     
     # initSystem - done editing model.
     state = model.initSystem()
@@ -212,12 +213,12 @@ def computeKAM(pathGenericTemplates, outputDir, modelPath, IDPath, IKPath,
     
     # Create JRA reporter.
     jointReaction = opensim.JointReaction(jointReactionXmlPath)
-    model.addAnalysis(jointReaction) ;
-    jointReaction.setModel(model) ;
-    jointReaction.printToXML(os.path.join(outputDir, 'JrxnSetup.xml')) ;    
+    model.addAnalysis(jointReaction)
+    jointReaction.setModel(model)
+    jointReaction.printToXML(os.path.join(outputDir, 'JrxnSetup.xml'))
     
     # Loop over time.
-    controls = opensim.Vector(nCoords,0) ;
+    controls = opensim.Vector(nCoords,0)
     for iTime in range(len(stateTime)):
         thisTime = stateTime[iTime]    
         if thisTime <= idTime[-1]:
@@ -271,7 +272,7 @@ def computeKAM(pathGenericTemplates, outputDir, modelPath, IDPath, IKPath,
             outputDir,
             outFileBase + '_JointReactionAnalysis_ReactionLoads.sto'))[0]    
     thisTable = opensim.TimeSeriesTable(outFilePath)
-    results = {} ;
+    results = {}
     results['time'] = np.asarray(thisTable.getIndependentColumn())
     nSteps = len(results['time'])
     temp_r = thisTable.getDependentColumn(
@@ -544,9 +545,9 @@ def computeMCF(pathGenericTemplates, outputDir, modelPath, activationsPath,
         
         # Create JRA reporter.
         jointReaction = opensim.JointReaction(jointReactionXmlPath)
-        model.addAnalysis(jointReaction) ;
-        jointReaction.setModel(model) ;
-        jointReaction.printToXML(os.path.join(outputDir, 'JrxnSetup.xml')) ;
+        model.addAnalysis(jointReaction)
+        jointReaction.setModel(model)
+        jointReaction.printToXML(os.path.join(outputDir, 'JrxnSetup.xml'))
         
         endTime = []
         if usingGenForceActuators:
@@ -560,7 +561,7 @@ def computeMCF(pathGenericTemplates, outputDir, modelPath, activationsPath,
 
         # Loop over time.
         if usingGenForceActuators:
-            controls = opensim.Vector(nCoords,0) ;
+            controls = opensim.Vector(nCoords,0)
         for iTime in range(len(stateTime)):
             thisTime = stateTime[iTime]
         
@@ -637,7 +638,7 @@ def computeMCF(pathGenericTemplates, outputDir, modelPath, activationsPath,
         
     # Load JRA results values and compute MCF.
     thisTable = opensim.TimeSeriesTable(pathJRAResults)
-    results = {} ;
+    results = {}
     results['time'] = np.asarray(thisTable.getIndependentColumn())
     nSteps = len(results['time'])
     KAM_r = thisTable.getDependentColumn('walker_knee_r_on_tibia_r_in_tibia_r_mx')

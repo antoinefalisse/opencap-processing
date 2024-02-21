@@ -365,6 +365,17 @@ def run_tracking(baseDir, dataDir, settings, case='0',
     pathExternalFunctionFolder = os.path.join(pathModelFolder,
                                               'ExternalFunction')
     pathIKFolder = os.path.join(pathOSData, 'Kinematics')
+    # If reference data are available, we load them for comparison.
+    pathMocap = os.path.join(dataDir, "Mocap")
+    pathIDFolder = os.path.join(pathMocap, 'InverseDynamics')
+    pathEMGFolder = os.path.join(dataDir, 'EMGData')
+    pathGRFFolder = os.path.join(dataDir, 'ForceData')
+    pathSOFolder = os.path.join(pathMocap, 'StaticOptimization')
+    pathIKFolderMocap = os.path.join(pathMocap, 'Kinematics')
+    pathJRAfromSOFolderMocap = os.path.join(pathMocap, 'JointReactionAnalysis')
+    pathModelFileMocap = os.path.join(pathMocap, 'Model', 
+                                      OpenSimModel + "_scaled.osim")
+
     pathResults = os.path.join(pathOSData, 'Dynamics', trialName)
     if 'repetition' in settings:
         pathResults = os.path.join(
@@ -665,6 +676,75 @@ def run_tracking(baseDir, dataDir, settings, case='0',
     from utilsOpenSimAD import scaleDataFrame, selectFromDataFrame     
     dataToTrack_Qs_nsc = selectFromDataFrame(
         Qs_toTrack, coordinates_toTrack_l).to_numpy()[:,1::].T
+    
+    # If inverse dynamics data are available, we load them for comparison.
+    from utilsOpenSimAD import getID    
+    trialNameMocap = trialName
+    # Hack: Experimental data do not have the videoAndMocap.
+    trialNameMocap = trialNameMocap.replace('_videoAndMocap', '')
+    pathIDFile = os.path.join(pathIDFolder, trialNameMocap + '.sto')
+    torques_ref_available = False
+    if os.path.exists(pathIDFile):
+        torques_ref_available = True
+        ID_temp = getID(pathIDFile, joints)
+        torques_ref = interpolateDataFrame(
+            ID_temp, timeIntervals[0], timeIntervals[1], N).to_numpy()[:,1::].T
+        
+    # If ground reaction force data are available, we load them for comparison.
+    from utilsOpenSimAD import getGRFAll, getGRFPeaks
+    pathGRFFile = os.path.join(pathGRFFolder, trialNameMocap + '_forces.mot')
+    GRF_ref_available = False
+    if os.path.exists(pathGRFFile):
+        GRF_ref_available = True
+        GRF_ref_all = getGRFAll(pathGRFFile, timeIntervals, N)
+        GRF_peaks_ref = getGRFPeaks(GRF_ref_all, timeIntervals)
+
+        GRF_ref = selectFromDataFrame(
+                GRF_ref_all['df_interp']['forces']['all'], 
+                GRF_ref_all['headers']['forces']['all']).to_numpy()[:,1::].T
+        
+        GRM_ref = selectFromDataFrame(
+                GRF_ref_all['df_interp']['torques_G']['all'], 
+                GRF_ref_all['headers']['torques']['all']).to_numpy()[:,1::].T
+        
+    # If EMG data are available, we load them for comparison.
+    from utilsOpenSimAD import getEMG
+    pathEMGFile = os.path.join(pathEMGFolder, trialNameMocap + '_EMG.sto')
+    EMG_ref_available = False
+    if os.path.exists(pathEMGFile):
+        EMG_ref_available = True
+        EMG_temp = getEMG(pathEMGFile, bothSidesMuscles)
+        EMG_ref = interpolateDataFrame(
+            EMG_temp, timeIntervals[0], timeIntervals[1], N).to_numpy()[:,1::].T
+        
+    # If SO data are available, we load them for comparison.
+    from utilsOpenSimAD import getFromStorage
+    pathSOFile = os.path.join(
+        pathSOFolder, trialNameMocap + '_StaticOptimization_activation.sto')
+    SO_ref_available = False
+    if os.path.exists(pathSOFile):
+        SO_ref_available = True
+        SO_temp = getFromStorage(pathSOFile, bothSidesMuscles)
+        SO_ref = interpolateDataFrame(
+            SO_temp, timeIntervals[0], timeIntervals[1], N).to_numpy()[:,1::].T
+        
+    # If IK data are available, we load them for comparison.
+    pathIKFileMocap = os.path.join(pathIKFolderMocap, trialNameMocap + '.mot')
+    IK_ref_available = False
+    if os.path.exists(pathIKFileMocap):
+        IK_ref_available = True
+        Qs_fromIK_mocap = getIK(pathIKFileMocap, joints)
+        if filter_Qs_toTrack:
+            Qs_fromIK_mocap_filter = filterDataFrame(
+                Qs_fromIK_mocap, cutoff_frequency=cutoff_freq_Qs)
+        else:
+            Qs_fromIK_mocap_filter = Qs_fromIK_mocap
+        Qs_fromIK_mocap_sel = selectDataFrame(
+                Qs_fromIK_mocap_filter, timeIntervals[0], timeIntervals[1])
+        Qs_mocap_ref = interpolateDataFrame(
+            Qs_fromIK_mocap_filter, timeIntervals[0], timeIntervals[1],
+            N).to_numpy()[:,1::].T
+        Qs_fromIK_mocap_sel_copy = copy.deepcopy(Qs_fromIK_mocap_sel)
         
     # %% Polynomial approximations.
     # Muscle-tendon lengths, velocities, and moment arms are estimated based
@@ -1192,6 +1272,62 @@ def run_tracking(baseDir, dataDir, settings, case='0',
         Qds_spline_interp, joints).to_numpy()[:,1::].T            
     refData_Qdds_nsc = selectFromDataFrame(
         Qdds_spline_interp, joints).to_numpy()[:,1::].T
+    
+    if IK_ref_available:
+        Qs_mocap_spline = Qs_fromIK_mocap_sel_copy.copy()
+        Qds_mocap_spline = Qs_fromIK_mocap_sel_copy.copy()
+        Qdds_mocap_spline = Qs_fromIK_mocap_sel_copy.copy()
+        for joint in joints:
+            spline = interpolate.InterpolatedUnivariateSpline(
+                Qs_fromIK_mocap_sel_copy['time'], 
+                Qs_fromIK_mocap_sel_copy[joint], k=3)
+            Qs_mocap_spline[joint] = spline(
+                Qs_fromIK_mocap_sel_copy['time'])
+            splineD1 = spline.derivative(n=1)
+            Qds_mocap_spline[joint] = splineD1(
+                Qs_fromIK_mocap_sel_copy['time'])
+            splineD2 = spline.derivative(n=2)
+            Qdds_mocap_spline[joint] = splineD2(
+                Qs_fromIK_mocap_sel_copy['time'])
+        
+        # Filtering
+        if filter_Qds_toTrack:
+            Qds_mocap_spline_filter = filterDataFrame(
+                Qds_mocap_spline, cutoff_frequency=cutoff_freq_Qds)
+        else:
+            Qds_mocap_spline_filter = Qds_mocap_spline                
+        if filter_Qdds_toTrack:
+            Qdds_mocap_spline_filter = filterDataFrame(
+                Qdds_mocap_spline, cutoff_frequency=cutoff_freq_Qdds)
+        else:
+            Qdds_mocap_spline_filter = Qdds_mocap_spline
+            
+        # Instead of splining Qs twice to get Qdds, spline Qds, which can
+        # be filtered or not.
+        if splineQds:
+            Qdds_mocap_spline2 = Qs_fromIK_mocap_sel_copy.copy()
+            for joint in joints:
+                spline = interpolate.InterpolatedUnivariateSpline(
+                    Qds_mocap_spline_filter['time'], 
+                    Qds_mocap_spline_filter[joint], k=3)
+                splineD1 = spline.derivative(n=1)
+                Qdds_mocap_spline2[joint] = splineD1(
+                    Qds_mocap_spline_filter['time'])
+                
+            if filter_Qdds_toTrack:
+                Qdds_mocap_spline_filter = filterDataFrame(
+                    Qdds_mocap_spline2, 
+                    cutoff_frequency=cutoff_freq_Qdds)
+            else:
+                Qdds_mocap_spline_filter = Qdds_mocap_spline2
+        
+        # Interpolation
+        Qds_mocap_ref = interpolateDataFrame(
+            Qds_mocap_spline_filter, timeIntervals[0], 
+            timeIntervals[1], N).to_numpy()[:,1::].T
+        Qdds_mocap_ref = interpolateDataFrame(
+            Qdds_mocap_spline_filter, timeIntervals[0], 
+            timeIntervals[1], N).to_numpy()[:,1::].T
             
     # %% Update bounds if coordinate constraints.
     if coordinate_constraints:
@@ -2472,7 +2608,33 @@ def run_tracking(baseDir, dataDir, settings, case='0',
                                Qds=Qds_opt_nsc.T)
             KAM = np.concatenate(
                 (np.expand_dims(c_KAM['KAM_r'], axis=1),
-                 np.expand_dims(c_KAM['KAM_l'], axis=1)), axis=1).T              
+                 np.expand_dims(c_KAM['KAM_l'], axis=1)), axis=1).T
+
+            # Experimental
+            IKPathMocap = os.path.join(pathIKFolderMocap, trialNameMocap + '.mot')
+            IDPathMocap = os.path.join(pathIDFolder, trialNameMocap + '.sto')
+            GRFPathMocap = os.path.join(pathGRFFolder, trialNameMocap + '_forces.mot')
+            # if all files exist then do what is below
+            KAM_ref_available = False
+            if (os.path.exists(IKPathMocap) and os.path.exists(IDPathMocap) 
+                and os.path.exists(GRFPathMocap) and os.path.exists(pathModelFileMocap)):
+                KAM_ref_available = True
+                pathResultsMocap = os.path.join(pathMocap, 'temp')
+                os.makedirs(pathResultsMocap, exist_ok=True)
+                c_KAM_ref = computeKAM(pathGenericTemplates, pathResultsMocap,
+                                    pathModelFileMocap, IDPathMocap,
+                                    IKPathMocap, GRFPathMocap,
+                                    grfType='experimental', contactSides=[])
+                from utilsOpenSimAD import interpolateNumpyArray_time
+                KAM_ref_r_interp = interpolateNumpyArray_time(
+                    c_KAM_ref['KAM_r'], c_KAM_ref['time'], 
+                    timeIntervals[0], timeIntervals[1], N)
+                KAM_ref_l_interp = interpolateNumpyArray_time(
+                    c_KAM_ref['KAM_l'], c_KAM_ref['time'], 
+                    timeIntervals[0], timeIntervals[1], N)
+                KAM_ref = np.concatenate(
+                    (np.expand_dims(KAM_ref_r_interp, axis=1),
+                        np.expand_dims(KAM_ref_l_interp, axis=1)), axis=1).T          
                 
         # %% Compute medial knee contact forces.
         if torque_driven_model:
@@ -2578,18 +2740,57 @@ def run_tracking(baseDir, dataDir, settings, case='0',
             MCF = np.concatenate(
                 (np.expand_dims(c_MCF['MCF_r'], axis=1),
                  np.expand_dims(c_MCF['MCF_l'], axis=1)), axis=1).T
+            
+            # Experimental
+            pathJRAfromSO = os.path.join(
+                pathJRAfromSOFolderMocap,
+                trialNameMocap + '_JointReaction_ReactionLoads.sto')
+            MCF_ref_available = False
+            if os.path.exists(pathJRAfromSO):
+                MCF_ref_available = True
+                c_MCF_ref = computeMCF(None,None,None,None,None,None,None,None,[],
+                                        pathJRAResults=pathJRAfromSO)
+                from utilsOpenSimAD import interpolateNumpyArray_time                
+                MCF_ref_r_interp = interpolateNumpyArray_time(
+                    c_MCF_ref['MCF_r'], c_MCF_ref['time'], 
+                    timeIntervals[0], timeIntervals[1], N)
+                MCF_ref_l_interp = interpolateNumpyArray_time(
+                    c_MCF_ref['MCF_l'], c_MCF_ref['time'], 
+                    timeIntervals[0], timeIntervals[1], N)
+                MCF_ref = np.concatenate(
+                    (np.expand_dims(MCF_ref_r_interp, axis=1),
+                        np.expand_dims(MCF_ref_l_interp, axis=1)), axis=1).T
+            
+        # %% Filter GRFs
+        from utilsOpenSimAD import filterNumpyArray     
+        GRF_all_opt_filt = filterNumpyArray(
+            GRF_all_opt['all'].T, tgridf[0,:-1], 
+            cutoff_frequency=cutoff_freq_Qs).T
                 
         # %% Express forces in %BW and torques in %BW*height.
         gravity = 9.80665
         BW = settings['mass_kg'] * gravity
         BW_ht = BW * settings['height_m']
         GRF_BW_all_opt = GRF_all_opt['all'] / BW * 100
+        GRF_BW_all_opt_filt = GRF_all_opt_filt / BW * 100
         GRM_BWht_all_opt = GRM_all_opt['all'] / BW_ht * 100
         torques_BWht_opt = torques_opt / BW_ht * 100
+        if torques_ref_available:
+            torques_BWht_ref = torques_ref / BW_ht * 100
+        if GRF_ref_available:
+            GRF_BW_ref = GRF_ref / BW * 100
+            GRM_BWht_ref = GRM_ref / BW_ht * 100
+            GRF_peaks_BW_ref = {}
+            for side in list(GRF_peaks_ref.keys()):
+                GRF_peaks_BW_ref[side] = GRF_peaks_ref[side] / BW * 100
         if computeKAM:
             KAM_BWht = KAM / BW_ht * 100
+            if KAM_ref_available:
+                KAM_BWht_ref = KAM_ref / BW_ht * 100
         if computeMCF:
             MCF_BW = MCF / BW * 100
+            if MCF_ref_available:
+                MCF_BW_ref = MCF_ref / BW * 100
 
         # %% Compute joint powers.
         poweredJoints = []
@@ -2600,6 +2801,8 @@ def run_tracking(baseDir, dataDir, settings, case='0',
         # Powers (W) = Torques (Nm) * Angular velocities (rad/s).
         powers_opts = (torques_opt[idxPoweredJoints, :] 
                        * Qds_opt_nsc[idxPoweredJoints, :-1])    
+        
+        
             
         # %% Save optimal trajectories.
         if not os.path.exists(os.path.join(pathResults,
@@ -2622,6 +2825,8 @@ def run_tracking(baseDir, dataDir, settings, case='0',
             'powers': powers_opts,
             'GRF': GRF_all_opt['all'],
             'GRF_BW': GRF_BW_all_opt,
+            'GRF_filt': GRF_all_opt_filt,
+            'GRF_filt_BW': GRF_BW_all_opt_filt,
             'GRM': GRM_all_opt['all'],
             'GRM_BWht': GRM_BWht_all_opt,
             'COP': COP_all_opt['all'],
@@ -2641,10 +2846,35 @@ def run_tracking(baseDir, dataDir, settings, case='0',
             optimaltrajectories[case]['KAM'] = KAM
             optimaltrajectories[case]['KAM_BWht'] = KAM_BWht
             optimaltrajectories[case]['KAM_labels'] = KAM_labels
+            if KAM_ref_available:
+                optimaltrajectories[case]['KAM_ref'] = KAM_ref
+                optimaltrajectories[case]['KAM_BWht_ref'] = KAM_BWht_ref
         if computeMCF:
             optimaltrajectories[case]['MCF'] = MCF
             optimaltrajectories[case]['MCF_BW'] = MCF_BW
-            optimaltrajectories[case]['MCF_labels'] = MCF_labels              
+            optimaltrajectories[case]['MCF_labels'] = MCF_labels
+            if MCF_ref_available:
+                optimaltrajectories[case]['MCF_ref'] = MCF_ref
+                optimaltrajectories[case]['MCF_BW_ref'] = MCF_BW_ref
+        if torques_ref_available:
+            optimaltrajectories[case]['torques_ref'] = torques_ref
+            optimaltrajectories[case]['torques_BWht_ref'] = torques_BWht_ref
+        if GRF_ref_available:
+            optimaltrajectories[case]['GRF_ref'] = GRF_ref
+            optimaltrajectories[case]['GRF_BW_ref'] = GRF_BW_ref
+            optimaltrajectories[case]['GRM_ref'] = GRM_ref
+            optimaltrajectories[case]['GRM_BWht_ref'] = GRM_BWht_ref
+            optimaltrajectories[case]['GRF_peaks_ref'] = GRF_peaks_ref
+            optimaltrajectories[case]['GRF_peaks_BW_ref'] = GRF_peaks_BW_ref
+        if EMG_ref_available:
+            optimaltrajectories[case]['muscle_activations_ref'] = EMG_ref
+        if SO_ref_available:
+            optimaltrajectories[case]['static_optimization_ref'] = SO_ref
+        if IK_ref_available:
+            optimaltrajectories[case]['coordinate_values_ref'] = Qs_mocap_ref
+            optimaltrajectories[case]['coordinate_speeds_ref'] = Qds_mocap_ref
+            optimaltrajectories[case]['coordinate_accelerations_ref'] = Qdds_mocap_ref
+
         optimaltrajectories[case]['iter'] = stats['iter_count']
 
         if torque_driven_model:

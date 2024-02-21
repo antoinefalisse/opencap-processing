@@ -36,7 +36,7 @@ from mainOpenSimAD import run_tracking
 
 # %% Paths.
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
-subjects = ['subject' + str(i) for i in range(2, 12)]
+subjects = ['subject' + str(i) for i in range(2,12)]
 
 
 trials = {'subject2': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS4'],
@@ -59,8 +59,8 @@ motion_type = 'walking_formulation2'
 case = '0'
 runProblem = True
 processInputs = True
-runSimulation = False
-solveProblem = True
+runSimulation = True
+solveProblem = False
 analyzeResults = True
 plotResults = False
     
@@ -99,6 +99,6 @@ for subject in subjects:
                         continue
             
         if plotResults:            
-            plotResultsOpenSimAD(sessionDir, trial_name, cases=['0'], mainPlots=True)
+            plotResultsOpenSimAD(sessionDir, trial_name, cases=['0'], mainPlots=False)
         
-test=1
+    test=1
