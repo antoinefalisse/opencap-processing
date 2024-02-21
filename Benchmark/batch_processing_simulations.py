@@ -36,19 +36,19 @@ from mainOpenSimAD import run_tracking
 
 # %% Paths.
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
-subjects = ['subject' + str(i) for i in range(2, 5)]
+subjects = ['subject' + str(i) for i in range(2, 12)]
 
 
-trials = {'subject2': ['walking1', 'walking2', 'walking3', 'walking_TS1', 'walking_TS2', 'walking_TS4'],
-          'subject3': ['walking1', 'walking2', 'walking3', 'walking_TS2', 'walking_TS3', 'walking_TS4'],
-          'subject4': ['walking1', 'walking2', 'walking4', 'walking_TS1', 'walking_TS2', 'walking_TS3'],
-          'subject5': ['walking1', 'walking2', 'walking3', 'walking_TS1', 'walking_TS2', 'walking_TS3'],
-          'subject6': ['walking1', 'walking2', 'walking3', 'walking_TS1', 'walking_TS2', 'walking_TS3'],
-          'subject7': ['walking1', 'walking2', 'walking3', 'walking_TS1', 'walking_TS2', 'walking_TS3'],
-          'subject8': ['walking1', 'walking2', 'walking3', 'walking_TS1', 'walking_TS2', 'walking_TS3'],
-          'subject9': ['walking1', 'walking2', 'walking3', 'walking_TS1', 'walking_TS2', 'walking_TS3'],
-          'subject10': ['walking1', 'walking2', 'walking3', 'walking_TS1', 'walking_TS2', 'walking_TS3'],
-          'subject11': ['walking1', 'walking2', 'walking4', 'walking_TS1', 'walking_TS2', 'walking_TS3'],
+trials = {'subject2': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS4'],
+          'subject3': ['walking1', 'walking2', 'walking3', 'walkingTS2', 'walkingTS3', 'walkingTS4'],
+          'subject4': ['walking1', 'walking2', 'walking4', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
+          'subject5': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
+          'subject6': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
+          'subject7': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
+          'subject8': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
+          'subject9': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
+          'subject10': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
+          'subject11': ['walking2', 'walking3', 'walking4', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
           }
 
 # %% User-defined variables.
@@ -59,7 +59,7 @@ motion_type = 'walking_formulation2'
 case = '0'
 runProblem = True
 processInputs = True
-runSimulation = True
+runSimulation = False
 solveProblem = True
 analyzeResults = True
 plotResults = False
