@@ -22,6 +22,7 @@
 import os
 import sys
 import numpy as np
+import traceback
 sys.path.append("../")
 sys.path.append("../ActivityAnalyses")
 sys.path.append("../UtilsDynamicSimulations/OpenSimAD")
@@ -37,20 +38,27 @@ from utils import storage_to_numpy
 
 # %% Paths.
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
-subjects = ['subject' + str(i) for i in range(10,12)]
+subjects = ['subject' + str(i) for i in range(4,5)]
 
 
-trials = {
-    'subject2': {'walking1': {'start':-1, 'end':1.85}, 'walking2': {'start':-0.9, 'end':1.76}, 'walking3': {'start':-1, 'end':1.76}, 'walkingTS1': {'start':-1, 'end':2.15}, 'walkingTS2': {'start':-1, 'end':1.97}, 'walkingTS4': {'start':-0.9, 'end':2.13}},
-    'subject3': {'walking1': {'start':-1.8, 'end':1.41}, 'walking2': {'start':-1.8, 'end':1.46}, 'walking3': {'start':-1.7, 'end':1.48}, 'walkingTS2': {'start':-2.5, 'end':1.97}, 'walkingTS3': {'start':-2, 'end':1.79}, 'walkingTS4': {'start':-2.2, 'end':1.7}},
-    'subject4': {'walking1': {'start':-0.7, 'end':1.6}, 'walking2': {'start':-0.7, 'end':1.87}, 'walking4': {'start':-0.7, 'end':1.7}, 'walkingTS1': {'start':-0.7, 'end':1.7}, 'walkingTS2': {'start':-0.7, 'end':1.6}, 'walkingTS3': {'start':-0.7, 'end':1.95}},
-    'subject5': {'walking1': {'start':-0.7, 'end':1.83}, 'walking2': {'start':-0.7, 'end':1.8}, 'walking3': {'start':-0.7, 'end':1.8}, 'walkingTS1': {'start':-0.8, 'end':1.88}, 'walkingTS2': {'start':-0.7, 'end':1.75}, 'walkingTS3': {'start':-0.7, 'end':1.72}},
-    'subject6': {'walking1': {'start':-1.2, 'end':1.63}, 'walking2': {'start':-1.2, 'end':1.6}, 'walking3': {'start':-1.2, 'end':2}, 'walkingTS1': {'start':-0.7, 'end':1.65}, 'walkingTS2': {'start':-0.8, 'end':1.72}, 'walkingTS3': {'start':-1.1, 'end':1.78}},
-    'subject7': {'walking1': {'start':-0.8, 'end':1.79}, 'walking2': {'start':-0.7, 'end':1.82}, 'walking3': {'start':-0.7, 'end':1.87}, 'walkingTS1': {'start':-1.1, 'end':1.83}, 'walkingTS2': {'start':-1.1, 'end':1.9}, 'walkingTS3': {'start':-1.1, 'end':2.12}},
-    'subject8': {'walking1': {'start':-1, 'end':1.83}, 'walking2': {'start':-0.7, 'end':1.89}, 'walking3': {'start':-0.7, 'end':1.92}, 'walkingTS1': {'start':-0.7, 'end':2.3}, 'walkingTS3': {'start':-0.7, 'end':1.9}}, # walkingTS2 excluded
-    'subject9': {'walking1': {'start':-0.6, 'end':1.65}, 'walking2': {'start':-0.5, 'end':1.55}, 'walking3': {'start':-0.6, 'end':1.6}, 'walkingTS1': {'start':-0.7, 'end':1.68}, 'walkingTS2': {'start':-0.7, 'end':1.63}, 'walkingTS3': {'start':-0.7, 'end':1.56}},
-    'subject10': {'walking1': {'start':-0.7, 'end':1.46}, 'walking2': {'start':-0.7, 'end':1.49}, 'walking3': {'start':-0.7, 'end':1.5}, 'walkingTS1': {'start':-0.8, 'end':1.78}, 'walkingTS2': {'start':-0.9, 'end':1.85}, 'walkingTS3': {'start':-0.8, 'end':1.66}},
-    'subject11': {'walking2': {'start':-0.7, 'end':1.6}, 'walking3': {'start':-0.7, 'end':1.55}, 'walking4': {'start':-0.7, 'end':1.62}, 'walkingTS1': {'start':-0.7, 'end':1.9}, 'walkingTS2': {'start':-0.7, 'end':1.85}, 'walkingTS3': {'start':-0.7, 'end':1.9}}, # arms weird in beginning, if 0.7 does not work roll back to 0.5
+# trials = {
+#     'subject2': {'walking1': {'start':-1, 'end':1.85}, 'walking2': {'start':-0.9, 'end':1.76}, 'walking3': {'start':-1, 'end':1.76}, 'walkingTS1': {'start':-1, 'end':2.15}, 'walkingTS2': {'start':-1, 'end':1.97}, 'walkingTS4': {'start':-0.9, 'end':2.13}},
+#     'subject3': {'walking1': {'start':-1.8, 'end':1.41}, 'walking2': {'start':-1.8, 'end':1.46}, 'walking3': {'start':-1.7, 'end':1.48}, 'walkingTS2': {'start':-2.5, 'end':1.97}, 'walkingTS3': {'start':-2, 'end':1.79}, 'walkingTS4': {'start':-2.2, 'end':1.7}},
+#     'subject4': {'walking1': {'start':-0.7, 'end':1.6}, 'walking2': {'start':-0.7, 'end':1.87}, 'walking4': {'start':-0.7, 'end':1.7}, 'walkingTS1': {'start':-0.7, 'end':1.7}, 'walkingTS2': {'start':-0.7, 'end':1.6}, 'walkingTS3': {'start':-0.7, 'end':1.95}},
+#     'subject5': {'walking1': {'start':-0.7, 'end':1.83}, 'walking2': {'start':-0.7, 'end':1.8}, 'walking3': {'start':-0.7, 'end':1.8}, 'walkingTS1': {'start':-0.8, 'end':1.88}, 'walkingTS2': {'start':-0.7, 'end':1.75}, 'walkingTS3': {'start':-0.7, 'end':1.72}},
+#     'subject6': {'walking1': {'start':-1.2, 'end':1.63}, 'walking2': {'start':-1.2, 'end':1.6}, 'walking3': {'start':-1.2, 'end':2}, 'walkingTS1': {'start':-0.7, 'end':1.65}, 'walkingTS2': {'start':-0.8, 'end':1.72}, 'walkingTS3': {'start':-1.1, 'end':1.78}},
+#     'subject7': {'walking1': {'start':-0.8, 'end':1.79}, 'walking2': {'start':-0.7, 'end':1.82}, 'walking3': {'start':-0.7, 'end':1.87}, 'walkingTS1': {'start':-1.1, 'end':1.83}, 'walkingTS2': {'start':-1.1, 'end':1.9}, 'walkingTS3': {'start':-1.1, 'end':2.12}},
+#     'subject8': {'walking1': {'start':-1, 'end':1.83}, 'walking2': {'start':-0.7, 'end':1.89}, 'walking3': {'start':-0.7, 'end':1.92}, 'walkingTS1': {'start':-0.7, 'end':2.3}, 'walkingTS3': {'start':-0.7, 'end':1.9}}, # walkingTS2 excluded
+#     'subject9': {'walking1': {'start':-0.6, 'end':1.65}, 'walking2': {'start':-0.5, 'end':1.55}, 'walking3': {'start':-0.6, 'end':1.6}, 'walkingTS1': {'start':-0.7, 'end':1.68}, 'walkingTS2': {'start':-0.7, 'end':1.63}, 'walkingTS3': {'start':-0.7, 'end':1.56}},
+#     'subject10': {'walking1': {'start':-0.7, 'end':1.46}, 'walking2': {'start':-0.7, 'end':1.49}, 'walking3': {'start':-0.7, 'end':1.5}, 'walkingTS1': {'start':-0.8, 'end':1.78}, 'walkingTS2': {'start':-0.9, 'end':1.85}, 'walkingTS3': {'start':-0.8, 'end':1.66}},
+#     'subject11': {'walking2': {'start':-0.7, 'end':1.6}, 'walking3': {'start':-0.7, 'end':1.55}, 'walking4': {'start':-0.7, 'end':1.62}, 'walkingTS1': {'start':-0.7, 'end':1.9}, 'walkingTS2': {'start':-0.7, 'end':1.85}, 'walkingTS3': {'start':-0.7, 'end':1.9}}, # arms weird in beginning, if 0.7 does not work roll back to 0.5
+#     }
+
+trials = {    
+    'subject4': {'walkingTS2': {'start':-0.7, 'end':1.6}},    
+    # 'subject5': {'walking1': {'start':-0.7, 'end':1.83}},
+    # 'subject7': {'walkingTS3': {'start':-1.1, 'end':2.12}},
+    # 'subject10': {'walkingTS2': {'start':-0.9, 'end':1.85}},    
     }
 
 # %% User-defined variables.
@@ -75,6 +83,7 @@ elif case == '1':
     
 # %% Gait segmentation and kinematic analysis.
 
+no_results = []
 for subject in subjects:
 
     sessionDir = os.path.join(dataFolder, subject)
@@ -83,8 +92,8 @@ for subject in subjects:
     pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
     for count, trial_name in enumerate(list(trials[subject].keys())):
         
-        if count < 1:
-           continue
+        # if count != 0:
+        #     continue
         
         trial_name += '_video'
         
@@ -111,10 +120,12 @@ for subject in subjects:
                         time_end = np.round(min(trimmed_time_window[1] + buffer_end, full_time_window[1], trials[subject][trial_name.replace('_video', '')]['end']),2)
                         buffer_start_applied = np.abs(np.round(time_start - trimmed_time_window[0], 2))
                         buffer_end_applied = np.abs(np.round(time_end - trimmed_time_window[1], 2))
-                        settings['buffers'] = [float(buffer_start_applied), float(buffer_end_applied)]
+                        settings['buffers'] = [round(float(buffer_start_applied),6),
+                                               round(float(buffer_end_applied),6)]
                         time_window = [time_start, time_end]
-                        settings['timeInterval'] = [float(i) for i in time_window]
-                        settings['timeIntervalWithoutBuffers'] = [float(settings['timeInterval'][0] + settings['buffers'][0]), float(settings['timeInterval'][1] - settings['buffers'][1])]                        
+                        settings['timeInterval'] = [round(float(i),6) for i in time_window]
+                        settings['timeIntervalWithoutBuffers'] = [round(float(settings['timeInterval'][0] + settings['buffers'][0]),6),
+                                                                  round(float(settings['timeInterval'][1] - settings['buffers'][1]),6)]                        
                         
                     except Exception as e:
                         print(f"Error setting up dynamic optimization for trial {trial_name}: {e}")
@@ -123,14 +134,20 @@ for subject in subjects:
                 # Simulation.
                 if runSimulation:
                     try:
+                        print('Running dynamic simulation...')
                         run_tracking(baseDir, sessionDir, settings, case=case, 
                                     solveProblem=solveProblem, analyzeResults=analyzeResults)
                         test=1
                     except Exception as e:
-                        print(f"Error during dynamic optimization for trial {trial_name}: {e}")
+                        tb_info = traceback.format_exc()
+                        print(f"Error during dynamic optimization for trial {trial_name}: {e}\nTraceback: {tb_info}")
+                        no_results.append(subject + '_' + trial_name)
                         continue
             
         if plotResults:            
-            plotResultsOpenSimAD(sessionDir, trial_name, cases=['0', '1'], mainPlots=True)
+            plotResultsOpenSimAD(sessionDir, trial_name, cases=['1'], mainPlots=True)
         
         test=1
+
+print('No results for the following trials:')
+print(no_results)

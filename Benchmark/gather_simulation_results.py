@@ -90,7 +90,7 @@ for iSub, subject in enumerate(subjects):
             if not  os.path.isdir(pathOSData):
                 raise Exception('The data is not found in ' + dataDir + '. Download it from https://simtk.org/projects/opencap, and save to the the repository directory. E.g., Data/LabValidation')
 
-            trialNamesAll = [i + '_videoAndMocap' for i in trials[subject]]
+            trialNamesAll = [i + '_video' for i in trials[subject]]
 
             for i in trialNamesAll:
                 if motion_type == 'walking':
@@ -115,7 +115,9 @@ for iSub, subject in enumerate(subjects):
             c_tr = np.load(os.path.join(pathOSData,tName,
                                         'optimaltrajectories.npy'),
                            allow_pickle=True).item()
-            tempKeys = list(c_tr.keys())
+            # TODO
+            # tempKeys = list(c_tr.keys())
+            tempKeys = ['1']
             
             # case_toPlot = list(c_tr[tempKeys[0]].keys())[0].replace('_videoAndMocap','')
             

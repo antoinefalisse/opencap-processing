@@ -2645,10 +2645,10 @@ def run_tracking(baseDir, dataDir, settings, case='0',
                 from utilsOpenSimAD import interpolateNumpyArray_time
                 KAM_ref_r_interp = interpolateNumpyArray_time(
                     c_KAM_ref['KAM_r'], c_KAM_ref['time'], 
-                    timeIntervalsWithoutBuffers[0], timeIntervalsWithoutBuffers[1], N)
+                    timeIntervalsWithoutBuffers[0], timeIntervalsWithoutBuffers[1], NWithoutBuffers)
                 KAM_ref_l_interp = interpolateNumpyArray_time(
                     c_KAM_ref['KAM_l'], c_KAM_ref['time'], 
-                    timeIntervalsWithoutBuffers[0], timeIntervalsWithoutBuffers[1], N)
+                    timeIntervalsWithoutBuffers[0], timeIntervalsWithoutBuffers[1], NWithoutBuffers)
                 KAM_ref = np.concatenate(
                     (np.expand_dims(KAM_ref_r_interp, axis=1),
                         np.expand_dims(KAM_ref_l_interp, axis=1)), axis=1).T          
@@ -2770,10 +2770,10 @@ def run_tracking(baseDir, dataDir, settings, case='0',
                 from utilsOpenSimAD import interpolateNumpyArray_time                
                 MCF_ref_r_interp = interpolateNumpyArray_time(
                     c_MCF_ref['MCF_r'], c_MCF_ref['time'], 
-                    timeIntervalsWithoutBuffers[0], timeIntervalsWithoutBuffers[1], N)
+                    timeIntervalsWithoutBuffers[0], timeIntervalsWithoutBuffers[1], NWithoutBuffers)
                 MCF_ref_l_interp = interpolateNumpyArray_time(
                     c_MCF_ref['MCF_l'], c_MCF_ref['time'], 
-                    timeIntervalsWithoutBuffers[0], timeIntervalsWithoutBuffers[1], N)
+                    timeIntervalsWithoutBuffers[0], timeIntervalsWithoutBuffers[1], NWithoutBuffers)
                 MCF_ref = np.concatenate(
                     (np.expand_dims(MCF_ref_r_interp, axis=1),
                         np.expand_dims(MCF_ref_l_interp, axis=1)), axis=1).T
@@ -2854,7 +2854,7 @@ def run_tracking(baseDir, dataDir, settings, case='0',
             'GRF_labels': GRF_labels_fig,
             'GRM_labels': GRM_labels_fig,
             'COP_labels': COP_labels_fig,
-            'time': tgridf,
+            'time': np.round(tgridf,6),
             'muscles': bothSidesMuscles,
             'passive_limit_torques': pT_opt,
             'muscle_driven_joints': muscleDrivenJoints,
@@ -2892,7 +2892,7 @@ def run_tracking(baseDir, dataDir, settings, case='0',
             optimaltrajectories[case]['coordinate_speeds_ref'] = Qds_mocap_ref
             optimaltrajectories[case]['coordinate_accelerations_ref'] = Qdds_mocap_ref
         if 'timeIntervalWithoutBuffers' in settings:
-            optimaltrajectories[case]['timeWithoutBuffers'] = tgridfWithoutBuffers
+            optimaltrajectories[case]['timeWithoutBuffers'] = np.round(tgridfWithoutBuffers,6)
 
         optimaltrajectories[case]['iter'] = stats['iter_count']
 
@@ -2902,7 +2902,46 @@ def run_tracking(baseDir, dataDir, settings, case='0',
             optimaltrajectories[case]['muscle_activations'] = a_opt
             optimaltrajectories[case]['muscle_forces'] = Ft_opt  
             optimaltrajectories[case]['passive_muscle_torques'] = pMT_opt
-            optimaltrajectories[case]['passive_muscle_torques'] = aMT_opt
+            optimaltrajectories[case]['active_muscle_torques'] = aMT_opt
+
+        trimBuffers = True
+        if trimBuffers:
+            variablesToTrim = [
+                'coordinate_values_toTrack', 'coordinate_values', 
+                'coordinate_speeds_toTrack', 'coordinate_speeds', 
+                'coordinate_accelerations_toTrack', 'coordinate_accelerations',
+                'torques', 'torques_BWht', 'powers', 'GRF', 'GRF_BW', 'GRF_filt',
+                'GRF_filt_BW', 'GRM', 'GRM_BWht', 'COP', 'freeM', 'time',
+                'passive_limit_torques']
+            if computeKAM:
+                variablesToTrim += ['KAM', 'KAM_BWht']
+            if computeMCF:
+                variablesToTrim += ['MCF', 'MCF_BW']
+            if torque_driven_model:
+                variablesToTrim += ['coordinate_activations']
+            else:
+                variablesToTrim += ['muscle_activations', 'muscle_forces', 
+                                    'passive_muscle_torques', 'active_muscle_torques']                
+            statesVariables = ['coordinate_values', 'coordinate_speeds', 'time']
+            if torque_driven_model:
+                statesVariables += ['coordinate_activations']
+            else:
+                statesVariables += ['muscle_activations']
+
+            idxFirst = np.where(
+                optimaltrajectories[case]['time'][0,:] >= optimaltrajectories[case]['timeWithoutBuffers'][0][0])[0][0]
+            idxLast = np.where(
+                optimaltrajectories[case]['time'][0,:] <= optimaltrajectories[case]['timeWithoutBuffers'][0][-1])[0][-1]                
+            timeFirst = optimaltrajectories[case]['time'][0,idxFirst]
+            timeLast = optimaltrajectories[case]['time'][0,idxLast]
+            assert np.allclose(timeFirst, settings['timeIntervalWithoutBuffers'][0]), "Error in timeFirst"
+            assert np.allclose(timeLast, settings['timeIntervalWithoutBuffers'][1]), "Error in timeLast"
+            for variable in variablesToTrim:
+                if variable in statesVariables:
+                    optimaltrajectories[case][variable] = optimaltrajectories[case][variable][:,idxFirst:idxLast+1]
+                else:
+                    optimaltrajectories[case][variable] = optimaltrajectories[case][variable][:,idxFirst:idxLast]
+                
                 
         np.save(os.path.join(pathResults, 'optimaltrajectories.npy'),
                 optimaltrajectories)
