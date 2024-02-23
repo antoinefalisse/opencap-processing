@@ -131,6 +131,13 @@ def run_tracking(baseDir, dataDir, settings, case='0',
     # Time interval.
     timeIntervals = settings['timeInterval']
     timeElapsed = timeIntervals[1] - timeIntervals[0]
+
+    if 'timeIntervalWithoutBuffers' in settings:
+        timeIntervalsWithoutBuffers = [
+            settings['timeIntervalWithoutBuffers'][0],
+            settings['timeIntervalWithoutBuffers'][1]]
+        timeElapsedWithoutBuffers = (timeIntervalsWithoutBuffers[1] - 
+                                     timeIntervalsWithoutBuffers[0])
     
     # Mesh intervals / density.
     if 'N' in settings: # number of mesh intervals.
@@ -140,11 +147,21 @@ def run_tracking(baseDir, dataDir, settings, case='0',
         if 'meshDensity' in settings:
             meshDensity = settings['meshDensity']
         N = int(round(timeElapsed * meshDensity, 2))
+        if 'timeIntervalWithoutBuffers' in settings:
+            NWithoutBuffers = int(round(timeElapsedWithoutBuffers * meshDensity, 2))
+
         
     # Discretized time interval.
     tgrid = np.linspace(timeIntervals[0], timeIntervals[1], N+1)
     tgridf = np.zeros((1, N+1))
-    tgridf[:,:] = tgrid.T            
+    tgridf[:,:] = tgrid.T
+    if 'timeIntervalWithoutBuffers' in settings:
+        tgridWithoutBuffers = np.linspace(
+            timeIntervalsWithoutBuffers[0], timeIntervalsWithoutBuffers[1],
+            NWithoutBuffers+1)
+        tgridfWithoutBuffers = np.zeros((1, NWithoutBuffers+1))
+        tgridfWithoutBuffers[:,:] = tgridWithoutBuffers.T
+        
         
     # If heel_vGRF_threshold is larger than 0, a constraint will enforce
     # that the contact spheres on the model's heels generate a vertical
@@ -681,14 +698,14 @@ def run_tracking(baseDir, dataDir, settings, case='0',
     from utilsOpenSimAD import getID    
     trialNameMocap = trialName
     # Hack: Experimental data do not have the videoAndMocap.
-    trialNameMocap = trialNameMocap.replace('_videoAndMocap', '')
+    trialNameMocap = trialNameMocap.replace('_video', '')
     pathIDFile = os.path.join(pathIDFolder, trialNameMocap + '.sto')
     torques_ref_available = False
     if os.path.exists(pathIDFile):
         torques_ref_available = True
         ID_temp = getID(pathIDFile, joints)
         torques_ref = interpolateDataFrame(
-            ID_temp, timeIntervals[0], timeIntervals[1], N).to_numpy()[:,1::].T
+            ID_temp, timeIntervalsWithoutBuffers[0], timeIntervalsWithoutBuffers[1], NWithoutBuffers).to_numpy()[:,1::].T
         
     # If ground reaction force data are available, we load them for comparison.
     from utilsOpenSimAD import getGRFAll, getGRFPeaks
@@ -696,8 +713,8 @@ def run_tracking(baseDir, dataDir, settings, case='0',
     GRF_ref_available = False
     if os.path.exists(pathGRFFile):
         GRF_ref_available = True
-        GRF_ref_all = getGRFAll(pathGRFFile, timeIntervals, N)
-        GRF_peaks_ref = getGRFPeaks(GRF_ref_all, timeIntervals)
+        GRF_ref_all = getGRFAll(pathGRFFile, timeIntervalsWithoutBuffers, NWithoutBuffers)
+        GRF_peaks_ref = getGRFPeaks(GRF_ref_all, timeIntervalsWithoutBuffers)
 
         GRF_ref = selectFromDataFrame(
                 GRF_ref_all['df_interp']['forces']['all'], 
@@ -715,7 +732,7 @@ def run_tracking(baseDir, dataDir, settings, case='0',
         EMG_ref_available = True
         EMG_temp = getEMG(pathEMGFile, bothSidesMuscles)
         EMG_ref = interpolateDataFrame(
-            EMG_temp, timeIntervals[0], timeIntervals[1], N).to_numpy()[:,1::].T
+            EMG_temp, timeIntervalsWithoutBuffers[0], timeIntervalsWithoutBuffers[1], NWithoutBuffers).to_numpy()[:,1::].T
         
     # If SO data are available, we load them for comparison.
     from utilsOpenSimAD import getFromStorage
@@ -726,7 +743,7 @@ def run_tracking(baseDir, dataDir, settings, case='0',
         SO_ref_available = True
         SO_temp = getFromStorage(pathSOFile, bothSidesMuscles)
         SO_ref = interpolateDataFrame(
-            SO_temp, timeIntervals[0], timeIntervals[1], N).to_numpy()[:,1::].T
+            SO_temp, timeIntervalsWithoutBuffers[0], timeIntervalsWithoutBuffers[1], NWithoutBuffers).to_numpy()[:,1::].T
         
     # If IK data are available, we load them for comparison.
     pathIKFileMocap = os.path.join(pathIKFolderMocap, trialNameMocap + '.mot')
@@ -740,10 +757,10 @@ def run_tracking(baseDir, dataDir, settings, case='0',
         else:
             Qs_fromIK_mocap_filter = Qs_fromIK_mocap
         Qs_fromIK_mocap_sel = selectDataFrame(
-                Qs_fromIK_mocap_filter, timeIntervals[0], timeIntervals[1])
+                Qs_fromIK_mocap_filter, timeIntervalsWithoutBuffers[0], timeIntervalsWithoutBuffers[1])
         Qs_mocap_ref = interpolateDataFrame(
-            Qs_fromIK_mocap_filter, timeIntervals[0], timeIntervals[1],
-            N).to_numpy()[:,1::].T
+            Qs_fromIK_mocap_filter, timeIntervalsWithoutBuffers[0], timeIntervalsWithoutBuffers[1],
+            NWithoutBuffers).to_numpy()[:,1::].T
         Qs_fromIK_mocap_sel_copy = copy.deepcopy(Qs_fromIK_mocap_sel)
         
     # %% Polynomial approximations.
@@ -1323,11 +1340,11 @@ def run_tracking(baseDir, dataDir, settings, case='0',
         
         # Interpolation
         Qds_mocap_ref = interpolateDataFrame(
-            Qds_mocap_spline_filter, timeIntervals[0], 
-            timeIntervals[1], N).to_numpy()[:,1::].T
+            Qds_mocap_spline_filter, timeIntervalsWithoutBuffers[0], 
+            timeIntervalsWithoutBuffers[1], NWithoutBuffers).to_numpy()[:,1::].T
         Qdds_mocap_ref = interpolateDataFrame(
-            Qdds_mocap_spline_filter, timeIntervals[0], 
-            timeIntervals[1], N).to_numpy()[:,1::].T
+            Qdds_mocap_spline_filter, timeIntervalsWithoutBuffers[0], 
+            timeIntervalsWithoutBuffers[1], NWithoutBuffers).to_numpy()[:,1::].T
             
     # %% Update bounds if coordinate constraints.
     if coordinate_constraints:
@@ -2628,10 +2645,10 @@ def run_tracking(baseDir, dataDir, settings, case='0',
                 from utilsOpenSimAD import interpolateNumpyArray_time
                 KAM_ref_r_interp = interpolateNumpyArray_time(
                     c_KAM_ref['KAM_r'], c_KAM_ref['time'], 
-                    timeIntervals[0], timeIntervals[1], N)
+                    timeIntervalsWithoutBuffers[0], timeIntervalsWithoutBuffers[1], N)
                 KAM_ref_l_interp = interpolateNumpyArray_time(
                     c_KAM_ref['KAM_l'], c_KAM_ref['time'], 
-                    timeIntervals[0], timeIntervals[1], N)
+                    timeIntervalsWithoutBuffers[0], timeIntervalsWithoutBuffers[1], N)
                 KAM_ref = np.concatenate(
                     (np.expand_dims(KAM_ref_r_interp, axis=1),
                         np.expand_dims(KAM_ref_l_interp, axis=1)), axis=1).T          
@@ -2753,10 +2770,10 @@ def run_tracking(baseDir, dataDir, settings, case='0',
                 from utilsOpenSimAD import interpolateNumpyArray_time                
                 MCF_ref_r_interp = interpolateNumpyArray_time(
                     c_MCF_ref['MCF_r'], c_MCF_ref['time'], 
-                    timeIntervals[0], timeIntervals[1], N)
+                    timeIntervalsWithoutBuffers[0], timeIntervalsWithoutBuffers[1], N)
                 MCF_ref_l_interp = interpolateNumpyArray_time(
                     c_MCF_ref['MCF_l'], c_MCF_ref['time'], 
-                    timeIntervals[0], timeIntervals[1], N)
+                    timeIntervalsWithoutBuffers[0], timeIntervalsWithoutBuffers[1], N)
                 MCF_ref = np.concatenate(
                     (np.expand_dims(MCF_ref_r_interp, axis=1),
                         np.expand_dims(MCF_ref_l_interp, axis=1)), axis=1).T
@@ -2874,6 +2891,8 @@ def run_tracking(baseDir, dataDir, settings, case='0',
             optimaltrajectories[case]['coordinate_values_ref'] = Qs_mocap_ref
             optimaltrajectories[case]['coordinate_speeds_ref'] = Qds_mocap_ref
             optimaltrajectories[case]['coordinate_accelerations_ref'] = Qdds_mocap_ref
+        if 'timeIntervalWithoutBuffers' in settings:
+            optimaltrajectories[case]['timeWithoutBuffers'] = tgridfWithoutBuffers
 
         optimaltrajectories[case]['iter'] = stats['iter_count']
 

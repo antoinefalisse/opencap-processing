@@ -6,10 +6,11 @@ import sys
 sys.path.append("../")
 baseDir = os.path.join(os.getcwd(), '..')
 
-from utils import import_metadata
+# from utils import import_metadata
 
 # %% Data re-organization
 dataDir = 'C:/MyDriveSym/Projects/mobilecap/data'
+# dataDir = os.path.join(baseDir, 'Data', 'Benchmark')
 
 driveDir = os.path.join(baseDir, 'data', 'Benchmark')
 dataFolder = os.path.join(driveDir, 'Data')
@@ -44,35 +45,35 @@ for subject in subjects:
     os.makedirs(pathModelMocap, exist_ok=True)
 
     # Drive
-    pathModelDrive = os.path.join(dataDir, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63')
+    pathDataDrive = os.path.join(dataDir, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63_allVideoOnly')
     pathMocapDrive = os.path.join(dataDir, subject, 'OpenSimData', 'Mocap')
-    pathKinematicsDrive = os.path.join(pathModelDrive, 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
-    pathModelDrive = os.path.join(pathModelDrive, 'Model', 'LaiArnoldModified2017_poly_withArms_weldHand')
+    pathKinematicsDrive = os.path.join(pathDataDrive, 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
+    pathModelDrive = os.path.join(pathDataDrive, 'Model', 'LaiArnoldModified2017_poly_withArms_weldHand')
     pathIDDrive = os.path.join(pathMocapDrive, 'ID', 'LaiArnoldModified2017_poly_withArms_weldHand')
     pathIKDrive = os.path.join(pathMocapDrive, 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
     pathGRFDrive = os.path.join(dataDir, subject, 'ForceData')
     pathSODrive = os.path.join(pathMocapDrive, 'SO', 'LaiArnoldModified2017_poly_withArms_weldHand')
     pathJRADrive = os.path.join(pathMocapDrive, 'JRA', 'LaiArnoldModified2017_poly_withArms_weldHand')
     pathEMGDrive = os.path.join(dataDir, subject, 'EMGData')
-    pathModelDrive = os.path.join(pathMocapDrive, 'Model', 'LaiArnoldModified2017_poly_withArms_weldHand')
+    pathModelMocapDrive = os.path.join(pathMocapDrive, 'Model', 'LaiArnoldModified2017_poly_withArms_weldHand')
 
-    # # Copy model
-    # for file in os.listdir(pathModelDrive):
-    #     pathFile = os.path.join(pathModelDrive, file)
-    #     if os.path.isfile(pathFile) and not 'desktop.ini' in file:
-    #         shutil.copy2(pathFile, pathModel)
+    # Copy model
+    for file in os.listdir(pathModelDrive):
+        pathFile = os.path.join(pathModelDrive, file)
+        if os.path.isfile(pathFile) and not 'desktop.ini' in file:
+            shutil.copy2(pathFile, pathModel)
 
-    # # Change model name
-    # for file in os.listdir(pathModel):
-    #     if 'LaiArnoldModified2017_poly_withArms_weldHand' in file:
-    #         fileName = file.replace('LaiArnoldModified2017_poly_withArms_weldHand', 'LaiUhlrich2022')
-    #         os.rename(os.path.join(pathModel, file), os.path.join(pathModel, fileName))
+    # Change model name
+    for file in os.listdir(pathModel):
+        if 'LaiArnoldModified2017_poly_withArms_weldHand' in file:
+            fileName = file.replace('LaiArnoldModified2017_poly_withArms_weldHand', 'LaiUhlrich2022')
+            os.rename(os.path.join(pathModel, file), os.path.join(pathModel, fileName))
 
-    # # Copy kinematics
-    # for file in os.listdir(pathKinematicsDrive):
-    #     pathFile = os.path.join(pathKinematicsDrive, file)
-    #     if os.path.isfile(pathFile) and not 'desktop.ini' in file:
-    #         shutil.copy2(pathFile, pathKinematics)
+    # Copy kinematics
+    for file in os.listdir(pathKinematicsDrive):
+        pathFile = os.path.join(pathKinematicsDrive, file)
+        if os.path.isfile(pathFile) and not 'desktop.ini' in file:
+            shutil.copy2(pathFile, pathKinematics)
 
     # # Copy metadata
     # pathMetadata = os.path.join(dataDir, subject, 'sessionMetadata.yaml')
@@ -122,7 +123,7 @@ for subject in subjects:
     #         shutil.copy2(pathFile, pathEMG)
 
     # # Copy model mocap
-    # for file in os.listdir(pathModelDrive):
+    # for file in os.listdir(pathModelMocapDrive):
     #     files_to_copy = [
     #         'LaiArnoldModified2017_poly_withArms_weldHand_generic.osim',
     #         'LaiArnoldModified2017_poly_withArms_weldHand_scaled.mot',
@@ -130,7 +131,7 @@ for subject in subjects:
     #         'Setup_Scale_LaiArnoldModified2017_poly_withArms_weldHand_scaled.xml'
     #         ]
     #     if file in files_to_copy:
-    #         pathFile = os.path.join(pathModelDrive, file)
+    #         pathFile = os.path.join(pathModelMocapDrive, file)
     #         if os.path.isfile(pathFile) and not 'desktop.ini' in file:
     #             shutil.copy2(pathFile, pathModelMocap)
 

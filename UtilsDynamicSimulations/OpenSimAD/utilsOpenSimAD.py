@@ -2057,7 +2057,7 @@ def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
                     idx_coord = optimaltrajectories[case]['coordinates'].index(joints[i])
                     if 'torques_ref' in optimaltrajectories[case]:
                         if not plotReference:
-                            ax.plot(optimaltrajectories[case]['time'][0,:-1].T,
+                            ax.plot(optimaltrajectories[case]['timeWithoutBuffers'][0,:-1].T,
                                     optimaltrajectories[case]['torques_ref'][idx_coord:idx_coord+1,:].T, c='black', label='Mocap ' + cases[c], linewidth=linewidth)
                             plotReference = True
                     ax.plot(optimaltrajectories[case]['time'][0,:-1].T,
@@ -2102,7 +2102,7 @@ def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
             for c, case in enumerate(cases):
                 if 'GRF_ref' in optimaltrajectories[case] and not plotedGRF:
                     plotedGRF = True
-                    ax.plot(optimaltrajectories[case]['time'][0,:-1].T,
+                    ax.plot(optimaltrajectories[case]['timeWithoutBuffers'][0,:-1].T,
                             optimaltrajectories[case]['GRF_ref'][i:i+1,:].T, c='black', label='Mocap ' + cases[c], linewidth=linewidth)   
                 ax.plot(optimaltrajectories[case]['time'][0,:-1].T,
                         optimaltrajectories[case]['GRF'][i:i+1,:].T, c=colors[c], label='Dynamic simulation: ' + cases[c], linewidth=linewidth)          
@@ -2137,7 +2137,7 @@ def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
                 for c, case in enumerate(cases):
                     if 'GRM_ref' in optimaltrajectories[case] and not plotedGRF:
                         plotedGRF = True
-                        ax.plot(optimaltrajectories[case]['time'][0,:-1].T,
+                        ax.plot(optimaltrajectories[case]['timeWithoutBuffers'][0,:-1].T,
                                 optimaltrajectories[case]['GRM_ref'][i:i+1,:].T, c='black', label='Mocap ' + cases[c], linewidth=linewidth)   
                     ax.plot(optimaltrajectories[case]['time'][0,:-1].T,
                             optimaltrajectories[case]['GRM'][i:i+1,:].T, c=colors[c], label='Dynamic simulation: ' + cases[c], linewidth=linewidth)          
@@ -2273,21 +2273,21 @@ def processInputsOpenSimAD(baseDir, dataFolder, session_id, trial_name,
          dynamic simulations (https://github.com/stanfordnmbl/opencap-processing/issues/61).
          Consider using the default Full body model instead (LaiUhlrich2022).""")
     
-    # Prepare inputs for dynamic simulations.
-    # Adjust muscle wrapping.    
-    adjust_muscle_wrapping(baseDir, dataFolder,
-                         OpenSimModel=OpenSimModel, overwrite=overwrite)
-    # Add foot-ground contacts to musculoskeletal model.    
-    generate_model_with_contacts(dataFolder, 
-                              OpenSimModel=OpenSimModel, overwrite=overwrite,
-                              contact_configuration=contact_configuration)
-    # Generate external function.    
-    generateExternalFunction(baseDir, dataFolder,
-                             OpenSimModel=OpenSimModel,
-                             overwrite=overwrite, 
-                             treadmill=bool(treadmill_speed),
-                             useExpressionGraphFunction=useExpressionGraphFunction,
-                             contact_configuration=contact_configuration)
+    # # Prepare inputs for dynamic simulations.
+    # # Adjust muscle wrapping.    
+    # adjust_muscle_wrapping(baseDir, dataFolder,
+    #                      OpenSimModel=OpenSimModel, overwrite=overwrite)
+    # # Add foot-ground contacts to musculoskeletal model.    
+    # generate_model_with_contacts(dataFolder, 
+    #                           OpenSimModel=OpenSimModel, overwrite=overwrite,
+    #                           contact_configuration=contact_configuration)
+    # # Generate external function.    
+    # generateExternalFunction(baseDir, dataFolder,
+    #                          OpenSimModel=OpenSimModel,
+    #                          overwrite=overwrite, 
+    #                          treadmill=bool(treadmill_speed),
+    #                          useExpressionGraphFunction=useExpressionGraphFunction,
+    #                          contact_configuration=contact_configuration)
     
     # Get settings.
     settings = get_setup(motion_type)

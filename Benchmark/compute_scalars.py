@@ -167,9 +167,7 @@ for iSub,subject in enumerate(subjects):
                 resTimeIdx = results_sel['video']['positions'][case]['headers'].index('time')
                 timeVec = results_sel['video']['positions'][case][segSource][resTimeIdx,:]
                 sfInds = getIndsFromTimes(sfTimes,timeVec)
-                selInds[case] = np.arange(sfInds[0],sfInds[1]+1)
-                
-              
+                selInds[case] = np.arange(sfInds[0],sfInds[1]+1)    
             elif 'DJ' in motion_type:
                 forcesFilePath = osDir = os.path.join(dataDir, 'LabValidation',subject, 'ForceData',case.replace('_videoAndMocap','') + '_forces.mot')
                 _, sfTimes = segmentDJ(forcesFilePath)
