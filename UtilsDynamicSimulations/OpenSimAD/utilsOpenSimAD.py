@@ -2273,21 +2273,21 @@ def processInputsOpenSimAD(baseDir, dataFolder, session_id, trial_name,
          dynamic simulations (https://github.com/stanfordnmbl/opencap-processing/issues/61).
          Consider using the default Full body model instead (LaiUhlrich2022).""")
     
-    # # Prepare inputs for dynamic simulations.
-    # # Adjust muscle wrapping.    
-    # adjust_muscle_wrapping(baseDir, dataFolder,
-    #                      OpenSimModel=OpenSimModel, overwrite=overwrite)
-    # # Add foot-ground contacts to musculoskeletal model.    
-    # generate_model_with_contacts(dataFolder, 
-    #                           OpenSimModel=OpenSimModel, overwrite=overwrite,
-    #                           contact_configuration=contact_configuration)
-    # # Generate external function.    
-    # generateExternalFunction(baseDir, dataFolder,
-    #                          OpenSimModel=OpenSimModel,
-    #                          overwrite=overwrite, 
-    #                          treadmill=bool(treadmill_speed),
-    #                          useExpressionGraphFunction=useExpressionGraphFunction,
-    #                          contact_configuration=contact_configuration)
+    # Prepare inputs for dynamic simulations.
+    # Adjust muscle wrapping.    
+    adjust_muscle_wrapping(baseDir, dataFolder,
+                         OpenSimModel=OpenSimModel, overwrite=overwrite)
+    # Add foot-ground contacts to musculoskeletal model.    
+    generate_model_with_contacts(dataFolder, 
+                              OpenSimModel=OpenSimModel, overwrite=overwrite,
+                              contact_configuration=contact_configuration)
+    # Generate external function.    
+    generateExternalFunction(baseDir, dataFolder,
+                             OpenSimModel=OpenSimModel,
+                             overwrite=overwrite, 
+                             treadmill=bool(treadmill_speed),
+                             useExpressionGraphFunction=useExpressionGraphFunction,
+                             contact_configuration=contact_configuration)
     
     # Get settings.
     settings = get_setup(motion_type)

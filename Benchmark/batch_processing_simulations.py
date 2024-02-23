@@ -37,7 +37,7 @@ from utils import storage_to_numpy
 
 # %% Paths.
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
-subjects = ['subject' + str(i) for i in range(2,12)]
+subjects = ['subject' + str(i) for i in range(10,12)]
 
 
 trials = {
@@ -62,8 +62,8 @@ case = '1'
 runProblem = True
 processInputs = True
 runSimulation = True
-solveProblem = False
-analyzeResults = False
+solveProblem = True
+analyzeResults = True
 plotResults = False
 
 if case == '0':
@@ -83,8 +83,8 @@ for subject in subjects:
     pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
     for count, trial_name in enumerate(list(trials[subject].keys())):
         
-        if count > 0:
-            continue
+        #if count > 0:
+        #    continue
         
         trial_name += '_video'
         
