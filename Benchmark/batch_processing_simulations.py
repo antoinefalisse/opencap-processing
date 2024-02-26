@@ -38,7 +38,7 @@ from utils import storage_to_numpy
 
 # %% Paths.
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
-i = 10
+i = 2
 subjects = ['subject' + str(i) for i in range(i,i+1)]
 
 # TODO: subject 10 might be 56.6 instead of 60kgs, check if that makes a diff.
@@ -64,13 +64,13 @@ filter_frequency = 6
 
 # Settings for dynamic simulation.
 motion_type = 'walking_formulation2'
-case = '0'
-runProblem = True
+case = '1'
+runProblem = False
 processInputs = True
 runSimulation = True
 solveProblem = True
-analyzeResults = False
-plotResults = False
+analyzeResults = True
+plotResults = True
 
 if case == '0':
     buffer_start = 0
@@ -84,6 +84,10 @@ elif case == '2': # Did the same one to compare end times
 elif case == '3':
     buffer_start = 0.7
     buffer_end = 0
+elif case == '4':
+    buffer_start = 0.7
+    buffer_end = 0.5
+    weight_activation = 5
     
 # %% Gait segmentation and kinematic analysis.
 
@@ -96,8 +100,8 @@ for subject in subjects:
     pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
     for count, trial_name in enumerate(list(trials[subject].keys())):
         
-        # if count != 0:
-        #     continue
+        if count != 0:
+            continue
         
         trial_name += '_video'
         
@@ -129,7 +133,10 @@ for subject in subjects:
                         time_window = [time_start, time_end]
                         settings['timeInterval'] = [round(float(i),6) for i in time_window]
                         settings['timeIntervalWithoutBuffers'] = [round(float(settings['timeInterval'][0] + settings['buffers'][0]),6),
-                                                                  round(float(settings['timeInterval'][1] - settings['buffers'][1]),6)]                        
+                                                                  round(float(settings['timeInterval'][1] - settings['buffers'][1]),6)]     
+                        
+                        if case == '4':
+                            settings['weights']['activationTerm'] = weight_activation
                         
                     except Exception as e:
                         print(f"Error setting up dynamic optimization for trial {trial_name}: {e}")
