@@ -584,12 +584,12 @@ metrics = ['mae_mean','mape_mean','rmse_mean']
 for act in acts:
     results_all[act]['GRFs_BW_limbAveraged'] = {}
     head = results_all[act]['GRFs_BW']['headers']
-    biHeadNames = [dof for dof in head if dof[-5:-3] == '_l']
-    matchingPairs = [[head.index(bN),head.index(np.char.replace(bN, '_l', '_r', count = 1))] for bN in biHeadNames]
+    biHeadNames = [dof for dof in head if 'left' in dof]
+    matchingPairs = [[head.index(bN),head.index(np.char.replace(bN, 'left', 'right', count = 1))] for bN in biHeadNames]
     nMP = len(matchingPairs)
-    biHeadReplacedNames = {'ground_force_l_vy':'GRF_vertical',
-                           'ground_force_l_vx':'GRF_anterior',
-                           'ground_force_l_vz':'GRF_medial'}
+    biHeadReplacedNames = {'ground_force_left_vy':'GRF_vertical',
+                           'ground_force_left_vx':'GRF_anterior',
+                           'ground_force_left_vz':'GRF_medial'}
     
     
     for met in metrics:

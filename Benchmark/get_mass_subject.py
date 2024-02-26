@@ -32,16 +32,14 @@ activityAnalysesDir = os.path.join(baseDir, 'ActivityAnalyses')
 sys.path.append(activityAnalysesDir)
 opensimADDir = os.path.join(baseDir, 'UtilsDynamicSimulations', 'OpenSimAD')
 sys.path.append(opensimADDir)
-from utilsOpenSimAD import processInputsOpenSimAD, plotResultsOpenSimAD
+from utilsOpenSimAD import processInputsOpenSimAD, plotResultsOpenSimAD, getGRF
 from mainOpenSimAD import run_tracking
-from utils import storage_to_numpy
+from utils import storage_to_numpy, import_metadata
 
 # %% Paths.
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
 i = 10
 subjects = ['subject' + str(i) for i in range(i,i+1)]
-
-# TODO: subject 10 might be 56.6 instead of 60kgs, check if that makes a diff.
 
 
 trials = {
@@ -59,96 +57,53 @@ trials = {
     }
 
 
-# %% User-defined variables.
-filter_frequency = 6
-
-# Settings for dynamic simulation.
-motion_type = 'walking_formulation2'
-case = '2'
-runProblem = False
-processInputs = True
-runSimulation = True
-solveProblem = True
-analyzeResults = True
-plotResults = True
-
-if case == '0':
-    buffer_start = 0
-    buffer_end = 0
-elif case == '1':
-    buffer_start = 0.7
-    buffer_end = 0.5
-elif case == '2':
-    buffer_start = 0.7
-    buffer_end = 0.5
-    
-# %% Gait segmentation and kinematic analysis.
-
-no_results = []
 for subject in subjects:
 
     sessionDir = os.path.join(dataFolder, subject)
     session_id = ''
 
-    pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
-    for count, trial_name in enumerate(list(trials[subject].keys())):
-        
-        if count != 2:
-            continue
-        
-        trial_name += '_video'
-        
-        if runProblem:        
+    pathData = os.path.join(dataFolder, subject, 'ForceData')
+    pathFile = os.path.join(pathData, 'static1_forces.mot')
+    
+    GRF = {        
+        'headers': {
+            'forces': {
+                'right': ['R_ground_force_vx', 'R_ground_force_vy', 
+                          'R_ground_force_vz'],
+                'left': ['L_ground_force_vx', 'L_ground_force_vy', 
+                         'L_ground_force_vz'],
+                'all': ['R_ground_force_vx', 'R_ground_force_vy', 
+                        'R_ground_force_vz','L_ground_force_vx', 
+                        'L_ground_force_vy', 'L_ground_force_vz']},
+            'COP': {
+                'right': ['R_ground_force_px', 'R_ground_force_py', 
+                          'R_ground_force_pz'],
+                'left': ['L_ground_force_px', 'L_ground_force_py', 
+                         'L_ground_force_pz'],
+                'all': ['R_ground_force_px', 'R_ground_force_py', 
+                        'R_ground_force_pz','L_ground_force_px', 
+                        'L_ground_force_py', 'L_ground_force_pz']},
+            'torques': {
+                'right': ['R_ground_torque_x', 'R_ground_torque_y', 
+                          'R_ground_torque_z'],
+                'left': ['L_ground_torque_x', 'L_ground_torque_y', 
+                         'L_ground_torque_z'],
+                'all': ['R_ground_torque_x', 'R_ground_torque_y', 
+                        'R_ground_torque_z', 'L_ground_torque_x', 
+                        'L_ground_torque_y', 'L_ground_torque_z']}}}
+    
+    GRF_right = getGRF(pathFile, GRF['headers']['forces']['right'])
+    GRF_left = getGRF(pathFile, GRF['headers']['forces']['left'])
+    
+       
+    mass = np.mean(GRF_left['L_ground_force_vy'].to_numpy()) / 9.8066499999999994
 
-                print('Processing {}-{} for dynamic simulation...'.format(subject, trial_name))
-                if processInputs:
-                    try:
-                        settings = processInputsOpenSimAD(
-                            baseDir, sessionDir, session_id, trial_name, 
-                            motion_type)
-                        
-                        # Get time interval from trimmed trial
-                        pathTrimmedMotionFile = os.path.join(dataFolder, subject, 'OpenSimData_trimmed', 'Kinematics', trial_name.replace('_video', '_videoAndMocap') + '.mot')
-                        trimmed_motion_file = storage_to_numpy(pathTrimmedMotionFile)
-                        trimmed_time_window = [trimmed_motion_file['time'][0], trimmed_motion_file['time'][-1]]
-                        
-                        pathMotionFile = os.path.join(dataFolder, subject, 'OpenSimData', 'Kinematics', trial_name + '.mot')
-                        motion_file = storage_to_numpy(pathMotionFile)
-                        full_time_window = [motion_file['time'][0], motion_file['time'][-1]]
+    metadata = import_metadata(os.path.join(dataFolder, subject, 'sessionMetadata.yaml'))
+    subject_mass = metadata['mass_kg']
 
-                        # Update time window
-                        time_start = np.round(max(trimmed_time_window[0] - buffer_start, full_time_window[0], trials[subject][trial_name.replace('_video', '')]['start']),2)
-                        time_end = np.round(min(trimmed_time_window[1] + buffer_end, full_time_window[1], trials[subject][trial_name.replace('_video', '')]['end']),2)
-                        buffer_start_applied = np.abs(np.round(time_start - trimmed_time_window[0], 2))
-                        buffer_end_applied = np.abs(np.round(time_end - trimmed_time_window[1], 2))
-                        settings['buffers'] = [round(float(buffer_start_applied),6),
-                                               round(float(buffer_end_applied),6)]
-                        time_window = [time_start, time_end]
-                        settings['timeInterval'] = [round(float(i),6) for i in time_window]
-                        settings['timeIntervalWithoutBuffers'] = [round(float(settings['timeInterval'][0] + settings['buffers'][0]),6),
-                                                                  round(float(settings['timeInterval'][1] - settings['buffers'][1]),6)]                        
-                        
-                    except Exception as e:
-                        print(f"Error setting up dynamic optimization for trial {trial_name}: {e}")
-                        continue
-            
-                # Simulation.
-                if runSimulation:
-                    try:
-                        # print('Running dynamic simulation...')
-                        run_tracking(baseDir, sessionDir, settings, case=case, 
-                                    solveProblem=solveProblem, analyzeResults=analyzeResults)
-                        test=1
-                    except Exception as e:
-                        tb_info = traceback.format_exc()
-                        print(f"Error during dynamic optimization for trial {trial_name}: {e}\nTraceback: {tb_info}")
-                        no_results.append(subject + '_' + trial_name)
-                        continue
-            
-        if plotResults:            
-            plotResultsOpenSimAD(sessionDir, trial_name, cases=['1'], mainPlots=True, grfPlotOnly=True)
-        
-        test=1
+    print(f'Estimated mass: {mass} kg')
+    print(f'Metadata mass: {subject_mass} kg')
 
-print('No results for the following trials:')
-print(no_results)
+    
+
+    
