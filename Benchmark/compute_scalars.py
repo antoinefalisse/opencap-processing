@@ -1,4 +1,4 @@
-"""
+"""forceData = storage2df(pathForceFile
 ---------------------------------------------------------------------------
 OpenCap: reprocessSessions.py
 ---------------------------------------------------------------------------
@@ -45,7 +45,7 @@ from utilsDataPostprocessing import (segmentSquats, segmentWalkStance, segmentDJ
                                      getIndsFromTimes, calc_LSI, interpolateNumpyArray)
 
 trials = {
-    'subject2': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS4'],
+    # 'subject2': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS4'],
     'subject3': ['walking1', 'walking2', 'walking3', 'walkingTS2', 'walkingTS3', 'walkingTS4'],
     'subject4': ['walking1', 'walking2', 'walking4', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
     'subject5': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
@@ -162,14 +162,14 @@ for iSub,subject in enumerate(subjects):
         for case in cases:
             # Walking - identify first L toe-off, first L HS, second L toe-off. add swing to end.
             if 'walking' in motion_type:
-                forcesFilePath = osDir = os.path.join(dataDir, subject, 'ForceData',case.replace('_videoAndMocap','') + '_forces.mot')
+                forcesFilePath = osDir = os.path.join(dataDir, subject, 'ForceData',case.replace('_video','') + '_forces.mot')
                 _, sfTimes = segmentWalkStance(forcesFilePath)
                 resTimeIdx = results_sel['video']['positions'][case]['headers'].index('time')
                 timeVec = results_sel['video']['positions'][case][segSource][resTimeIdx,:]
                 sfInds = getIndsFromTimes(sfTimes,timeVec)
                 selInds[case] = np.arange(sfInds[0],sfInds[1]+1)    
             elif 'DJ' in motion_type:
-                forcesFilePath = osDir = os.path.join(dataDir, 'LabValidation',subject, 'ForceData',case.replace('_videoAndMocap','') + '_forces.mot')
+                forcesFilePath = osDir = os.path.join(dataDir, 'LabValidation',subject, 'ForceData',case.replace('_video','') + '_forces.mot')
                 _, sfTimes = segmentDJ(forcesFilePath)
                 resTimeIdx = results_sel['video']['positions'][case]['headers'].index('time')
                 timeVec = results_sel['video']['positions'][case][segSource][resTimeIdx,:]

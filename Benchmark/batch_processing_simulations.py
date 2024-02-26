@@ -38,35 +38,31 @@ from utils import storage_to_numpy
 
 # %% Paths.
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
-subjects = ['subject' + str(i) for i in range(4,5)]
+i = 3
+subjects = ['subject' + str(i) for i in range(i,i+1)]
 
 
-# trials = {
-#     'subject2': {'walking1': {'start':-1, 'end':1.85}, 'walking2': {'start':-0.9, 'end':1.76}, 'walking3': {'start':-1, 'end':1.76}, 'walkingTS1': {'start':-1, 'end':2.15}, 'walkingTS2': {'start':-1, 'end':1.97}, 'walkingTS4': {'start':-0.9, 'end':2.13}},
-#     'subject3': {'walking1': {'start':-1.8, 'end':1.41}, 'walking2': {'start':-1.8, 'end':1.46}, 'walking3': {'start':-1.7, 'end':1.48}, 'walkingTS2': {'start':-2.5, 'end':1.97}, 'walkingTS3': {'start':-2, 'end':1.79}, 'walkingTS4': {'start':-2.2, 'end':1.7}},
-#     'subject4': {'walking1': {'start':-0.7, 'end':1.6}, 'walking2': {'start':-0.7, 'end':1.87}, 'walking4': {'start':-0.7, 'end':1.7}, 'walkingTS1': {'start':-0.7, 'end':1.7}, 'walkingTS2': {'start':-0.7, 'end':1.6}, 'walkingTS3': {'start':-0.7, 'end':1.95}},
-#     'subject5': {'walking1': {'start':-0.7, 'end':1.83}, 'walking2': {'start':-0.7, 'end':1.8}, 'walking3': {'start':-0.7, 'end':1.8}, 'walkingTS1': {'start':-0.8, 'end':1.88}, 'walkingTS2': {'start':-0.7, 'end':1.75}, 'walkingTS3': {'start':-0.7, 'end':1.72}},
-#     'subject6': {'walking1': {'start':-1.2, 'end':1.63}, 'walking2': {'start':-1.2, 'end':1.6}, 'walking3': {'start':-1.2, 'end':2}, 'walkingTS1': {'start':-0.7, 'end':1.65}, 'walkingTS2': {'start':-0.8, 'end':1.72}, 'walkingTS3': {'start':-1.1, 'end':1.78}},
-#     'subject7': {'walking1': {'start':-0.8, 'end':1.79}, 'walking2': {'start':-0.7, 'end':1.82}, 'walking3': {'start':-0.7, 'end':1.87}, 'walkingTS1': {'start':-1.1, 'end':1.83}, 'walkingTS2': {'start':-1.1, 'end':1.9}, 'walkingTS3': {'start':-1.1, 'end':2.12}},
-#     'subject8': {'walking1': {'start':-1, 'end':1.83}, 'walking2': {'start':-0.7, 'end':1.89}, 'walking3': {'start':-0.7, 'end':1.92}, 'walkingTS1': {'start':-0.7, 'end':2.3}, 'walkingTS3': {'start':-0.7, 'end':1.9}}, # walkingTS2 excluded
-#     'subject9': {'walking1': {'start':-0.6, 'end':1.65}, 'walking2': {'start':-0.5, 'end':1.55}, 'walking3': {'start':-0.6, 'end':1.6}, 'walkingTS1': {'start':-0.7, 'end':1.68}, 'walkingTS2': {'start':-0.7, 'end':1.63}, 'walkingTS3': {'start':-0.7, 'end':1.56}},
-#     'subject10': {'walking1': {'start':-0.7, 'end':1.46}, 'walking2': {'start':-0.7, 'end':1.49}, 'walking3': {'start':-0.7, 'end':1.5}, 'walkingTS1': {'start':-0.8, 'end':1.78}, 'walkingTS2': {'start':-0.9, 'end':1.85}, 'walkingTS3': {'start':-0.8, 'end':1.66}},
-#     'subject11': {'walking2': {'start':-0.7, 'end':1.6}, 'walking3': {'start':-0.7, 'end':1.55}, 'walking4': {'start':-0.7, 'end':1.62}, 'walkingTS1': {'start':-0.7, 'end':1.9}, 'walkingTS2': {'start':-0.7, 'end':1.85}, 'walkingTS3': {'start':-0.7, 'end':1.9}}, # arms weird in beginning, if 0.7 does not work roll back to 0.5
-#     }
-
-trials = {    
-    'subject4': {'walkingTS2': {'start':-0.7, 'end':1.6}},    
-    # 'subject5': {'walking1': {'start':-0.7, 'end':1.83}},
-    # 'subject7': {'walkingTS3': {'start':-1.1, 'end':2.12}},
-    # 'subject10': {'walkingTS2': {'start':-0.9, 'end':1.85}},    
+trials = {
+    'subject2': {'walking1': {'start':-1, 'end':1.85}, 'walking2': {'start':-0.9, 'end':1.76}, 'walking3': {'start':-1, 'end':1.76}, 'walkingTS1': {'start':-1, 'end':2.15}, 'walkingTS2': {'start':-1, 'end':1.97}, 'walkingTS4': {'start':-0.9, 'end':2.13}},
+    # 'subject3': {'walking1': {'start':-1.8, 'end':1.41}, 'walking2': {'start':-1.8, 'end':1.46}, 'walking3': {'start':-1.7, 'end':1.48}, 'walkingTS2': {'start':-2.5, 'end':1.97}, 'walkingTS3': {'start':-2, 'end':1.79}, 'walkingTS4': {'start':-2.2, 'end':1.7}},
+    'subject3': {'walking1': {'start':-1.8, 'end':1.56}, 'walking2': {'start':-1.8, 'end':1.56}, 'walking3': {'start':-1.7, 'end':1.58}, 'walkingTS2': {'start':-2.5, 'end':2.08}, 'walkingTS3': {'start':-2, 'end':1.96}, 'walkingTS4': {'start':-2.2, 'end':1.82}},
+    'subject4': {'walking1': {'start':-0.7, 'end':1.6}, 'walking2': {'start':-0.7, 'end':1.87}, 'walking4': {'start':-0.7, 'end':1.7}, 'walkingTS1': {'start':-0.7, 'end':1.7}, 'walkingTS2': {'start':-0.7, 'end':1.6}, 'walkingTS3': {'start':-0.7, 'end':1.95}},
+    'subject5': {'walking1': {'start':-0.7, 'end':1.83}, 'walking2': {'start':-0.7, 'end':1.8}, 'walking3': {'start':-0.7, 'end':1.8}, 'walkingTS1': {'start':-0.8, 'end':1.88}, 'walkingTS2': {'start':-0.7, 'end':1.75}, 'walkingTS3': {'start':-0.7, 'end':1.72}},
+    'subject6': {'walking1': {'start':-1.2, 'end':1.63}, 'walking2': {'start':-1.2, 'end':1.6}, 'walking3': {'start':-1.2, 'end':2}, 'walkingTS1': {'start':-0.7, 'end':1.65}, 'walkingTS2': {'start':-0.8, 'end':1.72}, 'walkingTS3': {'start':-1.1, 'end':1.78}},
+    'subject7': {'walking1': {'start':-0.8, 'end':1.79}, 'walking2': {'start':-0.7, 'end':1.82}, 'walking3': {'start':-0.7, 'end':1.87}, 'walkingTS1': {'start':-1.1, 'end':1.83}, 'walkingTS2': {'start':-1.1, 'end':1.9}, 'walkingTS3': {'start':-1.1, 'end':2.12}},
+    'subject8': {'walking1': {'start':-1, 'end':1.83}, 'walking2': {'start':-0.7, 'end':1.89}, 'walking3': {'start':-0.7, 'end':1.92}, 'walkingTS1': {'start':-0.7, 'end':2.3}, 'walkingTS3': {'start':-0.7, 'end':1.9}}, # walkingTS2 excluded
+    'subject9': {'walking1': {'start':-0.6, 'end':1.65}, 'walking2': {'start':-0.5, 'end':1.55}, 'walking3': {'start':-0.6, 'end':1.6}, 'walkingTS1': {'start':-0.7, 'end':1.68}, 'walkingTS2': {'start':-0.7, 'end':1.63}, 'walkingTS3': {'start':-0.7, 'end':1.56}},
+    'subject10': {'walking1': {'start':-0.7, 'end':1.46}, 'walking2': {'start':-0.7, 'end':1.49}, 'walking3': {'start':-0.7, 'end':1.5}, 'walkingTS1': {'start':-0.8, 'end':1.78}, 'walkingTS2': {'start':-0.9, 'end':1.85}, 'walkingTS3': {'start':-0.8, 'end':1.66}},
+    'subject11': {'walking2': {'start':-0.7, 'end':1.6}, 'walking3': {'start':-0.7, 'end':1.55}, 'walking4': {'start':-0.7, 'end':1.62}, 'walkingTS1': {'start':-0.7, 'end':1.9}, 'walkingTS2': {'start':-0.7, 'end':1.85}, 'walkingTS3': {'start':-0.7, 'end':1.9}}, # arms weird in beginning, if 0.7 does not work roll back to 0.5
     }
+
 
 # %% User-defined variables.
 filter_frequency = 6
 
 # Settings for dynamic simulation.
 motion_type = 'walking_formulation2'
-case = '1'
+case = '2'
 runProblem = True
 processInputs = True
 runSimulation = True
@@ -75,9 +71,12 @@ analyzeResults = True
 plotResults = False
 
 if case == '0':
-    buffer_start = 0.5
-    buffer_end = 0.5
+    buffer_start = 0
+    buffer_end = 0
 elif case == '1':
+    buffer_start = 0.7
+    buffer_end = 0.5
+elif case == '2':
     buffer_start = 0.7
     buffer_end = 0.5
     
@@ -92,14 +91,14 @@ for subject in subjects:
     pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
     for count, trial_name in enumerate(list(trials[subject].keys())):
         
-        # if count != 0:
-        #     continue
+        if count != 0:
+            continue
         
         trial_name += '_video'
         
         if runProblem:        
 
-                print('Processing data for dynamic simulation...')
+                print('Processing {}-{} for dynamic simulation...'.format(subject, trial_name))
                 if processInputs:
                     try:
                         settings = processInputsOpenSimAD(
@@ -134,7 +133,7 @@ for subject in subjects:
                 # Simulation.
                 if runSimulation:
                     try:
-                        print('Running dynamic simulation...')
+                        # print('Running dynamic simulation...')
                         run_tracking(baseDir, sessionDir, settings, case=case, 
                                     solveProblem=solveProblem, analyzeResults=analyzeResults)
                         test=1
@@ -145,7 +144,7 @@ for subject in subjects:
                         continue
             
         if plotResults:            
-            plotResultsOpenSimAD(sessionDir, trial_name, cases=['1'], mainPlots=True)
+            plotResultsOpenSimAD(sessionDir, trial_name, cases=['1'], mainPlots=True, grfPlotOnly=True)
         
         test=1
 

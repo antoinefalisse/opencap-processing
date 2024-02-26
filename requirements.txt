@@ -10,3 +10,6 @@ pyyaml
 joblib
 cmake
 seaborn
+scikit-learn
+pingouin
+openpyxl
