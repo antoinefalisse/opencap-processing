@@ -38,7 +38,7 @@ from utils import storage_to_numpy
 
 # %% Paths.
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
-i = 10
+i = 3
 subjects = ['subject' + str(i) for i in range(i,i+1)]
 
 # TODO: subject 10 might be 56.6 instead of 60kgs, check if that makes a diff.
@@ -46,8 +46,8 @@ subjects = ['subject' + str(i) for i in range(i,i+1)]
 
 trials = {
     'subject2': {'walking1': {'start':-1, 'end':1.85}, 'walking2': {'start':-0.9, 'end':1.76}, 'walking3': {'start':-1, 'end':1.76}, 'walkingTS1': {'start':-1, 'end':2.15}, 'walkingTS2': {'start':-1, 'end':1.97}, 'walkingTS4': {'start':-0.9, 'end':2.13}},
-    # 'subject3': {'walking1': {'start':-1.8, 'end':1.41}, 'walking2': {'start':-1.8, 'end':1.46}, 'walking3': {'start':-1.7, 'end':1.48}, 'walkingTS2': {'start':-2.5, 'end':1.97}, 'walkingTS3': {'start':-2, 'end':1.79}, 'walkingTS4': {'start':-2.2, 'end':1.7}},
-    'subject3': {'walking1': {'start':-1.8, 'end':1.56}, 'walking2': {'start':-1.8, 'end':1.56}, 'walking3': {'start':-1.7, 'end':1.58}, 'walkingTS2': {'start':-2.5, 'end':2.08}, 'walkingTS3': {'start':-2, 'end':1.96}, 'walkingTS4': {'start':-2.2, 'end':1.82}},
+    'subject3': {'walking1': {'start':-1.8, 'end':1.56}, 'walking2': {'start':-1.8, 'end':1.46}, 'walking3': {'start':-1.7, 'end':1.48}, 'walkingTS2': {'start':-2.5, 'end':1.97}, 'walkingTS3': {'start':-2, 'end':1.79}, 'walkingTS4': {'start':-2.2, 'end':1.7}},
+    # 'subject3': {'walking1': {'start':-1.8, 'end':1.41}, 'walking2': {'start':-1.8, 'end':1.56}, 'walking3': {'start':-1.7, 'end':1.58}, 'walkingTS2': {'start':-2.5, 'end':2.08}, 'walkingTS3': {'start':-2, 'end':1.96}, 'walkingTS4': {'start':-2.2, 'end':1.82}},
     'subject4': {'walking1': {'start':-0.7, 'end':1.6}, 'walking2': {'start':-0.7, 'end':1.87}, 'walking4': {'start':-0.7, 'end':1.7}, 'walkingTS1': {'start':-0.7, 'end':1.7}, 'walkingTS2': {'start':-0.7, 'end':1.6}, 'walkingTS3': {'start':-0.7, 'end':1.95}},
     'subject5': {'walking1': {'start':-0.7, 'end':1.83}, 'walking2': {'start':-0.7, 'end':1.8}, 'walking3': {'start':-0.7, 'end':1.8}, 'walkingTS1': {'start':-0.8, 'end':1.88}, 'walkingTS2': {'start':-0.7, 'end':1.75}, 'walkingTS3': {'start':-0.7, 'end':1.72}},
     'subject6': {'walking1': {'start':-1.2, 'end':1.63}, 'walking2': {'start':-1.2, 'end':1.6}, 'walking3': {'start':-1.2, 'end':2}, 'walkingTS1': {'start':-0.7, 'end':1.65}, 'walkingTS2': {'start':-0.8, 'end':1.72}, 'walkingTS3': {'start':-1.1, 'end':1.78}},
@@ -64,13 +64,13 @@ filter_frequency = 6
 
 # Settings for dynamic simulation.
 motion_type = 'walking_formulation2'
-case = '2'
-runProblem = False
+case = '0'
+runProblem = True
 processInputs = True
 runSimulation = True
 solveProblem = True
-analyzeResults = True
-plotResults = True
+analyzeResults = False
+plotResults = False
 
 if case == '0':
     buffer_start = 0
@@ -78,9 +78,12 @@ if case == '0':
 elif case == '1':
     buffer_start = 0.7
     buffer_end = 0.5
-elif case == '2':
+elif case == '2': # Did the same one to compare end times
     buffer_start = 0.7
     buffer_end = 0.5
+elif case == '3': # Did the same one to compare end times
+    buffer_start = 0.7
+    buffer_end = 0
     
 # %% Gait segmentation and kinematic analysis.
 
@@ -93,7 +96,7 @@ for subject in subjects:
     pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
     for count, trial_name in enumerate(list(trials[subject].keys())):
         
-        if count != 2:
+        if count != 0:
             continue
         
         trial_name += '_video'
@@ -146,7 +149,7 @@ for subject in subjects:
                         continue
             
         if plotResults:            
-            plotResultsOpenSimAD(sessionDir, trial_name, cases=['1'], mainPlots=True, grfPlotOnly=True)
+            plotResultsOpenSimAD(sessionDir, trial_name, cases=['1', '2'], mainPlots=True, grfPlotOnly=True)
         
         test=1
 
