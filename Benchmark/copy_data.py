@@ -52,7 +52,15 @@ for subject in subjects:
         pathSetupEnd = os.path.join(pathFolderEnd, 'Setup_0.yaml')
         pathStatsEnd = os.path.join(pathFolderEnd, 'stats_0.npy')
         pathWOptEnd = os.path.join(pathFolderEnd, 'w_opt_0.npy')
-        shutil.copyfile(pathSetup, pathSetupEnd)
-        shutil.copyfile(pathStats, pathStatsEnd)
-        shutil.copyfile(pathWOpt, pathWOptEnd)
+        # shutil.copyfile(pathSetup, pathSetupEnd)
+        # shutil.copyfile(pathStats, pathStatsEnd)
+        # shutil.copyfile(pathWOpt, pathWOptEnd)
+
+        # delete the new files
+        if os.path.exists(pathSetupEnd):
+            os.remove(pathSetupEnd)
+        if os.path.exists(pathStatsEnd):
+            os.remove(pathStatsEnd)
+        if os.path.exists(pathWOptEnd):
+            os.remove(pathWOptEnd)
 

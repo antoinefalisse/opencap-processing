@@ -45,7 +45,7 @@ from utilsDataPostprocessing import (segmentSquats, segmentWalkStance, segmentDJ
                                      getIndsFromTimes, calc_LSI, interpolateNumpyArray)
 
 trials = {
-    # 'subject2': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS4'],
+    'subject2': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS4'],
     'subject3': ['walking1', 'walking2', 'walking3', 'walkingTS2', 'walkingTS3', 'walkingTS4'],
     'subject4': ['walking1', 'walking2', 'walking4', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
     'subject5': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],

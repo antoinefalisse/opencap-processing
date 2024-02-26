@@ -38,7 +38,7 @@ from utils import storage_to_numpy
 
 # %% Paths.
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
-i = 3
+i = 10
 subjects = ['subject' + str(i) for i in range(i,i+1)]
 
 # TODO: subject 10 might be 56.6 instead of 60kgs, check if that makes a diff.
@@ -81,7 +81,7 @@ elif case == '1':
 elif case == '2': # Did the same one to compare end times
     buffer_start = 0.7
     buffer_end = 0.5
-elif case == '3': # Did the same one to compare end times
+elif case == '3':
     buffer_start = 0.7
     buffer_end = 0
     
@@ -96,8 +96,8 @@ for subject in subjects:
     pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
     for count, trial_name in enumerate(list(trials[subject].keys())):
         
-        if count != 0:
-            continue
+        # if count != 0:
+        #     continue
         
         trial_name += '_video'
         
@@ -149,7 +149,7 @@ for subject in subjects:
                         continue
             
         if plotResults:            
-            plotResultsOpenSimAD(sessionDir, trial_name, cases=['1', '2'], mainPlots=True, grfPlotOnly=True)
+            plotResultsOpenSimAD(sessionDir, trial_name, cases=['1'], mainPlots=True, grfPlotOnly=True)
         
         test=1
 
