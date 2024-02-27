@@ -36,6 +36,7 @@ trials = {
     'subject10': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
     'subject11': ['walking2', 'walking3', 'walking4', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
           }
+tempKeys = ['0']
 
 
 # %% User inputs
@@ -117,7 +118,7 @@ for iSub, subject in enumerate(subjects):
                            allow_pickle=True).item()
             # TODO
             # tempKeys = list(c_tr.keys())
-            tempKeys = ['1']
+            
             
             # case_toPlot = list(c_tr[tempKeys[0]].keys())[0].replace('_videoAndMocap','')
             

@@ -39,7 +39,7 @@ from utils import storage_to_numpy
 # %% Paths.
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
 i = 2
-subjects = ['subject' + str(i) for i in range(i,i+1)]
+subjects = ['subject' + str(i) for i in range(2,3)]
 
 # TODO: subject 10 might be 56.6 instead of 60kgs, check if that makes a diff.
 
@@ -64,13 +64,13 @@ filter_frequency = 6
 
 # Settings for dynamic simulation.
 motion_type = 'walking_formulation2'
-case = '1'
-runProblem = False
+case = '4'
+runProblem = True
 processInputs = True
 runSimulation = True
 solveProblem = True
-analyzeResults = True
-plotResults = True
+analyzeResults = False
+plotResults = False
 
 if case == '0':
     buffer_start = 0
@@ -100,7 +100,7 @@ for subject in subjects:
     pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
     for count, trial_name in enumerate(list(trials[subject].keys())):
         
-        if count != 0:
+        if count != 1:
             continue
         
         trial_name += '_video'
@@ -156,7 +156,7 @@ for subject in subjects:
                         continue
             
         if plotResults:            
-            plotResultsOpenSimAD(sessionDir, trial_name, cases=['1'], mainPlots=True, grfPlotOnly=True)
+            plotResultsOpenSimAD(sessionDir, trial_name, cases=['0','1','4'], mainPlots=True, grfPlotOnly=False)
         
         test=1
 
