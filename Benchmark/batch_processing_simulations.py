@@ -64,7 +64,7 @@ filter_frequency = 6
 
 # Settings for dynamic simulation.
 motion_type = 'walking_formulation2'
-case = '4'
+case = '5'
 runProblem = True
 processInputs = True
 runSimulation = True
@@ -88,6 +88,10 @@ elif case == '4':
     buffer_start = 0.7
     buffer_end = 0.5
     weight_activation = 5
+elif case == '5':
+    buffer_start = 0.7
+    buffer_end = 0.5
+    weight_activation = 1
     
 # %% Gait segmentation and kinematic analysis.
 
@@ -100,7 +104,7 @@ for subject in subjects:
     pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
     for count, trial_name in enumerate(list(trials[subject].keys())):
         
-        if count != 1:
+        if count != 0:
             continue
         
         trial_name += '_video'
@@ -156,7 +160,7 @@ for subject in subjects:
                         continue
             
         if plotResults:            
-            plotResultsOpenSimAD(sessionDir, trial_name, cases=['0','1','4'], mainPlots=True, grfPlotOnly=False)
+            plotResultsOpenSimAD(sessionDir, trial_name, cases=['1', '4'], mainPlots=True, grfPlotOnly=False)
         
         test=1
 
