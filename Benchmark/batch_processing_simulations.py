@@ -38,8 +38,8 @@ from utils import storage_to_numpy
 
 # %% Paths.
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
-i = 2
-subjects = ['subject' + str(i) for i in range(2,3)]
+i = 1
+subjects = ['subject' + str(i) for i in range(i,i+1)]
 
 # TODO: subject 10 might be 56.6 instead of 60kgs, check if that makes a diff.
 
@@ -104,8 +104,8 @@ for subject in subjects:
     pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
     for count, trial_name in enumerate(list(trials[subject].keys())):
         
-        if count != 0:
-            continue
+        # if count != 0:
+        #     continue
         
         trial_name += '_video'
         
@@ -139,7 +139,7 @@ for subject in subjects:
                         settings['timeIntervalWithoutBuffers'] = [round(float(settings['timeInterval'][0] + settings['buffers'][0]),6),
                                                                   round(float(settings['timeInterval'][1] - settings['buffers'][1]),6)]     
                         
-                        if case == '4':
+                        if case == '4' or case == '5':
                             settings['weights']['activationTerm'] = weight_activation
                         
                     except Exception as e:
@@ -160,7 +160,7 @@ for subject in subjects:
                         continue
             
         if plotResults:            
-            plotResultsOpenSimAD(sessionDir, trial_name, cases=['1', '4'], mainPlots=True, grfPlotOnly=False)
+            plotResultsOpenSimAD(sessionDir, trial_name, cases=['1', '4'], mainPlots=False, grfPlotOnly=False)
         
         test=1
 
