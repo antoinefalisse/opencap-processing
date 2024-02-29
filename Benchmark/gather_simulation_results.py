@@ -36,7 +36,7 @@ trials = {
     'subject10': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
     'subject11': ['walking2', 'walking3', 'walking4', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
           }
-tempKeys = ['0']
+tempKeys = ['5']
 
 
 # %% User inputs

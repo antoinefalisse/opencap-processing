@@ -880,6 +880,7 @@ if activities['walking']:
         thisFigPath = os.path.join(figPath,'Walking.svg')
         os.makedirs(figPath,exist_ok=True)
         plt.savefig(thisFigPath, format='svg')
+    plt.show()
 
 
 # %% Figure 4: Compare sagittal moment redistribution with different sit-to-stand kinematics

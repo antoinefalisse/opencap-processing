@@ -2406,11 +2406,11 @@ def processInputsOpenSimAD(baseDir, dataFolder, session_id, trial_name,
     pathMotionFile = os.path.join(dataFolder, 'OpenSimData', 'Kinematics',
                                   trial_name + '.mot')
     if (repetition is not None and 
-        (motion_type == 'squats' or motion_type == 'sit_to_stand')): 
+        ('squats' in motion_type or 'sit_to_stand' in motion_type)): 
         if motion_type == 'squats':
             times_window = segment_squats(pathMotionFile, visualize=True)
-        elif motion_type == 'sit_to_stand':
-            _, _, times_window = segment_STS(pathMotionFile, visualize=True)
+        elif 'sit_to_stand' in motion_type:
+            _, times_window, _ = segment_STS(pathMotionFile, visualize=True)
         time_window = times_window[repetition]
         settings['repetition'] = repetition
     else:
