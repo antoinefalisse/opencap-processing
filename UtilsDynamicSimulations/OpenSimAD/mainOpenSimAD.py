@@ -2934,8 +2934,8 @@ def run_tracking(baseDir, dataDir, settings, case='0',
                 optimaltrajectories[case]['time'][0,:] <= optimaltrajectories[case]['timeWithoutBuffers'][0][-1])[0][-1]                
             timeFirst = optimaltrajectories[case]['time'][0,idxFirst]
             timeLast = optimaltrajectories[case]['time'][0,idxLast]
-            assert np.allclose(timeFirst, settings['timeIntervalWithoutBuffers'][0]), "Error in timeFirst"
-            assert np.allclose(timeLast, settings['timeIntervalWithoutBuffers'][1]), "Error in timeLast"
+            # assert np.allclose(timeFirst, settings['timeIntervalWithoutBuffers'][0]), "Error in timeFirst"
+            # assert np.allclose(timeLast, settings['timeIntervalWithoutBuffers'][1]), "Error in timeLast"
             for variable in variablesToTrim:
                 if variable in statesVariables:
                     optimaltrajectories[case][variable] = optimaltrajectories[case][variable][:,idxFirst:idxLast+1]

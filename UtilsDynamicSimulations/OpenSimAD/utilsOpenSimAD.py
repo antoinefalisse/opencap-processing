@@ -2212,61 +2212,61 @@ def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
         plt.show()
         
     # %% KAMs.
-    # if not grfPlotOnly:
-    plotKAMs = False
-    for case in cases:
-        if 'KAM_BWht' in optimaltrajectories[case]:
-            plotKAMs = True
-
-    if not plotKAMs:
-        return
-
-    kam_labels = optimaltrajectories[cases[0]]['KAM_labels']
-    nKAMs = len(kam_labels)
-    ny = np.ceil(np.sqrt(nKAMs))
-    fig, axs = plt.subplots(1, int(ny))
-    fig.suptitle('KAMs', fontsize=fontsizeSubTitle, fontweight='bold') 
-    for i, ax in enumerate(axs.flat):
-        if i < nKAMs:
-            plotedKAM = False
-            for c, case in enumerate(cases):
-                if 'KAM_BWht_ref' in optimaltrajectories[case] and not plotedKAM:
-                    plotedKAM = True
-                    ax.plot(optimaltrajectories[case]['timeWithoutBuffers'][0,:-1].T,
-                            optimaltrajectories[case]['KAM_BWht_ref'][i:i+1,:].T, c='black', label='Mocap ' + cases[c], linewidth=linewidth)
-                if 'KAM_BWht' in optimaltrajectories[case]:
-                    ax.plot(optimaltrajectories[case]['time'][0,:-1].T,
-                            optimaltrajectories[case]['KAM_BWht'][i:i+1,:].T, c=colors[c], label='Dynamic simulation: ' + cases[c], linewidth=linewidth)         
-            ax.set_title(kam_labels[i], fontsize=fontsizeTitle, fontweight='bold')
-            # ax.set_ylim((0,1))
-            handles, labels = ax.get_legend_handles_labels()
-    fig.align_ylabels()
+    if not mainPlots and not grfPlotOnly:
+        plotKAMs = False
+        for case in cases:
+            if 'KAM_BWht' in optimaltrajectories[case]:
+                plotKAMs = True
     
-    # Remove empty subplots.
-    # for i in range(nKAMs, int(ny)**2):
-    #     fig.delaxes(axs.flatten()[i])
-    # Remove top and right spines.
-    for ax in axs.flat:
-        ax.spines['top'].set_visible(False)
-        ax.spines['right'].set_visible(False)
-        ax.tick_params(axis='both', which='major', labelsize=fontsizeTicks)
-    # Add labels
-    mm = int(ny)*(int(ny)-1) -(int(ny)*int(ny)-nKAMs)
-    for i in range(mm,nKAMs):
-        axs.flatten()[i].set_xlabel('Time (s)', fontsize=fontsizeLabel, fontweight='bold')
-    # for ax in axs[:, 0]:
-    #     ax.set_ylabel('()', fontsize=fontsizeLabel, fontweight='bold')
-    # Add legend.
-    fig.legend(handles, labels, loc='upper right', fontsize=fontsizeLegend)
-    # Change subplot spacing.
-    fig.subplots_adjust(hspace=0.4, wspace=0.4)
-    # Clean up ticks and labels.
-    for i in range(0, mm):
-        axs.flatten()[i].set_xticklabels([])
-    plt.show()
+        if not plotKAMs:
+            return
+    
+        kam_labels = optimaltrajectories[cases[0]]['KAM_labels']
+        nKAMs = len(kam_labels)
+        ny = np.ceil(np.sqrt(nKAMs))
+        fig, axs = plt.subplots(1, int(ny))
+        fig.suptitle('KAMs', fontsize=fontsizeSubTitle, fontweight='bold') 
+        for i, ax in enumerate(axs.flat):
+            if i < nKAMs:
+                plotedKAM = False
+                for c, case in enumerate(cases):
+                    if 'KAM_BWht_ref' in optimaltrajectories[case] and not plotedKAM:
+                        plotedKAM = True
+                        ax.plot(optimaltrajectories[case]['timeWithoutBuffers'][0,:-1].T,
+                                optimaltrajectories[case]['KAM_BWht_ref'][i:i+1,:].T, c='black', label='Mocap ' + cases[c], linewidth=linewidth)
+                    if 'KAM_BWht' in optimaltrajectories[case]:
+                        ax.plot(optimaltrajectories[case]['time'][0,:-1].T,
+                                optimaltrajectories[case]['KAM_BWht'][i:i+1,:].T, c=colors[c], label='Dynamic simulation: ' + cases[c], linewidth=linewidth)         
+                ax.set_title(kam_labels[i], fontsize=fontsizeTitle, fontweight='bold')
+                # ax.set_ylim((0,1))
+                handles, labels = ax.get_legend_handles_labels()
+        fig.align_ylabels()
+        
+        # Remove empty subplots.
+        # for i in range(nKAMs, int(ny)**2):
+        #     fig.delaxes(axs.flatten()[i])
+        # Remove top and right spines.
+        for ax in axs.flat:
+            ax.spines['top'].set_visible(False)
+            ax.spines['right'].set_visible(False)
+            ax.tick_params(axis='both', which='major', labelsize=fontsizeTicks)
+        # Add labels
+        mm = int(ny)*(int(ny)-1) -(int(ny)*int(ny)-nKAMs)
+        for i in range(mm,nKAMs):
+            axs.flatten()[i].set_xlabel('Time (s)', fontsize=fontsizeLabel, fontweight='bold')
+        # for ax in axs[:, 0]:
+        #     ax.set_ylabel('()', fontsize=fontsizeLabel, fontweight='bold')
+        # Add legend.
+        fig.legend(handles, labels, loc='upper right', fontsize=fontsizeLegend)
+        # Change subplot spacing.
+        fig.subplots_adjust(hspace=0.4, wspace=0.4)
+        # Clean up ticks and labels.
+        for i in range(0, mm):
+            axs.flatten()[i].set_xticklabels([])
+        plt.show()
     
     # %% MCFs.
-    if not grfPlotOnly:
+    if not mainPlots and not grfPlotOnly:
         plotMCFs = False
         for case in cases:
             if 'MCF_BW' in optimaltrajectories[case]:
@@ -2360,7 +2360,8 @@ def processInputsOpenSimAD(baseDir, dataFolder, session_id, trial_name,
                            motion_type, time_window=[], repetition=None,
                            treadmill_speed=0, overwrite=False,
                            useExpressionGraphFunction=True,
-                           contact_configuration='generic'):
+                           contact_configuration='generic',
+                           periodicSTS=False):
         
     # Path session folder.
     # sessionFolder =  os.path.join(dataFolder, session_id)
@@ -2410,7 +2411,10 @@ def processInputsOpenSimAD(baseDir, dataFolder, session_id, trial_name,
         if motion_type == 'squats':
             times_window = segment_squats(pathMotionFile, visualize=True)
         elif 'sit_to_stand' in motion_type:
-            _, times_window, _ = segment_STS(pathMotionFile, visualize=True)
+            if periodicSTS:
+                _, _, times_window = segment_STS(pathMotionFile, visualize=True)
+            else:
+                _, times_window, _ = segment_STS(pathMotionFile, visualize=True)
         time_window = times_window[repetition]
         settings['repetition'] = repetition
     else:

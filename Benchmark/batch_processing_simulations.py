@@ -40,7 +40,7 @@ from utils import storage_to_numpy
 # %% Paths.
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
 i = 2
-subjects = ['subject' + str(i) for i in range(i,i+2)]
+subjects = ['subject' + str(i) for i in range(2,3)]
 
 # TODO: subject 10 might be 56.6 instead of 60kgs, check if that makes a diff.
 
@@ -48,7 +48,7 @@ subjects = ['subject' + str(i) for i in range(i,i+2)]
 trials = {
     'subject2': {'walking': {'walking1': {'start':-1, 'end':1.85}, 'walking2': {'start':-0.9, 'end':1.76}, 'walking3': {'start':-1, 'end':1.76},
                              'walkingTS1': {'start':-1, 'end':2.15}, 'walkingTS2': {'start':-1, 'end':1.97}, 'walkingTS4': {'start':-0.9, 'end':2.13}},
-                 'STS':     {'STS1': {'start':None, 'end':None}}},
+                 'STS':     {'STS1': {'start':None, 'end':None}}}, # , 'STSweakLegs1': {'start':None, 'end':None}
     'subject3': {'walking': {'walking1': {'start':-1.8, 'end':1.56}, 'walking2': {'start':-1.8, 'end':1.46}, 'walking3': {'start':-1.7, 'end':1.48}, 
                              'walkingTS2': {'start':-2.5, 'end':1.97}, 'walkingTS3': {'start':-2, 'end':1.79}, 'walkingTS4': {'start':-2.2, 'end':1.7}}},
     'subject4': {'walking': {'walking1': {'start':-0.7, 'end':1.6}, 'walking2': {'start':-0.7, 'end':1.87}, 'walking4': {'start':-0.7, 'end':1.7},
@@ -74,14 +74,13 @@ trials = {
 filter_frequency = 6
 
 # Settings for dynamic simulation.
-# motion_style = 'STS'
-# motion_type = 'sit_to_stand_formulation2'
-# repetition = 1
+motion_style = 'STS'
+repetitions = [2]
 
-motion_style = 'walking'
-motion_type = 'walking_formulation2'
+# motion_style = 'walking'
+# motion_type = 'walking_formulation2'
 
-case = '7'
+case = '21'
 runProblem = True
 processInputs = True
 runSimulation = True
@@ -89,33 +88,184 @@ solveProblem = True
 analyzeResults = False
 plotResults = False
 
-if case == '0':
-    buffer_start = 0
-    buffer_end = 0
-elif case == '1':
-    buffer_start = 0.7
-    buffer_end = 0.5
-elif case == '2': # Did the same one to compare end times
-    buffer_start = 0.7
-    buffer_end = 0.5
-elif case == '3':
-    buffer_start = 0.7
-    buffer_end = 0
-elif case == '4':
-    buffer_start = 0.7
-    buffer_end = 0.5
-    weight_activation = 5
-elif case == '5':
-    buffer_start = 0.7
-    buffer_end = 0.5
-    weight_activation = 1
-elif case == '6':
-    buffer_start = 0.5
-    buffer_end = 0.5
-elif case == '7':
-    buffer_start = 0.7
-    buffer_end = 0.5
-    weight_activation = 20
+if motion_style == 'walking':
+    if case == '0':
+        buffer_start = 0
+        buffer_end = 0
+    elif case == '1':
+        buffer_start = 0.7
+        buffer_end = 0.5
+    elif case == '2': # Did the same one to compare end times
+        buffer_start = 0.7
+        buffer_end = 0.5
+    elif case == '3':
+        buffer_start = 0.7
+        buffer_end = 0
+    elif case == '4':
+        buffer_start = 0.7
+        buffer_end = 0.5
+        weight_activation = 5
+    elif case == '5':
+        buffer_start = 0.7
+        buffer_end = 0.5
+        weight_activation = 1
+    elif case == '7':
+        buffer_start = 0.7
+        buffer_end = 0.5
+        weight_activation = 20
+    
+if motion_style == 'STS':
+    if case == '0':
+        buffer_start = 0
+        buffer_end = 0
+        motion_type = 'sit_to_stand'
+        periodicSTS = True
+    elif case == '1':
+        buffer_start = 0.5
+        buffer_end = 0.5
+        motion_type = 'sit_to_stand_formulation2'
+        periodicSTS = False
+    elif case == '2':
+        buffer_start = 0
+        buffer_end = 0
+        motion_type = 'sit_to_stand_formulation3'
+        periodicSTS = False
+    elif case == '3':
+        buffer_start = 0
+        buffer_end = 0
+        motion_type = 'sit_to_stand_formulation4'
+        periodicSTS = True
+    elif case == '4':
+        buffer_start = 0.5
+        buffer_end = 0.5
+        motion_type = 'sit_to_stand_formulation3'
+        periodicSTS = False
+    elif case == '5':
+        buffer_start = 0
+        buffer_end = 0
+        motion_type = 'sit_to_stand_formulation5'
+        periodicSTS = True
+    elif case == '6':
+        buffer_start = 0.5
+        buffer_end = 0.5
+        motion_type = 'sit_to_stand_formulation6'
+        periodicSTS = False
+    elif case == '7':
+        buffer_start = 0
+        buffer_end = 0
+        motion_type = 'sit_to_stand_formulation7'
+        periodicSTS = True
+    elif case == '8':
+        buffer_start = 0
+        buffer_end = 0
+        motion_type = 'sit_to_stand_formulation8'
+        periodicSTS = False
+    elif case == '9':
+        buffer_start = 0
+        buffer_end = 0
+        motion_type = 'sit_to_stand_formulation9'
+        periodicSTS = True
+    elif case == '10':
+        buffer_start = 0
+        buffer_end = 0
+        motion_type = 'sit_to_stand_formulation9'
+        periodicSTS = True
+        meshDensity = 100
+    elif case == '11':
+        buffer_start = 0
+        buffer_end = 0
+        motion_type = 'sit_to_stand_formulation8'
+        periodicSTS = False
+        meshDensity = 100
+    elif case == '12':
+        buffer_start = 0
+        buffer_end = 0
+        motion_type = 'sit_to_stand_formulation8'
+        periodicSTS = False
+        vGRFRatioTerm = 0.05
+    elif case == '13':
+        buffer_start = 0
+        buffer_end = 0
+        motion_type = 'sit_to_stand_formulation9'
+        periodicSTS = True
+        vGRFRatioTerm = 0.05
+    elif case == '14':
+        buffer_start = 0
+        buffer_end = 0
+        motion_type = 'sit_to_stand_formulation8'
+        periodicSTS = False
+        weight_activation = 1
+    elif case == '15':
+        buffer_start = 0
+        buffer_end = 0
+        motion_type = 'sit_to_stand_formulation9'
+        periodicSTS = True
+        weight_activation = 1
+    elif case == '16':
+        buffer_start = 0
+        buffer_end = 0
+        motion_type = 'sit_to_stand_formulation9'
+        periodicSTS = True
+        meshDensity = 100
+        weight_pelvis_tilt = 100
+    elif case == '17':
+        buffer_start = 0
+        buffer_end = 0
+        motion_type = 'sit_to_stand_formulation9'
+        periodicSTS = True
+        meshDensity = 100
+        weight_pelvis_tilt = 200
+    elif case == '18':
+        buffer_start = 0
+        buffer_end = 0
+        motion_type = 'sit_to_stand_formulation9'
+        periodicSTS = True
+        meshDensity = 100
+        weight_pelvis_tilt = 500
+    elif case == '19':
+        buffer_start = 0
+        buffer_end = 0
+        motion_type = 'sit_to_stand_formulation9'
+        periodicSTS = True
+        meshDensity = 100
+        weight_pelvis_tilt = 500
+        weight_position_tracking = 100
+    elif case == '20':
+        buffer_start = 0
+        buffer_end = 0
+        motion_type = 'sit_to_stand_formulation9'
+        periodicSTS = True
+        meshDensity = 100
+        weight_pelvis_tilt = 500
+        weight_position_tracking = 200
+    elif case == '21':
+        buffer_start = 0
+        buffer_end = 0
+        motion_type = 'sit_to_stand_formulation9'
+        periodicSTS = True
+        meshDensity = 100
+        weight_pelvis_tilt = 500
+        weight_position_tracking = 100
+        weigth_lumbar_extension = 100
+    elif case == '22':
+        buffer_start = 0
+        buffer_end = 0
+        motion_type = 'sit_to_stand_formulation9'
+        periodicSTS = True
+        meshDensity = 100
+        weight_pelvis_tilt = 500
+        weight_position_tracking = 100
+        weigth_lumbar_extension = 100
+        min_ratio_vGRF = False
+    # elif case == '22':
+    #     buffer_start = 0
+    #     buffer_end = 0
+    #     motion_type = 'sit_to_stand_formulation9'
+    #     periodicSTS = True
+    #     meshDensity = 50
+    #     weight_pelvis_tilt = 500
+    #     weight_position_tracking = 100
+    #     weigth_lumbar_extension = 100
     
 # %% Gait segmentation and kinematic analysis.
 
@@ -128,96 +278,136 @@ for subject in subjects:
     pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
     for count, trial_name in enumerate(list(trials[subject][motion_style].keys())):
         
-        # if count > 2:
+        # if count > 0:
         #     continue
-        
-        trial_name += '_video'
-        
-        if runProblem:        
 
-                print('Processing {}-{} for dynamic simulation...'.format(subject, trial_name))
-                if processInputs:
-                    try:
-                        if not 'repetition' in locals():
-                            repetition = None
-                        settings = processInputsOpenSimAD(
-                            baseDir, sessionDir, session_id, trial_name, 
-                            motion_type, repetition=repetition)
-                        
-                        pathMotionFile = os.path.join(dataFolder, subject, 'OpenSimData', 'Kinematics', trial_name + '.mot')
-                        motion_file = storage_to_numpy(pathMotionFile)
-                        full_time_window = [motion_file['time'][0], motion_file['time'][-1]]
-                        
-                        if 'walking' in trial_name:
-                            # Get time interval from trimmed trial
-                            pathTrimmedMotionFile = os.path.join(dataFolder, subject, 'OpenSimData_trimmed', 'Kinematics', trial_name.replace('_video', '_videoAndMocap') + '.mot')
-                            trimmed_motion_file = storage_to_numpy(pathTrimmedMotionFile)
-                            trimmed_time_window = [trimmed_motion_file['time'][0], trimmed_motion_file['time'][-1]]
-                            
-                            
+        if not 'repetitions' in locals():
+            nReps = 1
+        else: 
+            nReps = len(repetitions)
 
-                            # Update time window
-                            time_start = np.round(max(trimmed_time_window[0] - buffer_start, full_time_window[0], trials[subject][motion_style][trial_name.replace('_video', '')]['start']),2)
-                            time_end = np.round(min(trimmed_time_window[1] + buffer_end, full_time_window[1], trials[subject][motion_style][trial_name.replace('_video', '')]['end']),2)
-                            buffer_start_applied = np.abs(np.round(time_start - trimmed_time_window[0], 2))
-                            buffer_end_applied = np.abs(np.round(time_end - trimmed_time_window[1], 2))
-                            settings['buffers'] = [round(float(buffer_start_applied),6),
-                                                round(float(buffer_end_applied),6)]
-                            time_window = [time_start, time_end]
-                            settings['timeInterval'] = [round(float(i),6) for i in time_window]
-                            settings['timeIntervalWithoutBuffers'] = [round(float(settings['timeInterval'][0] + settings['buffers'][0]),6),
-                                                                    round(float(settings['timeInterval'][1] - settings['buffers'][1]),6)]     
+        for rep in range(nReps):
+            
+            # if rep == 0:
+            #     continue
+
+            if 'repetitions' in locals():
+                repetition = repetitions[rep]   
+        
+            if not '_video' in trial_name:
+                trial_name += '_video'
+            
+            if runProblem:        
+
+                    print('Processing {}-{} for dynamic simulation...'.format(subject, trial_name))
+                    if processInputs:
+                        try:
+                            if not 'repetition' in locals():
+                                repetition = None
+                            if not 'periodicSTS' in locals():
+                                periodicSTS = False
+                            settings = processInputsOpenSimAD(
+                                baseDir, sessionDir, session_id, trial_name, 
+                                motion_type, repetition=repetition, periodicSTS=periodicSTS)
                             
-                            if case == '4' or case == '5' or case == '7':
-                                settings['weights']['activationTerm'] = weight_activation
+                            pathMotionFile = os.path.join(dataFolder, subject, 'OpenSimData', 'Kinematics', trial_name + '.mot')
+                            motion_file = storage_to_numpy(pathMotionFile)
+                            full_time_window = [motion_file['time'][0], motion_file['time'][-1]]
+                            
+                            if 'walking' in trial_name:
+                                # Get time interval from trimmed trial
+                                pathTrimmedMotionFile = os.path.join(dataFolder, subject, 'OpenSimData_trimmed', 'Kinematics', trial_name.replace('_video', '_videoAndMocap') + '.mot')
+                                trimmed_motion_file = storage_to_numpy(pathTrimmedMotionFile)
+                                trimmed_time_window = [trimmed_motion_file['time'][0], trimmed_motion_file['time'][-1]]
                                 
                                 
-                        if 'STS' in trial_name:
+    
+                                # Update time window
+                                time_start = np.round(max(trimmed_time_window[0] - buffer_start, full_time_window[0], trials[subject][motion_style][trial_name.replace('_video', '')]['start']),2)
+                                time_end = np.round(min(trimmed_time_window[1] + buffer_end, full_time_window[1], trials[subject][motion_style][trial_name.replace('_video', '')]['end']),2)
+                                buffer_start_applied = np.abs(np.round(time_start - trimmed_time_window[0], 2))
+                                buffer_end_applied = np.abs(np.round(time_end - trimmed_time_window[1], 2))
+                                settings['buffers'] = [round(float(buffer_start_applied),6),
+                                                    round(float(buffer_end_applied),6)]
+                                time_window = [time_start, time_end]
+                                settings['timeInterval'] = [round(float(i),6) for i in time_window]
+                                settings['timeIntervalWithoutBuffers'] = [round(float(settings['timeInterval'][0] + settings['buffers'][0]),6),
+                                                                        round(float(settings['timeInterval'][1] - settings['buffers'][1]),6)]     
+                                
+                                if 'weight_activation' in locals():
+                                    settings['weights']['activationTerm'] = weight_activation
+                                
+                                # if case == '4' or case == '5' or case == '7':
+                                #     settings['weights']['activationTerm'] = weight_activation
+                                    
+                                    
+                            if 'STS' in trial_name:
+                                
+                                time_start = np.round(max(settings['timeInterval'][0] - buffer_start, full_time_window[0]),2)
+                                time_end = np.round(min(settings['timeInterval'][1] + buffer_end, full_time_window[1]),2)
+                                buffer_start_applied = np.abs(np.round(time_start - settings['timeInterval'][0], 2))
+                                buffer_end_applied = np.abs(np.round(time_end - settings['timeInterval'][1], 2))
+                                settings['buffers'] = [round(float(buffer_start_applied),6),
+                                                    round(float(buffer_end_applied),6)]
+                                time_window = [time_start, time_end]
+                                settings['timeInterval'] = [round(float(i),6) for i in time_window]
+                                settings['timeIntervalWithoutBuffers'] = [round(float(settings['timeInterval'][0] + settings['buffers'][0]),6),
+                                                                        round(float(settings['timeInterval'][1] - settings['buffers'][1]),6)] 
+                                
+                                if 'meshDensity' in locals():
+                                    settings['meshDensity'] = meshDensity
+    
+                                if 'vGRFRatioTerm' in locals():
+                                    settings['weights']['vGRFRatioTerm'] = vGRFRatioTerm
+    
+                                if 'weight_activation' in locals():
+                                    settings['weights']['activationTerm'] = weight_activation
+
+                                if 'weight_pelvis_tilt' in locals():
+                                    settings['coordinates_toTrack']['pelvis_tilt']['weight'] = weight_pelvis_tilt
+                                    
+                                if 'weight_position_tracking' in locals():
+                                    settings['weights']['positionTrackingTerm'] = weight_position_tracking
+
+                                if 'weigth_lumbar_extension' in locals():
+                                    settings['coordinates_toTrack']['lumbar_extension']['weight'] = weigth_lumbar_extension
+
+                                if 'min_ratio_vGRF' in locals():
+                                    settings['min_ratio_vGRF'] = min_ratio_vGRF
+                                
                             
-                            time_start = np.round(max(settings['timeInterval'][0] - buffer_start, full_time_window[0]),2)
-                            time_end = np.round(min(settings['timeInterval'][1] + buffer_end, full_time_window[1]),2)
-                            buffer_start_applied = np.abs(np.round(time_start - settings['timeInterval'][0], 2))
-                            buffer_end_applied = np.abs(np.round(time_end - settings['timeInterval'][1], 2))
-                            settings['buffers'] = [round(float(buffer_start_applied),6),
-                                                   round(float(buffer_end_applied),6)]
-                            time_window = [time_start, time_end]
-                            settings['timeInterval'] = [round(float(i),6) for i in time_window]
-                            settings['timeIntervalWithoutBuffers'] = [round(float(settings['timeInterval'][0] + settings['buffers'][0]),6),
-                                                                      round(float(settings['timeInterval'][1] - settings['buffers'][1]),6)] 
-                            
-                        
-                    except Exception as e:
-                        print(f"Error setting up dynamic optimization for trial {trial_name}: {e}")
-                        continue
+                        except Exception as e:
+                            print(f"Error setting up dynamic optimization for trial {trial_name}: {e}")
+                            continue
+                
+                    # Simulation.
+                    if runSimulation:
+                        try:
+                            # print('Running dynamic simulation...')
+                            run_tracking(baseDir, sessionDir, settings, case=case, 
+                                        solveProblem=solveProblem, analyzeResults=analyzeResults)
+                            test=1
+                        except Exception as e:
+                            tb_info = traceback.format_exc()
+                            print(f"Error during dynamic optimization for trial {trial_name}: {e}\nTraceback: {tb_info}")
+                            no_results.append(subject + '_' + trial_name)
+                            continue
+                
+            if plotResults:    
+
+                # Load settings
+
+                pathResults = os.path.join(dataFolder, subject, 'OpenSimData', 'Dynamics', trial_name)
+                if 'repetition' in locals():
+                    pathResults = os.path.join(dataFolder, subject, 'OpenSimData', 'Dynamics', trial_name + '_rep' + str(repetition))     
+                pathSettings = os.path.join(pathResults, 'Setup_{}.yaml'.format(case))
+                with open(pathSettings, 'r') as file:
+                    settings = yaml.safe_load(file)
+
+
+                plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['21', '22'], mainPlots=True, grfPlotOnly=False)
             
-                # Simulation.
-                if runSimulation:
-                    try:
-                        # print('Running dynamic simulation...')
-                        run_tracking(baseDir, sessionDir, settings, case=case, 
-                                    solveProblem=solveProblem, analyzeResults=analyzeResults)
-                        test=1
-                    except Exception as e:
-                        tb_info = traceback.format_exc()
-                        print(f"Error during dynamic optimization for trial {trial_name}: {e}\nTraceback: {tb_info}")
-                        no_results.append(subject + '_' + trial_name)
-                        continue
-            
-        if plotResults:    
-
-            # Load settings
-
-            pathResults = os.path.join(dataFolder, subject, 'OpenSimData', 'Dynamics', trial_name)
-            if 'repetition' in locals():
-                pathResults = os.path.join(dataFolder, subject, 'OpenSimData', 'Dynamics', trial_name + '_rep' + str(repetition))     
-            pathSettings = os.path.join(pathResults, 'Setup_{}.yaml'.format(case))
-            with open(pathSettings, 'r') as file:
-                settings = yaml.safe_load(file)
-
-
-            plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['0', '6'], mainPlots=True, grfPlotOnly=False)
-        
-        test=1
+            test=1
 
 print('No results for the following trials:')
 print(no_results)
