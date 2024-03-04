@@ -48,7 +48,7 @@ subjects = ['subject' + str(i) for i in range(2,3)]
 trials = {
     'subject2': {'walking': {'walking1': {'start':-1, 'end':1.85}, 'walking2': {'start':-0.9, 'end':1.76}, 'walking3': {'start':-1, 'end':1.76},
                              'walkingTS1': {'start':-1, 'end':2.15}, 'walkingTS2': {'start':-1, 'end':1.97}, 'walkingTS4': {'start':-0.9, 'end':2.13}},
-                 'STS':     {'STS1': {'start':None, 'end':None}}}, # , 'STSweakLegs1': {'start':None, 'end':None}
+                 'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}}, # 
     'subject3': {'walking': {'walking1': {'start':-1.8, 'end':1.56}, 'walking2': {'start':-1.8, 'end':1.46}, 'walking3': {'start':-1.7, 'end':1.48}, 
                              'walkingTS2': {'start':-2.5, 'end':1.97}, 'walkingTS3': {'start':-2, 'end':1.79}, 'walkingTS4': {'start':-2.2, 'end':1.7}}},
     'subject4': {'walking': {'walking1': {'start':-0.7, 'end':1.6}, 'walking2': {'start':-0.7, 'end':1.87}, 'walking4': {'start':-0.7, 'end':1.7},
@@ -75,12 +75,12 @@ filter_frequency = 6
 
 # Settings for dynamic simulation.
 motion_style = 'STS'
-repetitions = [1]
+repetitions = [1,2,3]
 
 # motion_style = 'walking'
 # motion_type = 'walking_formulation2'
 
-cases = ['33']
+cases = ['34']
 runProblem = True
 processInputs = True
 runSimulation = True
@@ -464,6 +464,9 @@ for case in cases:
             
                 if not '_video' in trial_name:
                     trial_name += '_video'
+                    
+                if trial_name == 'STS1_video' and repetition == 1:
+                    continue
                 
                 if runProblem:        
 
@@ -605,7 +608,7 @@ for case in cases:
                         settings = yaml.safe_load(file)
 
 
-                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['28', '30', '31'], mainPlots=True, grfPlotOnly=False)
+                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['23', '28', '29', '34'], mainPlots=True, grfPlotOnly=False)
                 
                 test=1
 
