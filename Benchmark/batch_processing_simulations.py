@@ -75,12 +75,12 @@ filter_frequency = 6
 
 # Settings for dynamic simulation.
 motion_style = 'STS'
-repetitions = [1,2,3]
+repetitions = [1]
 
 # motion_style = 'walking'
 # motion_type = 'walking_formulation2'
 
-cases = ['34']
+cases = ['37']
 runProblem = True
 processInputs = True
 runSimulation = True
@@ -432,6 +432,18 @@ for case in cases:
             trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
             weight_trackValueTerm = 1
             vGRFRatioTerm = 1
+        elif case == '37':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation8'
+            periodicSTS = False
+            meshDensity = 100
+            weight_pelvis_tilt = 500
+            weight_position_tracking = 100
+            weigth_lumbar_extension = 100
+            heel_vGRF_threshold = 5
+            trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
+            weight_trackValueTerm = 1
 
             
         
@@ -446,8 +458,8 @@ for case in cases:
         pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
         for count, trial_name in enumerate(list(trials[subject][motion_style].keys())):
             
-            # if count > 0:
-            #     continue
+            if count > 0:
+                continue
 
             if not 'repetitions' in locals():
                 nReps = 1
@@ -465,8 +477,8 @@ for case in cases:
                 if not '_video' in trial_name:
                     trial_name += '_video'
                     
-                if trial_name == 'STS1_video' and repetition == 1:
-                    continue
+                # if trial_name == 'STS1_video' and repetition == 1:
+                #     continue
                 
                 if runProblem:        
 
@@ -599,6 +611,9 @@ for case in cases:
                 if plotResults:    
 
                     # Load settings
+                    # Overwritting
+                    trial_name = 'STS1_video'
+                    repetition = 1
 
                     pathResults = os.path.join(dataFolder, subject, 'OpenSimData', 'Dynamics', trial_name)
                     if 'repetition' in locals():
@@ -608,7 +623,7 @@ for case in cases:
                         settings = yaml.safe_load(file)
 
 
-                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['23', '28', '29', '34'], mainPlots=True, grfPlotOnly=False)
+                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['28', '34'], mainPlots=True, grfPlotOnly=False)
                 
                 test=1
 
