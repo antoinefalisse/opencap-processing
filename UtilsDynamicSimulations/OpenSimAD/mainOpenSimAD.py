@@ -374,6 +374,16 @@ def run_tracking(baseDir, dataDir, settings, case='0',
         use_same_weight_individual_coordinate_value_acceleration = (
             settings['use_same_weight_individual_coordinate_value_acceleration'])
         
+
+    trackValueCoordinates = {}
+    if 'trackValueCoordinates' in settings:
+        for coord in list(settings['trackValueCoordinates'].keys()):
+            trackValueCoordinates[coord] = settings['trackValueCoordinates'][coord]
+    if trackValueCoordinates:
+        weights['trackValueTerm'] = 1
+        if 'trackValueTerm' in settings['weights']:
+            weights['trackValueTerm'] = settings['weights']['trackValueTerm']
+        
     # %% Paths and dirs.
     pathMain = os.getcwd()
     pathOSData = os.path.join(dataDir, 'OpenSimData')
@@ -1809,7 +1819,16 @@ def run_tracking(baseDir, dataDir, settings, case='0',
                             (ca.sum1(Tk[idx_vGRF_front[side]])) /
                             (ca.sum1(Tk[idx_vGRF_rear[side]])))
                         J += (weights['vGRFRatioTerm'] * 
-                              (vGRF_ratio) * h * B[j + 1])                 
+                              (vGRF_ratio) * h * B[j + 1])
+
+                if trackValueCoordinates:
+                    trackValueTerm = 0
+                    for c_j in list(trackValueCoordinates.keys()):
+                        trackValueTerm += ca.sumsqr(
+                            Qskj[joints.index(c_j), 0] - 
+                            trackValueCoordinates[c_j] / scaling['Qs'].iloc[0][c_j])
+                    J += (weights['trackValueTerm'] * 
+                          trackValueTerm * h * B[j + 1])
              
             # Note: we only impose the following constraints at the mesh
             # points. To be fully consistent with an orthogonal radau
@@ -2381,6 +2400,8 @@ def run_tracking(baseDir, dataDir, settings, case='0',
             reserveActuatorTerm_opt_all = 0
         if min_ratio_vGRF and weights['vGRFRatioTerm'] > 0:
             vGRFRatioTerm_opt_all = 0
+        if trackValueCoordinates:
+            trackValueTerm_opt_all = 0            
         if not torque_driven_model:
             pMT_opt = np.zeros((len(muscleDrivenJoints), N))
             aMT_opt = np.zeros((len(muscleDrivenJoints), N))
@@ -2524,7 +2545,14 @@ def run_tracking(baseDir, dataDir, settings, case='0',
                         for idx_rear_sphere in idx_rear_spheres:
                             vGRF_rear_opt += GRF_s_opt[side][contactSpheres[side][idx_rear_sphere]][1,k]
                         vGRF_ratio_opt = np.sqrt(vGRF_front_opt/vGRF_rear_opt) 
-                        vGRFRatioTerm_opt_all += (weights['vGRFRatioTerm'] * vGRF_ratio_opt * h * B[j + 1])                    
+                        vGRFRatioTerm_opt_all += (weights['vGRFRatioTerm'] * vGRF_ratio_opt * h * B[j + 1]) 
+                        
+                if trackValueCoordinates:
+                    trackValueTerm_opt = 0
+                    for c_j in list(trackValueCoordinates.keys()):
+                        trackValueTerm_opt += ca.sumsqr(
+                            Qskj_opt[joints.index(c_j), 0] - trackValueCoordinates[c_j] / scaling['Qs'].iloc[0][c_j])
+                    trackValueTerm_opt_all += (weights['trackValueTerm'] * trackValueTerm_opt * h * B[j + 1])
                 
         # "Motor control" terms.
         if torque_driven_model:
@@ -2547,6 +2575,8 @@ def run_tracking(baseDir, dataDir, settings, case='0',
                       velocityTrackingTerm_opt_all.full())
         if trackQdds:
             JTrack_opt += accelerationTrackingTerm_opt_all.full()
+        if trackValueCoordinates:
+            JTrack_opt += trackValueTerm_opt_all.full()
         # Combined terms.
         JAll_opt = JTrack_opt + JMotor_opt
         if stats['success']:
