@@ -45,18 +45,47 @@ from utilsDataPostprocessing import (segmentSquats, segmentWalkStance, segmentDJ
                                      getIndsFromTimes, calc_LSI, interpolateNumpyArray)
 
 trials = {
-    'subject2': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS4'],
-    'subject3': ['walking1', 'walking2', 'walking3', 'walkingTS2', 'walkingTS3', 'walkingTS4'],
-    'subject4': ['walking1', 'walking2', 'walking4', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
-    'subject5': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
-    'subject6': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
-    'subject7': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
-    'subject8': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS3'],
-    'subject9': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
-    'subject10': ['walking1', 'walking2', 'walking3', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
-    'subject11': ['walking2', 'walking3', 'walking4', 'walkingTS1', 'walkingTS2', 'walkingTS3'],
-          }
-
+    'subject2': {
+        'walking': {'walking1': {'start':-1, 'end':1.85}, 'walking2': {'start':-0.9, 'end':1.76}, 'walking3': {'start':-1, 'end':1.76},
+                    'walkingTS1': {'start':-1, 'end':2.15}, 'walkingTS2': {'start':-1, 'end':1.97}, 'walkingTS4': {'start':-0.9, 'end':2.13}},
+        'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+    'subject3': {
+        'walking': {'walking1': {'start':-1.8, 'end':1.56}, 'walking2': {'start':-1.8, 'end':1.46}, 'walking3': {'start':-1.7, 'end':1.48}, 
+                    'walkingTS2': {'start':-2.5, 'end':1.97}, 'walkingTS3': {'start':-2, 'end':1.79}, 'walkingTS4': {'start':-2.2, 'end':1.7}},
+        'STS':     {'STS1': {'start':None, 'end':None}}}, # , 'STSweakLegs1': {'start':None, 'end':None}
+    'subject4': {
+        'walking': {'walking1': {'start':-0.7, 'end':1.6}, 'walking2': {'start':-0.7, 'end':1.87}, 'walking4': {'start':-0.7, 'end':1.7},
+                    'walkingTS1': {'start':-0.7, 'end':1.7}, 'walkingTS2': {'start':-0.7, 'end':1.6}, 'walkingTS3': {'start':-0.7, 'end':1.95}},
+        'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+    'subject5': {
+        'walking': {'walking1': {'start':-0.7, 'end':1.83}, 'walking2': {'start':-0.7, 'end':1.8}, 'walking3': {'start':-0.7, 'end':1.8},
+                    'walkingTS1': {'start':-0.8, 'end':1.88}, 'walkingTS2': {'start':-0.7, 'end':1.75}, 'walkingTS3': {'start':-0.7, 'end':1.72}},
+        'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+    'subject6': {
+        'walking': {'walking1': {'start':-1.2, 'end':1.63}, 'walking2': {'start':-1.2, 'end':1.6}, 'walking3': {'start':-1.2, 'end':2},
+                    'walkingTS1': {'start':-0.7, 'end':1.65}, 'walkingTS2': {'start':-0.8, 'end':1.72}, 'walkingTS3': {'start':-1.1, 'end':1.78}},
+        'STS':     {'STS1': {'start':None, 'end':None}}}, # temp: , 'STSweakLegs1': {'start':None, 'end':None}
+    'subject7': {
+        'walking': {'walking1': {'start':-0.8, 'end':1.79}, 'walking2': {'start':-0.7, 'end':1.82}, 'walking3': {'start':-0.7, 'end':1.87},
+                    'walkingTS1': {'start':-1.1, 'end':1.83}, 'walkingTS2': {'start':-1.1, 'end':1.9}, 'walkingTS3': {'start':-1.1, 'end':2.12}},
+        'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+    'subject8': {
+        'walking': {'walking1': {'start':-1, 'end':1.83}, 'walking2': {'start':-0.7, 'end':1.89}, 'walking3': {'start':-0.7, 'end':1.92}, 
+                    'walkingTS1': {'start':-0.7, 'end':2.3}, 'walkingTS3': {'start':-0.7, 'end':1.9}},
+        'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+    'subject9': {
+        'walking': {'walking1': {'start':-0.6, 'end':1.65}, 'walking2': {'start':-0.5, 'end':1.55}, 'walking3': {'start':-0.6, 'end':1.6}, 
+                    'walkingTS1': {'start':-0.7, 'end':1.68}, 'walkingTS2': {'start':-0.7, 'end':1.63}, 'walkingTS3': {'start':-0.7, 'end':1.56}},
+        'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+    'subject10': {
+        'walking': {'walking1': {'start':-0.7, 'end':1.46}, 'walking2': {'start':-0.7, 'end':1.49}, 'walking3': {'start':-0.7, 'end':1.5}, 
+                    'walkingTS1': {'start':-0.8, 'end':1.78}, 'walkingTS2': {'start':-0.9, 'end':1.85}, 'walkingTS3': {'start':-0.8, 'end':1.66}},
+        'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+    'subject11': {
+        'walking': {'walking2': {'start':-0.7, 'end':1.6}, 'walking3': {'start':-0.7, 'end':1.55}, 'walking4': {'start':-0.7, 'end':1.62}, 
+                    'walkingTS1': {'start':-0.7, 'end':1.9}, 'walkingTS2': {'start':-0.7, 'end':1.85}, 'walkingTS3': {'start':-0.7, 'end':1.9}},
+        'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+    }
 
 # %% Settings
 fieldStudy = False # True to process field study results, false to process LabValidation results
@@ -77,7 +106,11 @@ else:
     subjects = list(trials.keys())
     # motion_types = motion_types = ['DJ', 'DJAsym', 'walking', 'walkingTS', 
     #                                'squats','squatsAsym','STS','STSweakLegs']
-    motion_types = motion_types = ['walking', 'walkingTS']
+    # motion_style = 'walking'
+    # motion_types = ['walking', 'walkingTS']
+    
+    motion_style = 'STS'
+    motion_types = ['STS','STSweakLegs']
 
     # Likely fixed settings
     data_type = 'Video' # only set up for video now
@@ -122,9 +155,12 @@ for iSub,subject in enumerate(subjects):
             if not os.path.isdir(pathOSData):
                 raise Exception('The data is not found in ' + dataDir + '. Download it from https://simtk.org/projects/opencap, and save to the the repository directory. E.g., Data/LabValidation')
             
-            results = np.load(os.path.join(pathOSData, 
-                                       '{}_results.npy'.format(motion_type)),
-                          allow_pickle=True).item()
+            pathResults = os.path.join(pathOSData, '{}_results.npy'.format(motion_type))
+            # Check if results file exists
+            if not os.path.isfile(pathResults):
+                print('Results file not found for subject ' + subject + ' and motion type ' + motion_type)
+                continue
+            results = np.load(pathResults, allow_pickle=True).item()
             
         tempKeys = list(results.keys())
         cases = list(results[tempKeys[0]].keys())

@@ -38,11 +38,13 @@ from mainOpenSimAD import run_tracking
 from utils import storage_to_numpy
 
 # %% Paths.
-dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
-i = 3
+dataFolder = os.path.join(baseDir, 'Data', 'Benchmark_updated')
+i = 2
 subjects = ['subject' + str(i) for i in range(i,i+2)]
 
 # TODO: subject 10 might be 56.6 instead of 60kgs, check if that makes a diff.
+# 11576, 35702 still running
+
 
 
 trials = {
@@ -72,7 +74,7 @@ trials = {
         'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
     'subject8': {
         'walking': {'walking1': {'start':-1, 'end':1.83}, 'walking2': {'start':-0.7, 'end':1.89}, 'walking3': {'start':-0.7, 'end':1.92}, 
-                    'walkingTS1': {'start':-0.7, 'end':2.3}, 'walkingTS3': {'start':-0.7, 'end':1.9}},
+                    'walkingTS1': {'start':-0.7, 'end':2.3}, 'walkingTS2': {'start':-1.0, 'end':2.06}, 'walkingTS3': {'start':-0.7, 'end':1.9}},
         'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
     'subject9': {
         'walking': {'walking1': {'start':-0.6, 'end':1.65}, 'walking2': {'start':-0.5, 'end':1.55}, 'walking3': {'start':-0.6, 'end':1.6}, 
@@ -88,18 +90,17 @@ trials = {
         'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
     }
 
-
 # %% User-defined variables.
 filter_frequency = 6
 
 # Settings for dynamic simulation.
-motion_style = 'STS'
-repetitions = [1,2,3]
+# motion_style = 'STS'
+# repetitions = [1,2,3]
 
-# motion_style = 'walking'
-# motion_type = 'walking_formulation2'
+motion_style = 'walking'
+motion_type = 'walking_formulation2'
 
-cases = ['28', '34']
+cases = ['1']
 runProblem = True
 processInputs = True
 runSimulation = True

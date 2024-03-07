@@ -6,16 +6,16 @@ import sys
 sys.path.append("../")
 baseDir = os.path.join(os.getcwd(), '..')
 
-# from utils import import_metadata
+from utils import import_metadata
 
 # %% Data re-organization
 dataDir = 'C:/MyDriveSym/Projects/mobilecap/data'
 # dataDir = os.path.join(baseDir, 'Data', 'Benchmark')
 
-driveDir = os.path.join(baseDir, 'data', 'Benchmark')
+driveDir = os.path.join(baseDir, 'data', 'Benchmark_updated')
 dataFolder = os.path.join(driveDir, 'Data')
 
-subjects = ['subject' + str(i) for i in range(2, 12)]
+subjects = ['subject' + str(i) for i in range(3, 12)]
 
 for subject in subjects:
     # Local
@@ -45,7 +45,7 @@ for subject in subjects:
     os.makedirs(pathModelMocap, exist_ok=True)
 
     # Drive
-    pathDataDrive = os.path.join(dataDir, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63_allVideoOnly')
+    pathDataDrive = os.path.join(dataDir, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63_updated_allVideoOnly')
     pathMocapDrive = os.path.join(dataDir, subject, 'OpenSimData', 'Mocap')
     pathKinematicsDrive = os.path.join(pathDataDrive, 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
     pathModelDrive = os.path.join(pathDataDrive, 'Model', 'LaiArnoldModified2017_poly_withArms_weldHand')
@@ -75,69 +75,69 @@ for subject in subjects:
         if os.path.isfile(pathFile) and not 'desktop.ini' in file:
             shutil.copy2(pathFile, pathKinematics)
 
-    # # Copy metadata
-    # pathMetadata = os.path.join(dataDir, subject, 'sessionMetadata.yaml')
-    # shutil.copy2(pathMetadata, pathSubject)
+    # Copy metadata
+    pathMetadata = os.path.join(dataDir, subject, 'sessionMetadata.yaml')
+    shutil.copy2(pathMetadata, pathSubject)
 
-    # # Load metadata and adjust opensim model
-    # metadata = import_metadata(os.path.join(pathSubject, 'sessionMetadata.yaml'))
-    # metadata['openSimModel'] = 'LaiUhlrich2022'
-    # # Save metadata
-    # with open(os.path.join(pathSubject, 'sessionMetadata.yaml'), 'w') as file:
-    #     documents = yaml.dump(metadata, file)
+    # Load metadata and adjust opensim model
+    metadata = import_metadata(os.path.join(pathSubject, 'sessionMetadata.yaml'))
+    metadata['openSimModel'] = 'LaiUhlrich2022'
+    # Save metadata
+    with open(os.path.join(pathSubject, 'sessionMetadata.yaml'), 'w') as file:
+        documents = yaml.dump(metadata, file)
 
     # Copy ID
-    # for file in os.listdir(pathIDDrive):
-    #     pathFile = os.path.join(pathIDDrive, file)
-    #     if os.path.isfile(pathFile) and not 'desktop.ini' in file:
-    #         shutil.copy2(pathFile, pathID)
+    for file in os.listdir(pathIDDrive):
+        pathFile = os.path.join(pathIDDrive, file)
+        if os.path.isfile(pathFile) and not 'desktop.ini' in file:
+            shutil.copy2(pathFile, pathID)
 
     # Copy GRF
-    # for file in os.listdir(pathGRFDrive):
-    #     pathFile = os.path.join(pathGRFDrive, file)
-    #     if os.path.isfile(pathFile) and not 'desktop.ini' in file:
-    #         shutil.copy2(pathFile, pathGRF)
+    for file in os.listdir(pathGRFDrive):
+        pathFile = os.path.join(pathGRFDrive, file)
+        if os.path.isfile(pathFile) and not 'desktop.ini' in file:
+            shutil.copy2(pathFile, pathGRF)
 
     # Copy IK
-    # for file in os.listdir(pathIKDrive):
-    #     pathFile = os.path.join(pathIKDrive, file)
-    #     if os.path.isfile(pathFile) and not 'desktop.ini' in file:
-    #         shutil.copy2(pathFile, pathIK)
+    for file in os.listdir(pathIKDrive):
+        pathFile = os.path.join(pathIKDrive, file)
+        if os.path.isfile(pathFile) and not 'desktop.ini' in file:
+            shutil.copy2(pathFile, pathIK)
 
-    # # Copy SO
-    # for file in os.listdir(pathSODrive):
-    #     pathFile = os.path.join(pathSODrive, file)
-    #     if os.path.isfile(pathFile) and not 'desktop.ini' in file:
-    #         shutil.copy2(pathFile, pathSO)
+    # Copy SO
+    for file in os.listdir(pathSODrive):
+        pathFile = os.path.join(pathSODrive, file)
+        if os.path.isfile(pathFile) and not 'desktop.ini' in file:
+            shutil.copy2(pathFile, pathSO)
 
-    # # Copy JRA
-    # for file in os.listdir(pathJRADrive):
-    #     pathFile = os.path.join(pathJRADrive, file)
-    #     if os.path.isfile(pathFile) and not 'desktop.ini' in file:
-    #         shutil.copy2(pathFile, pathJRA)
+    # Copy JRA
+    for file in os.listdir(pathJRADrive):
+        pathFile = os.path.join(pathJRADrive, file)
+        if os.path.isfile(pathFile) and not 'desktop.ini' in file:
+            shutil.copy2(pathFile, pathJRA)
 
-    # # Copy EMG
-    # for file in os.listdir(pathEMGDrive):
-    #     pathFile = os.path.join(pathEMGDrive, file)
-    #     if os.path.isfile(pathFile) and not 'desktop.ini' in file:
-    #         shutil.copy2(pathFile, pathEMG)
+    # Copy EMG
+    for file in os.listdir(pathEMGDrive):
+        pathFile = os.path.join(pathEMGDrive, file)
+        if os.path.isfile(pathFile) and not 'desktop.ini' in file:
+            shutil.copy2(pathFile, pathEMG)
 
-    # # Copy model mocap
-    # for file in os.listdir(pathModelMocapDrive):
-    #     files_to_copy = [
-    #         'LaiArnoldModified2017_poly_withArms_weldHand_generic.osim',
-    #         'LaiArnoldModified2017_poly_withArms_weldHand_scaled.mot',
-    #         'LaiArnoldModified2017_poly_withArms_weldHand_scaled.osim',
-    #         'Setup_Scale_LaiArnoldModified2017_poly_withArms_weldHand_scaled.xml'
-    #         ]
-    #     if file in files_to_copy:
-    #         pathFile = os.path.join(pathModelMocapDrive, file)
-    #         if os.path.isfile(pathFile) and not 'desktop.ini' in file:
-    #             shutil.copy2(pathFile, pathModelMocap)
+    # Copy model mocap
+    for file in os.listdir(pathModelMocapDrive):
+        files_to_copy = [
+            'LaiArnoldModified2017_poly_withArms_weldHand_generic.osim',
+            'LaiArnoldModified2017_poly_withArms_weldHand_scaled.mot',
+            'LaiArnoldModified2017_poly_withArms_weldHand_scaled.osim',
+            'Setup_Scale_LaiArnoldModified2017_poly_withArms_weldHand_scaled.xml'
+            ]
+        if file in files_to_copy:
+            pathFile = os.path.join(pathModelMocapDrive, file)
+            if os.path.isfile(pathFile) and not 'desktop.ini' in file:
+                shutil.copy2(pathFile, pathModelMocap)
 
-    # # Change model name
-    # for file in os.listdir(pathModelMocap):
-    #     if 'LaiArnoldModified2017_poly_withArms_weldHand' in file:
-    #         fileName = file.replace('LaiArnoldModified2017_poly_withArms_weldHand', 'LaiUhlrich2022')
-    #         os.rename(os.path.join(pathModelMocap, file), os.path.join(pathModelMocap, fileName))
+    # Change model name
+    for file in os.listdir(pathModelMocap):
+        if 'LaiArnoldModified2017_poly_withArms_weldHand' in file:
+            fileName = file.replace('LaiArnoldModified2017_poly_withArms_weldHand', 'LaiUhlrich2022')
+            os.rename(os.path.join(pathModelMocap, file), os.path.join(pathModelMocap, fileName))
 
