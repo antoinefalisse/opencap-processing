@@ -522,7 +522,7 @@ for case in cases:
                                 
                                 if 'walking' in trial_name:
                                     # Get time interval from trimmed trial
-                                    pathTrimmedMotionFile = os.path.join(dataFolder, subject, 'OpenSimData_trimmed', 'Kinematics', trial_name.replace('_video', '_videoAndMocap') + '.mot')
+                                    pathTrimmedMotionFile = os.path.join(dataFolder, subject, 'OpenSimData', 'Kinematics_trimmed', trial_name.replace('_video', '_videoAndMocap') + '.mot')
                                     trimmed_motion_file = storage_to_numpy(pathTrimmedMotionFile)
                                     trimmed_time_window = [trimmed_motion_file['time'][0], trimmed_motion_file['time'][-1]]
                                     
