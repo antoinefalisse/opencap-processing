@@ -2933,6 +2933,10 @@ def run_tracking(baseDir, dataDir, settings, case='0',
             optimaltrajectories[case]['muscle_forces'] = Ft_opt  
             optimaltrajectories[case]['passive_muscle_torques'] = pMT_opt
             optimaltrajectories[case]['active_muscle_torques'] = aMT_opt
+            
+        if 'timeIntervalRising' in settings:
+            optimaltrajectories[case]['timeIntervalRising'] = settings['timeIntervalRising']
+            
 
         trimBuffers = True
         if trimBuffers:

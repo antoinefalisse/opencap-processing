@@ -2412,7 +2412,8 @@ def processInputsOpenSimAD(baseDir, dataFolder, session_id, trial_name,
             times_window = segment_squats(pathMotionFile, visualize=True)
         elif 'sit_to_stand' in motion_type:
             if periodicSTS:
-                _, _, times_window = segment_STS(pathMotionFile, visualize=True)
+                _, times_window_rising, times_window = segment_STS(pathMotionFile, visualize=True)
+                settings['timeIntervalRising'] = [float(i) for i in times_window_rising[repetition]]
             else:
                 _, times_window, _ = segment_STS(pathMotionFile, visualize=True)
         time_window = times_window[repetition]

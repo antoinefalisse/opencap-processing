@@ -21,7 +21,8 @@ import sys
 
 baseDir = os.path.join(os.getcwd(), '..')
 sys.path.append(baseDir)
-dataDir = os.path.join(baseDir, 'Data', 'Benchmark')
+# dataDir = os.path.join(baseDir, 'Data', 'Benchmark')
+dataDir = os.path.join(baseDir, 'Data', 'Benchmark_updated')
 
 sys.path.append(baseDir) # utilities from base repository directory
 # sys.path.append(os.path.join(repoDir,'DataProcessing')) # utilities in child directory
@@ -45,13 +46,13 @@ if fieldStudy:
 
 subjects = ['subject' + str(sub) for sub in range(2,12)]
 # Exclude subject3 and subject6
-subjects = [sub for sub in subjects if sub not in ['subject3','subject6']]
+# subjects = [sub for sub in subjects if sub not in ['subject3','subject6']]
 
 
 #%% Process settings
 # all_motions = ['squats', 'squatsAsym', 'walking', 'walkingTS', 'DJ', 'DJAsym', 'STS', 'STSweakLegs']
-# all_motions = ['walking', 'walkingTS']
-all_motions = ['STS', 'STSweakLegs']
+all_motions = ['walking', 'walkingTS']
+# all_motions = ['STS', 'STSweakLegs']
 
 # Likely fixed settings
 suffix_motion_name = '_videoAndMocap'
@@ -610,7 +611,8 @@ if saveErrors:
     dynamicQuants = ['torques_BWht','GRFs_BW','positions','torques_BWht_limbAveraged','GRFs_BW_limbAveraged']
     
     # acts = ['DJ','walking','squats','STS']
-    acts = ['walking','STS']
+    # acts = ['walking','STS']
+    acts = ['walking']
     metrics = ['mae_mean','rmse_mean','mape_mean']
     
     for dynamicQuant in dynamicQuants:

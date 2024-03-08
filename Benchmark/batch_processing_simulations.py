@@ -38,14 +38,12 @@ from mainOpenSimAD import run_tracking
 from utils import storage_to_numpy
 
 # %% Paths.
+# dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark_updated')
 i = 2
 subjects = ['subject' + str(i) for i in range(i,i+2)]
 
 # TODO: subject 10 might be 56.6 instead of 60kgs, check if that makes a diff.
-# 11576, 35702 still running
-
-
 
 trials = {
     'subject2': {
@@ -94,13 +92,14 @@ trials = {
 filter_frequency = 6
 
 # Settings for dynamic simulation.
-# motion_style = 'STS'
-# repetitions = [1,2,3]
+motion_style = 'STS'
+repetitions = [1,2,3]
+cases = ['28']
 
-motion_style = 'walking'
-motion_type = 'walking_formulation2'
+# motion_style = 'walking'
+# motion_type = 'walking_formulation2'
+# cases = ['1']
 
-cases = ['1']
 runProblem = True
 processInputs = True
 runSimulation = True
@@ -475,7 +474,7 @@ for case in cases:
         sessionDir = os.path.join(dataFolder, subject)
         session_id = ''
 
-        pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
+        # pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
         for count, trial_name in enumerate(list(trials[subject][motion_style].keys())):
             
             # if count > 0:

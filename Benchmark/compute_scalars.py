@@ -34,14 +34,15 @@ warnings.filterwarnings('ignore')
 
 baseDir = os.path.join(os.getcwd(), '..')
 sys.path.append(baseDir)
-dataDir = os.path.join(baseDir, 'Data', 'Benchmark')
+# dataDir = os.path.join(baseDir, 'Data', 'Benchmark')
+dataDir = os.path.join(baseDir, 'Data', 'Benchmark_updated')
 
 sys.path.append(baseDir) # utilities from base repository directory
 sys.path.append(os.path.join(baseDir,'DataProcessing')) # utilities in child directory
 
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 from itertools import combinations
-from utilsDataPostprocessing import (segmentSquats, segmentWalkStance, segmentDJ,
+from utilsDataPostprocessing import (segmentSquats, segmentWalkStance, segmentDJ, segmentSTS,
                                      getIndsFromTimes, calc_LSI, interpolateNumpyArray)
 
 trials = {
@@ -52,7 +53,7 @@ trials = {
     'subject3': {
         'walking': {'walking1': {'start':-1.8, 'end':1.56}, 'walking2': {'start':-1.8, 'end':1.46}, 'walking3': {'start':-1.7, 'end':1.48}, 
                     'walkingTS2': {'start':-2.5, 'end':1.97}, 'walkingTS3': {'start':-2, 'end':1.79}, 'walkingTS4': {'start':-2.2, 'end':1.7}},
-        'STS':     {'STS1': {'start':None, 'end':None}}}, # , 'STSweakLegs1': {'start':None, 'end':None}
+        'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
     'subject4': {
         'walking': {'walking1': {'start':-0.7, 'end':1.6}, 'walking2': {'start':-0.7, 'end':1.87}, 'walking4': {'start':-0.7, 'end':1.7},
                     'walkingTS1': {'start':-0.7, 'end':1.7}, 'walkingTS2': {'start':-0.7, 'end':1.6}, 'walkingTS3': {'start':-0.7, 'end':1.95}},
@@ -64,14 +65,14 @@ trials = {
     'subject6': {
         'walking': {'walking1': {'start':-1.2, 'end':1.63}, 'walking2': {'start':-1.2, 'end':1.6}, 'walking3': {'start':-1.2, 'end':2},
                     'walkingTS1': {'start':-0.7, 'end':1.65}, 'walkingTS2': {'start':-0.8, 'end':1.72}, 'walkingTS3': {'start':-1.1, 'end':1.78}},
-        'STS':     {'STS1': {'start':None, 'end':None}}}, # temp: , 'STSweakLegs1': {'start':None, 'end':None}
+        'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
     'subject7': {
         'walking': {'walking1': {'start':-0.8, 'end':1.79}, 'walking2': {'start':-0.7, 'end':1.82}, 'walking3': {'start':-0.7, 'end':1.87},
                     'walkingTS1': {'start':-1.1, 'end':1.83}, 'walkingTS2': {'start':-1.1, 'end':1.9}, 'walkingTS3': {'start':-1.1, 'end':2.12}},
         'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
     'subject8': {
         'walking': {'walking1': {'start':-1, 'end':1.83}, 'walking2': {'start':-0.7, 'end':1.89}, 'walking3': {'start':-0.7, 'end':1.92}, 
-                    'walkingTS1': {'start':-0.7, 'end':2.3}, 'walkingTS3': {'start':-0.7, 'end':1.9}},
+                    'walkingTS1': {'start':-0.7, 'end':2.3}, 'walkingTS2': {'start':-1.0, 'end':2.06}, 'walkingTS3': {'start':-0.7, 'end':1.9}},
         'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
     'subject9': {
         'walking': {'walking1': {'start':-0.6, 'end':1.65}, 'walking2': {'start':-0.5, 'end':1.55}, 'walking3': {'start':-0.6, 'end':1.6}, 
@@ -106,11 +107,12 @@ else:
     subjects = list(trials.keys())
     # motion_types = motion_types = ['DJ', 'DJAsym', 'walking', 'walkingTS', 
     #                                'squats','squatsAsym','STS','STSweakLegs']
-    # motion_style = 'walking'
-    # motion_types = ['walking', 'walkingTS']
+    motion_style = 'walking'
+    motion_types = ['walking', 'walkingTS']
     
-    motion_style = 'STS'
-    motion_types = ['STS','STSweakLegs']
+    # motion_style = 'STS'
+    # motion_types = ['STS','STSweakLegs']
+    # risingOnlySTS = False
 
     # Likely fixed settings
     data_type = 'Video' # only set up for video now
@@ -224,13 +226,23 @@ for iSub,subject in enumerate(subjects):
                     sfInds, _ = segmentSquats(None , pelvis_ty=pelvis_ty , timeVec=timeVec)
                 selInds[case] = np.arange(sfInds[0][0],sfInds[0][1]+1)
             elif 'STS' in motion_type:
-                resTimeIdx = results_sel['video']['positions'][case]['headers'].index('time')
-                pelvTyIdx = results_sel['video']['positions'][case]['headers'].index('pelvis_ty')
-                timeVec = results_sel['video']['positions'][case][segSource][resTimeIdx,:]
-                pelvis_ty = results_sel['video']['positions'][case][segSource][pelvTyIdx,:]
-                sfInds = []
-                sfInds.append([0, pelvis_ty.shape[0]-1])                
-                selInds[case] = np.arange(sfInds[0][0],sfInds[0][1]+1)                
+                
+                if risingOnlySTS:
+                    resTimeIdx = results_sel['video']['positions'][case]['headers'].index('time')
+                    risingTimes =  results_sel['video']['positions'][case]['timeIntervalRising']
+                    timeVec = results_sel['video']['positions'][case][segSource][resTimeIdx,:]
+                    sfInds = getIndsFromTimes(risingTimes,timeVec)
+                    # No +1 on purpose to match previous results
+                    selInds[case] = np.arange(sfInds[0],sfInds[-1])
+                else:
+                    resTimeIdx = results_sel['video']['positions'][case]['headers'].index('time')
+                    pelvTyIdx = results_sel['video']['positions'][case]['headers'].index('pelvis_ty')
+                    timeVec = results_sel['video']['positions'][case][segSource][resTimeIdx,:]
+                    pelvis_ty = results_sel['video']['positions'][case][segSource][pelvTyIdx,:]
+                    sfInds = []
+                    sfInds.append([0, pelvis_ty.shape[0]-1])
+
+                    selInds[case] = np.arange(sfInds[0][0],sfInds[0][1]+1)                
             else:
                 raise Exception('Motion type:' + motion_type + ' not supported')
                     
