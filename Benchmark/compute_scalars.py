@@ -107,12 +107,12 @@ else:
     subjects = list(trials.keys())
     # motion_types = motion_types = ['DJ', 'DJAsym', 'walking', 'walkingTS', 
     #                                'squats','squatsAsym','STS','STSweakLegs']
-    motion_style = 'walking'
-    motion_types = ['walking', 'walkingTS']
+    # motion_style = 'walking'
+    # motion_types = ['walking', 'walkingTS']
     
-    # motion_style = 'STS'
-    # motion_types = ['STS','STSweakLegs']
-    # risingOnlySTS = False
+    motion_style = 'STS'
+    motion_types = ['STS','STSweakLegs']
+    risingOnlySTS = True
 
     # Likely fixed settings
     data_type = 'Video' # only set up for video now

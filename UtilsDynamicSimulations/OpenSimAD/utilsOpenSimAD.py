@@ -2361,7 +2361,9 @@ def processInputsOpenSimAD(baseDir, dataFolder, session_id, trial_name,
                            treadmill_speed=0, overwrite=False,
                            useExpressionGraphFunction=True,
                            contact_configuration='generic',
-                           periodicSTS=False):
+                           periodicSTS=False, stand_to_stand=False,
+                           endSTS_to_endSTS=False,
+                           startSTSnoDelay_to_Stand=False):
         
     # Path session folder.
     # sessionFolder =  os.path.join(dataFolder, session_id)
@@ -2412,8 +2414,33 @@ def processInputsOpenSimAD(baseDir, dataFolder, session_id, trial_name,
             times_window = segment_squats(pathMotionFile, visualize=True)
         elif 'sit_to_stand' in motion_type:
             if periodicSTS:
-                _, times_window_rising, times_window = segment_STS(pathMotionFile, visualize=True)
-                settings['timeIntervalRising'] = [float(i) for i in times_window_rising[repetition]]
+                _, times_window_rising_delayed, times_window = segment_STS(pathMotionFile, visualize=True)
+                settings['timeIntervalRising'] = [float(i) for i in times_window_rising_delayed[repetition]]
+            elif stand_to_stand:
+                if repetition == 0:
+                    raise ValueError("With this segmentation approach, you cannot simulate the first rep")
+                times_window_rising, times_window_rising_delayed, _ = segment_STS(pathMotionFile, visualize=True)
+                settings['timeIntervalRising'] = [float(i) for i in times_window_rising_delayed[repetition]]
+                times_window = []
+                for i, _  in enumerate(times_window_rising):
+                    if i == 0:
+                        times_window.append([-99, -99])
+                    else:
+                        times_window.append([times_window_rising[i-1][1], times_window_rising[i][1]]) 
+            elif endSTS_to_endSTS:
+                if repetition == 0:
+                    raise ValueError("With this segmentation approach, you cannot simulate the first rep")
+                times_window_rising, times_window_rising_delayed, times_window_periodic = segment_STS(pathMotionFile, visualize=True)
+                settings['timeIntervalRising'] = [float(i) for i in times_window_rising_delayed[repetition]]
+                times_window = []
+                for i, _  in enumerate(times_window_rising):
+                    if i == 0:
+                        times_window.append([-99, -99])
+                    else:
+                        times_window.append([times_window_periodic[i-1][1], times_window_periodic[i][1]])                        
+            elif startSTSnoDelay_to_Stand:
+                times_window, times_window_rising_delayed, _ = segment_STS(pathMotionFile, visualize=True)
+                settings['timeIntervalRising'] = [float(i) for i in times_window_rising_delayed[repetition]]                       
             else:
                 _, times_window, _ = segment_STS(pathMotionFile, visualize=True)
         time_window = times_window[repetition]

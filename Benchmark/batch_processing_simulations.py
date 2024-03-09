@@ -41,7 +41,7 @@ from utils import storage_to_numpy
 # dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark_updated')
 i = 2
-subjects = ['subject' + str(i) for i in range(i,i+2)]
+subjects = ['subject' + str(i) for i in range(10,11)]
 
 # TODO: subject 10 might be 56.6 instead of 60kgs, check if that makes a diff.
 
@@ -92,13 +92,13 @@ trials = {
 filter_frequency = 6
 
 # Settings for dynamic simulation.
-motion_style = 'STS'
-repetitions = [1,2,3]
-cases = ['28']
+# motion_style = 'STS'
+# repetitions = [1,2,3]
+# cases = ['28']
 
-# motion_style = 'walking'
-# motion_type = 'walking_formulation2'
-# cases = ['1']
+motion_style = 'walking'
+motion_type = 'walking_formulation2'
+cases = ['1']
 
 runProblem = True
 processInputs = True
@@ -116,7 +116,7 @@ for case in cases:
         elif case == '1':
             buffer_start = 0.7
             buffer_end = 0.5
-        elif case == '2': # Did the same one to compare end times
+        elif case == '2': # Did the same one to compare start/end times
             buffer_start = 0.7
             buffer_end = 0.5
         elif case == '3':
@@ -134,6 +134,19 @@ for case in cases:
             buffer_start = 0.7
             buffer_end = 0.5
             weight_activation = 20
+        elif case == '8':
+            buffer_start = 0.7
+            buffer_end = 0.5
+            weight_acceleration = 200
+        elif case == '9':
+            buffer_start = 0.7
+            buffer_end = 0.5
+            weight_velocity = 10
+        elif case == '10':
+            buffer_start = 0.7
+            buffer_end = 0.5
+            motion_type = 'walking_formulation3'
+            # Add reserves for the mtp, bad.
         
     if motion_style == 'STS':
         if case == '0':
@@ -463,6 +476,103 @@ for case in cases:
             heel_vGRF_threshold = 5
             trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
             weight_trackValueTerm = 1
+        elif case == '38':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation9'
+            periodicSTS = True
+            meshDensity = 100
+            weight_pelvis_tilt = 500
+            weight_position_tracking = 100
+            weigth_lumbar_extension = 100
+            heel_vGRF_threshold = 5
+            trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
+            weight_trackValueTerm = 1
+            weight_acceleration = 200
+        elif case == '39':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation9'
+            periodicSTS = True
+            meshDensity = 100
+            weight_pelvis_tilt = 500
+            weight_position_tracking = 100
+            weigth_lumbar_extension = 100
+            heel_vGRF_threshold = 5
+            trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
+            weight_trackValueTerm = 1
+            weight_acceleration = 500
+        elif case == '40':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation8'
+            periodicSTS = False
+            meshDensity = 100
+            weight_pelvis_tilt = 500
+            weight_position_tracking = 100
+            weigth_lumbar_extension = 100
+            heel_vGRF_threshold = 5
+            trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
+            weight_trackValueTerm = 1
+            stand_to_stand = True
+            weight_acceleration = 500
+        elif case == '41':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation9'
+            periodicSTS = True
+            meshDensity = 100
+            weight_pelvis_tilt = 500
+            weight_position_tracking = 100
+            weigth_lumbar_extension = 100
+            heel_vGRF_threshold = 5
+            trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
+            weight_trackValueTerm = 1
+            weight_acceleration = 1000
+        elif case == '42':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation8'
+            periodicSTS = False
+            meshDensity = 100
+            weight_pelvis_tilt = 500
+            weight_position_tracking = 100
+            weigth_lumbar_extension = 100
+            heel_vGRF_threshold = 5
+            trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
+            weight_trackValueTerm = 1
+            endSTS_to_endSTS = True
+            weight_acceleration = 500
+        elif case == '43':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation8'
+            periodicSTS = False
+            meshDensity = 100
+            weight_pelvis_tilt = 500
+            weight_position_tracking = 100
+            weigth_lumbar_extension = 100
+            heel_vGRF_threshold = 5
+            trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
+            weight_trackValueTerm = 1
+            endSTS_to_endSTS = True
+            weight_acceleration = 500
+            weight_activation = 1
+        elif case == '44':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation8'
+            periodicSTS = False
+            meshDensity = 100
+            weight_pelvis_tilt = 500
+            weight_position_tracking = 100
+            weigth_lumbar_extension = 100
+            heel_vGRF_threshold = 5
+            trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
+            weight_trackValueTerm = 1
+            startSTSnoDelay_to_Stand = True
+
+
 
             
         
@@ -477,8 +587,8 @@ for case in cases:
         # pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
         for count, trial_name in enumerate(list(trials[subject][motion_style].keys())):
             
-            # if count > 0:
-            #     continue
+            if count != 0:
+                continue
 
             if not 'repetitions' in locals():
                 nReps = 1
@@ -511,9 +621,16 @@ for case in cases:
                                     repetition = None
                                 if not 'periodicSTS' in locals():
                                     periodicSTS = False
+                                if not 'stand_to_stand' in locals():
+                                    stand_to_stand = False
+                                if not 'endSTS_to_endSTS' in locals():
+                                    endSTS_to_endSTS = False                                    
+                                if not 'startSTSnoDelay_to_Stand' in locals():
+                                    startSTSnoDelay_to_Stand = False
+                                    
                                 settings = processInputsOpenSimAD(
                                     baseDir, sessionDir, session_id, trial_name, 
-                                    motion_type, repetition=repetition, periodicSTS=periodicSTS)
+                                    motion_type, repetition=repetition, periodicSTS=periodicSTS, stand_to_stand=stand_to_stand, endSTS_to_endSTS=endSTS_to_endSTS, startSTSnoDelay_to_Stand=startSTSnoDelay_to_Stand)
                                 
                                 pathMotionFile = os.path.join(dataFolder, subject, 'OpenSimData', 'Kinematics', trial_name + '.mot')
                                 motion_file = storage_to_numpy(pathMotionFile)
@@ -544,6 +661,12 @@ for case in cases:
                                     
                                     # if case == '4' or case == '5' or case == '7':
                                     #     settings['weights']['activationTerm'] = weight_activation
+                                        
+                                    if 'weight_acceleration' in locals():
+                                        settings['weights']['accelerationTrackingTerm'] = weight_acceleration
+
+                                    if 'weight_velocity' in locals():
+                                        settings['weights']['velocityTrackingTerm'] = weight_velocity
                                         
                                         
                                 if 'STS' in trial_name:
@@ -611,6 +734,12 @@ for case in cases:
 
                                     if 'weight_trackValueTerm' in locals():
                                         settings['weights']['trackValueTerm'] = weight_trackValueTerm
+                                        
+                                    if 'weight_acceleration' in locals():
+                                        settings['weights']['accelerationTrackingTerm'] = weight_acceleration
+
+                                    if 'weight_velocity' in locals():
+                                        settings['weights']['velocityTrackingTerm'] = weight_velocity
                                     
                                 
                             except Exception as e:
@@ -635,8 +764,8 @@ for case in cases:
                     # Load settings
                     # Overwritting
                     # trial_name = 'STS1_video'
-                    trial_name = 'STSweakLegs1_video'
-                    repetition = 3
+                    # trial_name = 'STSweakLegs1_video'
+                    # repetition = 3
 
                     pathResults = os.path.join(dataFolder, subject, 'OpenSimData', 'Dynamics', trial_name)
                     if 'repetition' in locals():
@@ -646,7 +775,8 @@ for case in cases:
                         settings = yaml.safe_load(file)
 
 
-                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['28', '37'], mainPlots=True, grfPlotOnly=False)
+                    # plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['37', '44'], mainPlots=False, grfPlotOnly=False)
+                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['1', '10'], mainPlots=False, grfPlotOnly=False)
                 
                 test=1
 

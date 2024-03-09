@@ -67,7 +67,7 @@ trials = {
                     'walkingTS1': {'start':-0.7, 'end':1.9}, 'walkingTS2': {'start':-0.7, 'end':1.85}, 'walkingTS3': {'start':-0.7, 'end':1.9}},
         'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
     }
-tempKeys = ['1']
+tempKeys = ['28']
 
 
 # %% User inputs
@@ -87,11 +87,11 @@ if fieldStudy:
 else:
     subjects = list(trials.keys())
     
-    motion_style = 'walking'
-    motion_types = ['walking', 'walkingTS']
+    # motion_style = 'walking'
+    # motion_types = ['walking', 'walkingTS']
     
-    # motion_style = 'STS'
-    # motion_types = ['STS','STSweakLegs']
+    motion_style = 'STS'
+    motion_types = ['STS','STSweakLegs']
 
     # motion_types = ['DJ','DJAsym']
     # motion_types = ['DJ', 'DJAsym', 'walking', 'walkingTS', 'squats','squatsAsym','STS','STSweakLegs']
@@ -163,9 +163,13 @@ for iSub, subject in enumerate(subjects):
         optimaltrajectories = {}
         for tName in trialNames:
                        
-            c_tr = np.load(os.path.join(pathOSData,tName,
-                                        'optimaltrajectories.npy'),
-                           allow_pickle=True).item()
+            try:
+                c_tr = np.load(os.path.join(pathOSData,tName,
+                                            'optimaltrajectories.npy'),
+                               allow_pickle=True).item()
+            except:
+                print('No optimal trajectories found for {} - {}'.format(subject,tName))
+                continue
             # TODO
             # tempKeys = list(c_tr.keys())
             

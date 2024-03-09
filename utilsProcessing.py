@@ -209,17 +209,17 @@ def segment_STS(ikFilePath, pelvis_ty=None, timeVec=None, velSeated=0.3,
     
     if visualize:        
         plt.figure()     
-        plt.plot(pelvSignal)
+        plt.plot(timeVec, pelvSignal)
         for c_v, val in enumerate(startFinishInds):
-            plt.plot(val, pelvSignal[val], marker='o', markerfacecolor='k',
+            plt.plot(timeVec[val], pelvSignal[val], marker='o', markerfacecolor='k',
                      markeredgecolor='none', linestyle='none', 
                      label='Rising phase')
             val2 = startFinishIndsDelay[c_v][0]
-            plt.plot(val2, pelvSignal[val2], marker='o',
+            plt.plot(timeVec[val2], pelvSignal[val2], marker='o',
                      markerfacecolor='r', markeredgecolor='none',
                      linestyle='none', label='Delayed start')
             val3 = startFinishIndsDelayPeriodic[c_v][1]
-            plt.plot(val3, pelvSignal[val3], marker='o',
+            plt.plot(timeVec[val3], pelvSignal[val3], marker='o',
                      markerfacecolor='g', markeredgecolor='none',
                      linestyle='none', 
                      label='Periodic end corresponding to delayed start')

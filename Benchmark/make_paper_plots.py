@@ -51,8 +51,8 @@ subjects = ['subject' + str(sub) for sub in range(2,12)]
 
 #%% Process settings
 # all_motions = ['squats', 'squatsAsym', 'walking', 'walkingTS', 'DJ', 'DJAsym', 'STS', 'STSweakLegs']
-all_motions = ['walking', 'walkingTS']
-# all_motions = ['STS', 'STSweakLegs']
+# all_motions = ['walking', 'walkingTS']
+all_motions = ['STS', 'STSweakLegs']
 
 # Likely fixed settings
 suffix_motion_name = '_videoAndMocap'
@@ -611,8 +611,8 @@ if saveErrors:
     dynamicQuants = ['torques_BWht','GRFs_BW','positions','torques_BWht_limbAveraged','GRFs_BW_limbAveraged']
     
     # acts = ['DJ','walking','squats','STS']
-    # acts = ['walking','STS']
-    acts = ['walking']
+    acts = ['walking','STS']
+    # acts = ['walking']
     metrics = ['mae_mean','rmse_mean','mape_mean']
     
     for dynamicQuant in dynamicQuants:
