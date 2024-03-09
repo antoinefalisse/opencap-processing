@@ -38,8 +38,8 @@ from mainOpenSimAD import run_tracking
 from utils import storage_to_numpy
 
 # %% Paths.
-# dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
-dataFolder = os.path.join(baseDir, 'Data', 'Benchmark_updated')
+dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
+# dataFolder = os.path.join(baseDir, 'Data', 'Benchmark_updated')
 i = 2
 subjects = ['subject' + str(i) for i in range(10,11)]
 
@@ -92,13 +92,13 @@ trials = {
 filter_frequency = 6
 
 # Settings for dynamic simulation.
-# motion_style = 'STS'
-# repetitions = [1,2,3]
-# cases = ['28']
+motion_style = 'STS'
+repetitions = [1,2,3]
+cases = ['28']
 
-motion_style = 'walking'
-motion_type = 'walking_formulation2'
-cases = ['1']
+# motion_style = 'walking'
+# motion_type = 'walking_formulation2'
+# cases = ['1']
 
 runProblem = True
 processInputs = True
@@ -138,10 +138,12 @@ for case in cases:
             buffer_start = 0.7
             buffer_end = 0.5
             weight_acceleration = 200
+            # Not really useful.
         elif case == '9':
             buffer_start = 0.7
             buffer_end = 0.5
             weight_velocity = 10
+            # Not really useful.
         elif case == '10':
             buffer_start = 0.7
             buffer_end = 0.5
@@ -571,10 +573,19 @@ for case in cases:
             trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
             weight_trackValueTerm = 1
             startSTSnoDelay_to_Stand = True
-
-
-
-            
+        elif case == '45':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation8'
+            periodicSTS = False
+            meshDensity = 100
+            weight_pelvis_tilt = 500
+            weight_position_tracking = 100
+            weigth_lumbar_extension = 100
+            heel_vGRF_threshold = 5
+            trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
+            weight_trackValueTerm = 1
+            weight_acceleration = 500            
         
     # %% Gait segmentation and kinematic analysis.
 
@@ -587,8 +598,8 @@ for case in cases:
         # pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
         for count, trial_name in enumerate(list(trials[subject][motion_style].keys())):
             
-            if count != 0:
-                continue
+            # if count != 0:
+            #     continue
 
             if not 'repetitions' in locals():
                 nReps = 1
@@ -776,7 +787,7 @@ for case in cases:
 
 
                     # plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['37', '44'], mainPlots=False, grfPlotOnly=False)
-                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['1', '10'], mainPlots=False, grfPlotOnly=False)
+                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['1', '8', '9'], mainPlots=False, grfPlotOnly=False)
                 
                 test=1
 

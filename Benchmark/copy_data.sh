@@ -1,6 +1,6 @@
 # sed -i 's/\r//' copy_data.sh
 
-for n in subject2 subject3 subject4 subject5 subject6 subject7 subject8 subject9 subject10 subject11;
+for n in subject10;
 do
     # mkdir -p "/mnt/c/Users/antoi/Documents/MyRepositories/opencap-processing-fork/Data/Benchmark/$n/OpenSimData/Dynamics"
     # sshpass -p 'Stanford!' scp -r clarkadmin@171.65.102.146:Documents/MyRepositories_Antoine/opencap-processing-fork/opencap-processing/Data/Benchmark/$n/OpenSimData/Dynamics/* "/mnt/c/Users/antoi/Documents/MyRepositories/opencap-processing-fork/Data/Benchmark/$n/OpenSimData/Dynamics"
