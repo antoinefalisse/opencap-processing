@@ -38,10 +38,10 @@ from mainOpenSimAD import run_tracking
 from utils import storage_to_numpy
 
 # %% Paths.
-dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
-# dataFolder = os.path.join(baseDir, 'Data', 'Benchmark_updated')
+# dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
+dataFolder = os.path.join(baseDir, 'Data', 'Benchmark_updated')
 i = 2
-subjects = ['subject' + str(i) for i in range(10,11)]
+subjects = ['subject' + str(i) for i in range(i,i+2)]
 
 # TODO: subject 10 might be 56.6 instead of 60kgs, check if that makes a diff.
 
@@ -94,7 +94,7 @@ filter_frequency = 6
 # Settings for dynamic simulation.
 motion_style = 'STS'
 repetitions = [1,2,3]
-cases = ['28']
+cases = ['39', '45']
 
 # motion_style = 'walking'
 # motion_type = 'walking_formulation2'
