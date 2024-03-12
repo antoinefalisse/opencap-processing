@@ -92,19 +92,19 @@ trials = {
 filter_frequency = 6
 
 # Settings for dynamic simulation.
-motion_style = 'STS'
-repetitions = [1,2,3]
-cases = ['39', '45']
+# motion_style = 'STS'
+# repetitions = [1,2,3]
+# cases = ['39','45']
 
-# motion_style = 'walking'
-# motion_type = 'walking_formulation2'
-# cases = ['1']
+motion_style = 'walking'
+motion_type = 'walking_formulation2'
+cases = ['11']
 
 runProblem = True
 processInputs = True
 runSimulation = True
 solveProblem = True
-analyzeResults = False
+analyzeResults = True
 plotResults = False
 
 for case in cases:
@@ -149,7 +149,12 @@ for case in cases:
             buffer_end = 0.5
             motion_type = 'walking_formulation3'
             # Add reserves for the mtp, bad.
-        
+        elif case == '11':
+            buffer_start = 0.7
+            buffer_end = 0.5
+            use_same_weight_individual_coordinate_value_acceleration = True
+            use_same_weight_individual_coordinate_value_speed = True
+
     if motion_style == 'STS':
         if case == '0':
             buffer_start = 0
@@ -678,6 +683,12 @@ for case in cases:
 
                                     if 'weight_velocity' in locals():
                                         settings['weights']['velocityTrackingTerm'] = weight_velocity
+
+                                    if 'use_same_weight_individual_coordinate_value_acceleration' in locals():
+                                        settings['use_same_weight_individual_coordinate_value_acceleration'] = True
+
+                                    if 'use_same_weight_individual_coordinate_value_speed' in locals():
+                                        settings['use_same_weight_individual_coordinate_value_speed'] = True
                                         
                                         
                                 if 'STS' in trial_name:

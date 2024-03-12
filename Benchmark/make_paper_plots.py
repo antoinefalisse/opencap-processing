@@ -46,13 +46,14 @@ if fieldStudy:
 
 subjects = ['subject' + str(sub) for sub in range(2,12)]
 # Exclude subject3 and subject6
-# subjects = [sub for sub in subjects if sub not in ['subject3','subject6']]
+# subjects = [sub for sub in subjects if sub not in ['subject3']]
 
 
 #%% Process settings
 # all_motions = ['squats', 'squatsAsym', 'walking', 'walkingTS', 'DJ', 'DJAsym', 'STS', 'STSweakLegs']
-# all_motions = ['walking', 'walkingTS']
-all_motions = ['STS', 'STSweakLegs']
+all_motions = ['walking', 'walkingTS', 'STS', 'STSweakLegs']
+# all_motions = ['STS', 'STSweakLegs']
+# Also check line 614
 
 # Likely fixed settings
 suffix_motion_name = '_videoAndMocap'
