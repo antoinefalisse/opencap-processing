@@ -41,25 +41,31 @@ from utils import storage_to_numpy
 # dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark_updated')
 i = 2
-subjects = ['subject' + str(i) for i in range(i,i+1)]
+subjects = ['subject' + str(i) for i in range(3,4)]
 
 # TODO: subject 10 might be 56.6 instead of 60kgs, check if that makes a diff.
 
 trials = {
     'subject2': {
         'walking': {
-            # 'walking1': {'start':-1, 'end':1.85}, 'walking2': {'start':-0.9, 'end':1.76}, 'walking3': {'start':-1, 'end':1.76},
-            # 'walkingTS1': {'start':-1, 'end':2.15}, 'walkingTS2': {'start':-1, 'end':1.97}, 'walkingTS4': {'start':-0.9, 'end':2.13}},
-            'walking3': {'start':-1, 'end':1.90},
-            'walkingTS1': {'start':-1, 'end':2.25}},
-        'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+            'walking1': {'start':-1, 'end':1.85}, 'walking2': {'start':-0.9, 'end':1.76}, 'walking3': {'start':-1, 'end':1.90}, # case 2: 'walking3': {'start':-1, 'end':1.76},
+            'walkingTS1': {'start':-1, 'end':2.15}, 'walkingTS2': {'start':-1, 'end':1.97}, 'walkingTS4': {'start':-0.9, 'end':2.13}}, # case 2: 'walkingTS1': {'start':-1, 'end':2.25}},
+        'STS':     {
+            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
     'subject3': {
         'walking': {
-            'walking1': {'start':-1.8, 'end':1.67}, 'walking2': {'start':-1.8, 'end':1.59}, 'walking3': {'start':-1.7, 'end':1.61}}, 
+
+            # Case 12
+            'walking2': {'start':-1.8, 'end':1.61}, 'walking3': {'start':-1.7, 'end':1.63}, 
+            'walkingTS3': {'start':-2, 'end':2:00}},
+
+            # Case 2
+            # 'walking1': {'start':-1.8, 'end':1.67}, 'walking2': {'start':-1.8, 'end':1.59}, 'walking3': {'start':-1.7, 'end':1.61}, 
             # 'walkingTS2': {'start':-2.5, 'end':2.11}, 'walkingTS3': {'start':-2, 'end':1.96}, 'walkingTS4': {'start':-2.2, 'end':1.82}},
 
-        # 'walking': {'walking1': {'start':-1.8, 'end':1.56}, 'walking2': {'start':-1.8, 'end':1.46}, 'walking3': {'start':-1.7, 'end':1.48}, 
-                    # 'walkingTS2': {'start':-2.5, 'end':1.97}, 'walkingTS3': {'start':-2, 'end':1.79}, 'walkingTS4': {'start':-2.2, 'end':1.7}},
+            # Case 1
+            # 'walking1': {'start':-1.8, 'end':1.56}, 'walking2': {'start':-1.8, 'end':1.46}, 'walking3': {'start':-1.7, 'end':1.48}, 
+            # 'walkingTS2': {'start':-2.5, 'end':1.97}, 'walkingTS3': {'start':-2, 'end':1.79}, 'walkingTS4': {'start':-2.2, 'end':1.7}},
         'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
     'subject4': {
         'walking': {'walking1': {'start':-0.7, 'end':1.6}, 'walking2': {'start':-0.7, 'end':1.87}, 'walking4': {'start':-0.7, 'end':1.7},
@@ -105,14 +111,14 @@ filter_frequency = 6
 
 motion_style = 'walking'
 motion_type = 'walking_formulation2'
-cases = ['2']
+cases = ['12']
 
 runProblem = True
 processInputs = True
 runSimulation = True
 solveProblem = True
 analyzeResults = False
-plotResults = False
+plotResults = True
 
 for case in cases:
 
@@ -161,6 +167,9 @@ for case in cases:
             buffer_end = 0.5
             use_same_weight_individual_coordinate_value_acceleration = True
             use_same_weight_individual_coordinate_value_speed = True
+        elif case == '12': # Did the same one to compare start/end times
+            buffer_start = 0.7
+            buffer_end = 0.5
 
     if motion_style == 'STS':
         if case == '0':
@@ -610,8 +619,8 @@ for case in cases:
         # pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
         for count, trial_name in enumerate(list(trials[subject][motion_style].keys())):
             
-            # if count != 0:
-            #     continue
+            if count != 0:
+                continue
 
             if not 'repetitions' in locals():
                 nReps = 1
@@ -805,7 +814,7 @@ for case in cases:
 
 
                     # plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['37', '44'], mainPlots=False, grfPlotOnly=False)
-                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['1'], mainPlots=False, grfPlotOnly=True)
+                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['1', '2'], mainPlots=False, grfPlotOnly=True)
                 
                 test=1
 
