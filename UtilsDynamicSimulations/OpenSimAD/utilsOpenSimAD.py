@@ -2107,7 +2107,7 @@ def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
                     ax.plot(optimaltrajectories[case]['timeWithoutBuffers'][0,:-1].T,
                             optimaltrajectories[case]['GRF_ref'][i:i+1,:].T, c='black', label='Mocap ' + cases[c], linewidth=linewidth)   
                 ax.plot(optimaltrajectories[case]['time'][0,:-1].T,
-                        optimaltrajectories[case]['GRF'][i:i+1,:].T, c=colors[c], label='Dynamic simulation: ' + cases[c], linewidth=linewidth)          
+                        optimaltrajectories[case]['GRF_filt'][i:i+1,:].T, c=colors[c], label='Dynamic simulation: ' + cases[c], linewidth=linewidth)          
             ax.set_title(GRF_labels[i], fontsize=fontsizeTitle, fontweight='bold')
             handles, labels = ax.get_legend_handles_labels()
     fig.align_ylabels()    

@@ -67,7 +67,7 @@ trials = {
                     'walkingTS1': {'start':-0.7, 'end':1.9}, 'walkingTS2': {'start':-0.7, 'end':1.85}, 'walkingTS3': {'start':-0.7, 'end':1.9}},
         'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
     } 
-tempKeys = ['45']
+tempKeys = ['11']
 
 
 # %% User inputs
@@ -87,11 +87,11 @@ if fieldStudy:
 else:
     subjects = list(trials.keys())
     
-    # motion_style = 'walking'
-    # motion_types = ['walking', 'walkingTS']
+    motion_style = 'walking'
+    motion_types = ['walking', 'walkingTS']
     
-    motion_style = 'STS'
-    motion_types = ['STS','STSweakLegs']
+    # motion_style = 'STS'
+    # motion_types = ['STS','STSweakLegs']
 
     # motion_types = ['DJ','DJAsym']
     # motion_types = ['DJ', 'DJAsym', 'walking', 'walkingTS', 'squats','squatsAsym','STS','STSweakLegs']
