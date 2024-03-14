@@ -22,7 +22,7 @@ import sys
 baseDir = os.path.join(os.getcwd(), '..')
 sys.path.append(baseDir)
 # dataDir = os.path.join(baseDir, 'Data', 'Benchmark')
-dataDir = os.path.join(baseDir, 'Data', 'Benchmark_updated')
+dataDir = os.path.join(baseDir, 'Data', 'Benchmark_mocap_updated')
 
 sys.path.append(baseDir) # utilities from base repository directory
 # sys.path.append(os.path.join(repoDir,'DataProcessing')) # utilities in child directory
@@ -51,6 +51,7 @@ subjects = ['subject' + str(sub) for sub in range(2,12)]
 
 #%% Process settings
 # all_motions = ['squats', 'squatsAsym', 'walking', 'walkingTS', 'DJ', 'DJAsym', 'STS', 'STSweakLegs']
+# all_motions = ['walking', 'walkingTS']
 all_motions = ['walking', 'walkingTS', 'STS', 'STSweakLegs']
 # all_motions = ['STS', 'STSweakLegs']
 # Also check line 614

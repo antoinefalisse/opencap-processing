@@ -39,9 +39,9 @@ from utils import storage_to_numpy
 
 # %% Paths.
 # dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
-dataFolder = os.path.join(baseDir, 'Data', 'Benchmark_updated')
+dataFolder = os.path.join(baseDir, 'Data', 'Benchmark_mocap_updated')
 i = 2
-subjects = ['subject' + str(i) for i in range(3,4)]
+subjects = ['subject' + str(i) for i in range(i,i+2)]
 
 # TODO: subject 10 might be 56.6 instead of 60kgs, check if that makes a diff.
 
@@ -54,71 +54,82 @@ trials = {
             'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
     'subject3': {
         'walking': {
-
-            # Case 12
-            'walking2': {'start':-1.8, 'end':1.61}, 'walking3': {'start':-1.7, 'end':1.63}, 
-            'walkingTS3': {'start':-2, 'end':2:00}},
-
+            # Case 1: Warning, I re-organised stuff such that the good cases are 1.
+            'walking1': {'start':-1.8, 'end':1.67}, 'walking2': {'start':-1.8, 'end':1.61}, 'walking3': {'start':-1.7, 'end':1.63}, 
+            'walkingTS2': {'start':-2.5, 'end':2.11}, 'walkingTS3': {'start':-2, 'end':1.79}, 'walkingTS4': {'start':-2.2, 'end':1.82}},
             # Case 2
-            # 'walking1': {'start':-1.8, 'end':1.67}, 'walking2': {'start':-1.8, 'end':1.59}, 'walking3': {'start':-1.7, 'end':1.61}, 
-            # 'walkingTS2': {'start':-2.5, 'end':2.11}, 'walkingTS3': {'start':-2, 'end':1.96}, 'walkingTS4': {'start':-2.2, 'end':1.82}},
-
-            # Case 1
-            # 'walking1': {'start':-1.8, 'end':1.56}, 'walking2': {'start':-1.8, 'end':1.46}, 'walking3': {'start':-1.7, 'end':1.48}, 
-            # 'walkingTS2': {'start':-2.5, 'end':1.97}, 'walkingTS3': {'start':-2, 'end':1.79}, 'walkingTS4': {'start':-2.2, 'end':1.7}},
+            # 'walking1': {'start':-1.8, 'end':1.56}, 'walking2': {'start':-1.8, 'end':1.59}, 'walking3': {'start':-1.7, 'end':1.61}, 
+            # 'walkingTS2': {'start':-2.5, 'end':1.97}, 'walkingTS3': {'start':-2, 'end':1.96}, 'walkingTS4': {'start':-2.2, 'end':1.7}},
+             # Case 12
+            # 'walking2': {'start':-1.8, 'end':1.46}, 'walking3': {'start':-1.7, 'end':1.48}, 
+            # 'walkingTS3': {'start':-2, 'end':2.00}},
         'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
     'subject4': {
-        'walking': {'walking1': {'start':-0.7, 'end':1.6}, 'walking2': {'start':-0.7, 'end':1.87}, 'walking4': {'start':-0.7, 'end':1.7},
-                    'walkingTS1': {'start':-0.7, 'end':1.7}, 'walkingTS2': {'start':-0.7, 'end':1.6}, 'walkingTS3': {'start':-0.7, 'end':1.95}},
-        'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+        'walking': {
+            'walking1': {'start':-0.7, 'end':1.6}, 'walking2': {'start':-0.7, 'end':1.87}, 'walking4': {'start':-0.7, 'end':1.7},
+            'walkingTS1': {'start':-0.7, 'end':1.7}, 'walkingTS2': {'start':-0.7, 'end':1.6}, 'walkingTS3': {'start':-0.7, 'end':1.95}},
+        'STS':     {
+            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
     'subject5': {
-        'walking': {'walking1': {'start':-0.7, 'end':1.83}, 'walking2': {'start':-0.7, 'end':1.8}, 'walking3': {'start':-0.7, 'end':1.8},
-                    'walkingTS1': {'start':-0.8, 'end':1.88}, 'walkingTS2': {'start':-0.7, 'end':1.75}, 'walkingTS3': {'start':-0.7, 'end':1.72}},
+        'walking': {
+            'walking1': {'start':-0.7, 'end':1.83}, 'walking2': {'start':-0.7, 'end':1.8}, 'walking3': {'start':-0.7, 'end':1.8},
+            'walkingTS1': {'start':-0.8, 'end':1.88}, 'walkingTS2': {'start':-0.7, 'end':1.75}, 'walkingTS3': {'start':-0.7, 'end':1.72}},
         'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
     'subject6': {
-        'walking': {'walking1': {'start':-1.2, 'end':1.63}, 'walking2': {'start':-1.2, 'end':1.6}, 'walking3': {'start':-1.2, 'end':2},
-                    'walkingTS1': {'start':-0.7, 'end':1.65}, 'walkingTS2': {'start':-0.8, 'end':1.72}, 'walkingTS3': {'start':-1.1, 'end':1.78}},
-        'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+        'walking': {
+            'walking1': {'start':-1.2, 'end':1.63}, 'walking2': {'start':-1.2, 'end':1.6}, 'walking3': {'start':-1.2, 'end':2},
+            'walkingTS1': {'start':-0.7, 'end':1.65}, 'walkingTS2': {'start':-0.8, 'end':1.72}, 'walkingTS3': {'start':-1.1, 'end':1.78}},
+        'STS':     {
+            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
     'subject7': {
-        'walking': {'walking1': {'start':-0.8, 'end':1.79}, 'walking2': {'start':-0.7, 'end':1.82}, 'walking3': {'start':-0.7, 'end':1.87},
-                    'walkingTS1': {'start':-1.1, 'end':1.83}, 'walkingTS2': {'start':-1.1, 'end':1.9}, 'walkingTS3': {'start':-1.1, 'end':2.12}},
-        'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+        'walking': {
+            'walking1': {'start':-0.8, 'end':1.79}, 'walking2': {'start':-0.7, 'end':1.82}, 'walking3': {'start':-0.7, 'end':1.87},
+            'walkingTS1': {'start':-1.1, 'end':1.83}, 'walkingTS2': {'start':-1.1, 'end':1.9}, 'walkingTS3': {'start':-1.1, 'end':2.12}},
+        'STS':     {
+            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
     'subject8': {
-        'walking': {'walking1': {'start':-1, 'end':1.83}, 'walking2': {'start':-0.7, 'end':1.89}, 'walking3': {'start':-0.7, 'end':1.92}, 
-                    'walkingTS1': {'start':-0.7, 'end':2.3}, 'walkingTS2': {'start':-1.0, 'end':2.06}, 'walkingTS3': {'start':-0.7, 'end':1.9}},
-        'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+        'walking': {
+            'walking1': {'start':-1, 'end':1.83}, 'walking2': {'start':-0.7, 'end':1.89}, 'walking3': {'start':-0.7, 'end':1.92}, 
+            'walkingTS1': {'start':-0.7, 'end':2.3}, 'walkingTS2': {'start':-1.0, 'end':2.06}, 'walkingTS3': {'start':-0.7, 'end':1.9}},
+        'STS':     {
+            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
     'subject9': {
-        'walking': {'walking1': {'start':-0.6, 'end':1.65}, 'walking2': {'start':-0.5, 'end':1.55}, 'walking3': {'start':-0.6, 'end':1.6}, 
-                    'walkingTS1': {'start':-0.7, 'end':1.68}, 'walkingTS2': {'start':-0.7, 'end':1.63}, 'walkingTS3': {'start':-0.7, 'end':1.56}},
+        'walking': {
+            'walking1': {'start':-0.6, 'end':1.65}, 'walking2': {'start':-0.5, 'end':1.55}, 'walking3': {'start':-0.6, 'end':1.6}, 
+            'walkingTS1': {'start':-0.7, 'end':1.68}, 'walkingTS2': {'start':-0.7, 'end':1.63}, 'walkingTS3': {'start':-0.7, 'end':1.56}},
         'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
     'subject10': {
-        'walking': {'walking1': {'start':-0.7, 'end':1.46}, 'walking2': {'start':-0.7, 'end':1.49}, 'walking3': {'start':-0.7, 'end':1.5}, 
-                    'walkingTS1': {'start':-0.8, 'end':1.78}, 'walkingTS2': {'start':-0.9, 'end':1.85}, 'walkingTS3': {'start':-0.8, 'end':1.66}},
-        'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+        'walking': {
+            'walking1': {'start':-0.7, 'end':1.46}, 'walking2': {'start':-0.7, 'end':1.49}, 'walking3': {'start':-0.7, 'end':1.5}, 
+            'walkingTS1': {'start':-0.8, 'end':1.78}, 'walkingTS2': {'start':-0.9, 'end':1.85}, 'walkingTS3': {'start':-0.8, 'end':1.66}},
+        'STS':     {
+            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
     'subject11': {
-        'walking': {'walking2': {'start':-0.7, 'end':1.6}, 'walking3': {'start':-0.7, 'end':1.55}, 'walking4': {'start':-0.7, 'end':1.62}, 
-                    'walkingTS1': {'start':-0.7, 'end':1.9}, 'walkingTS2': {'start':-0.7, 'end':1.85}, 'walkingTS3': {'start':-0.7, 'end':1.9}},
-        'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+        'walking': {
+            'walking2': {'start':-0.7, 'end':1.6}, 'walking3': {'start':-0.7, 'end':1.55}, 'walking4': {'start':-0.7, 'end':1.62}, 
+            'walkingTS1': {'start':-0.7, 'end':1.9}, 'walkingTS2': {'start':-0.7, 'end':1.85}, 'walkingTS3': {'start':-0.7, 'end':1.9}},
+        'STS':     {
+            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
     }
 
 # %% User-defined variables.
 filter_frequency = 6
 
 # Settings for dynamic simulation.
-# motion_style = 'STS'
-# repetitions = [1,2,3]
-# cases = ['39','45']
+motion_style = 'STS'
+repetitions = [1, 2, 3]
+cases = ['47', '48']
 
-motion_style = 'walking'
-motion_type = 'walking_formulation2'
-cases = ['12']
+# motion_style = 'walking'
+# motion_type = 'walking_formulation2'
+# cases = ['1']
 
 runProblem = True
 processInputs = True
 runSimulation = True
 solveProblem = True
 analyzeResults = False
-plotResults = True
+plotResults = False
 
 for case in cases:
 
@@ -606,7 +617,42 @@ for case in cases:
             heel_vGRF_threshold = 5
             trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
             weight_trackValueTerm = 1
-            weight_acceleration = 500            
+            weight_acceleration = 500      
+        elif case == '46':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation10'
+            periodicSTS = False
+        elif case == '47':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation9'
+            periodicSTS = True
+            meshDensity = 100
+            weight_pelvis_tilt = 500
+            weight_position_tracking = 100
+            weigth_lumbar_extension = 100
+            weigth_subtalar = 50
+            weigth_hip_rotation = 50
+            heel_vGRF_threshold = 5
+            trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
+            weight_trackValueTerm = 1
+            weight_acceleration = 500
+        elif case == '48':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation9'
+            periodicSTS = True
+            meshDensity = 100
+            weight_pelvis_tilt = 500
+            weight_position_tracking = 200
+            weigth_lumbar_extension = 100
+            weigth_subtalar = 50
+            weigth_hip_rotation = 50
+            heel_vGRF_threshold = 5
+            trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
+            weight_trackValueTerm = 1
+            weight_acceleration = 500
         
     # %% Gait segmentation and kinematic analysis.
 
@@ -619,8 +665,8 @@ for case in cases:
         # pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
         for count, trial_name in enumerate(list(trials[subject][motion_style].keys())):
             
-            if count != 0:
-                continue
+            # if count != 0:
+            #     continue
 
             if not 'repetitions' in locals():
                 nReps = 1
@@ -778,6 +824,14 @@ for case in cases:
 
                                     if 'weight_velocity' in locals():
                                         settings['weights']['velocityTrackingTerm'] = weight_velocity
+
+                                    if 'weigth_subtalar' in locals():
+                                        settings['coordinates_toTrack']['subtalar_angle_r']['weight'] = weigth_subtalar
+                                        settings['coordinates_toTrack']['subtalar_angle_l']['weight'] = weigth_subtalar
+
+                                    if 'weigth_hip_rotation' in locals():
+                                        settings['coordinates_toTrack']['hip_rotation_r']['weight'] = weigth_hip_rotation
+                                        settings['coordinates_toTrack']['hip_rotation_l']['weight'] = weigth_hip_rotation
                                     
                                 
                             except Exception as e:
@@ -814,7 +868,7 @@ for case in cases:
 
 
                     # plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['37', '44'], mainPlots=False, grfPlotOnly=False)
-                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['1', '2'], mainPlots=False, grfPlotOnly=True)
+                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['39', '45', '46'], mainPlots=True, grfPlotOnly=False)
                 
                 test=1
 
