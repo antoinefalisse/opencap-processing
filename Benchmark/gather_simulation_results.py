@@ -91,7 +91,7 @@ trials = {
         'STS':     {
             'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
     }
-tempKeys = ['45']
+tempKeys = ['47']
 
 
 # %% User inputs

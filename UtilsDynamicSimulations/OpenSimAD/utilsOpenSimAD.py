@@ -1873,7 +1873,8 @@ def download_file_2(url, file_name):
 # %% Plot results simulations.
 # TODO: simplify and clean up.
 def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
-                         cases=['default'], mainPlots=True, grfPlotOnly=False):
+                         cases=['default'], mainPlots=True, grfPlotOnly=False,
+                         momentArmsPlots=False):
     
     # %% Load optimal trajectories.
     pathOSData = os.path.join(dataDir, 'OpenSimData')
@@ -1914,12 +1915,18 @@ def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
                 else:
                     scale_angles = 1
                 plotReference = False
+                plotMocapReference = False
                 for c, case in enumerate(cases):
                     if joints[i] in optimaltrajectories[case]['coordinates']:                        
-                        idx_coord = optimaltrajectories[case]['coordinates'].index(joints[i])                    
+                        idx_coord = optimaltrajectories[case]['coordinates'].index(joints[i])
+                        if 'coordinate_values_ref' in optimaltrajectories[case]:
+                            if not plotMocapReference:
+                                ax.plot(optimaltrajectories[case]['timeWithoutBuffers'][0,:-1].T,
+                                        optimaltrajectories[case]['coordinate_values_ref'][idx_coord:idx_coord+1,:].T * scale_angles, c='black', linestyle='dashed', label='Mocap ' + cases[c], linewidth=linewidth)
+                                plotMocapReference = True
                         if not plotReference:
                             ax.plot(optimaltrajectories[case]['time'][0,:-1].T,
-                                    optimaltrajectories[case]['coordinate_values_toTrack'][idx_coord:idx_coord+1,:].T * scale_angles, c='black', linestyle='dashed', label='Tracked data: ' + cases[c], linewidth=linewidth)
+                                    optimaltrajectories[case]['coordinate_values_toTrack'][idx_coord:idx_coord+1,:].T * scale_angles, c='black', linestyle='dotted', label='Tracked data: ' + cases[c], linewidth=linewidth)
                             plotReference = True
                         ax.plot(optimaltrajectories[case]['time'][0,:-1].T,
                                 optimaltrajectories[case]['coordinate_values'][idx_coord:idx_coord+1,:-1].T * scale_angles, c=colors[c], label='Dynamic simulation: ' + cases[c], linewidth=linewidth)   
@@ -1962,12 +1969,19 @@ def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
                 else:
                     scale_angles = 1
                 plotReference = False
+                plotMocapReference = False
                 for c, case in enumerate(cases):
                     if joints[i] in optimaltrajectories[case]['coordinates']:                        
                         idx_coord = optimaltrajectories[case]['coordinates'].index(joints[i])
+                        if 'coordinate_speeds_ref' in optimaltrajectories[case]:
+                            if not plotMocapReference:
+                                ax.plot(optimaltrajectories[case]['timeWithoutBuffers'][0,:-1].T,
+                                        optimaltrajectories[case]['coordinate_speeds_ref'][idx_coord:idx_coord+1,:].T * scale_angles, c='black', linestyle='dashed', label='Mocap ' + cases[c], linewidth=linewidth)
+                                plotMocapReference = True
+                        
                         if not plotReference:
                             ax.plot(optimaltrajectories[case]['time'][0,:-1].T,
-                                    optimaltrajectories[case]['coordinate_speeds_toTrack'][idx_coord:idx_coord+1,:].T * scale_angles, c='black', linestyle='dashed', label='Tracked data: ' + cases[c], linewidth=linewidth)
+                                    optimaltrajectories[case]['coordinate_speeds_toTrack'][idx_coord:idx_coord+1,:].T * scale_angles, c='black', linestyle='dotted', label='Tracked data: ' + cases[c], linewidth=linewidth)
                             plotReference = True
                         ax.plot(optimaltrajectories[case]['time'][0,:-1].T,
                                 optimaltrajectories[case]['coordinate_speeds'][idx_coord:idx_coord+1,:-1].T * scale_angles, c=colors[c], label='Dynamic simulation: ' + cases[c], linewidth=linewidth)   
@@ -2010,12 +2024,19 @@ def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
                 else:
                     scale_angles = 1
                 plotReference = False
+                plotMocapReference = False
                 for c, case in enumerate(cases):
                     if joints[i] in optimaltrajectories[case]['coordinates']:                        
                         idx_coord = optimaltrajectories[case]['coordinates'].index(joints[i])
+                        if 'coordinate_accelerations_ref' in optimaltrajectories[case]:
+                            if not plotMocapReference:
+                                ax.plot(optimaltrajectories[case]['timeWithoutBuffers'][0,:-1].T,
+                                        optimaltrajectories[case]['coordinate_accelerations_ref'][idx_coord:idx_coord+1,:].T * scale_angles, c='black', linestyle='dashed', label='Mocap ' + cases[c], linewidth=linewidth)
+                                plotMocapReference = True
+                        
                         if not plotReference:
                             ax.plot(optimaltrajectories[case]['time'][0,:-1].T,
-                                    optimaltrajectories[case]['coordinate_accelerations_toTrack'][idx_coord:idx_coord+1,:].T * scale_angles, c='black', linestyle='dashed', label='Tracked data: ' + cases[c], linewidth=linewidth)
+                                    optimaltrajectories[case]['coordinate_accelerations_toTrack'][idx_coord:idx_coord+1,:].T * scale_angles, c='black', linestyle='dotted', label='Tracked data: ' + cases[c], linewidth=linewidth)
                             plotReference = True
                         ax.plot(optimaltrajectories[case]['time'][0,:-1].T,
                                 optimaltrajectories[case]['coordinate_accelerations'][idx_coord:idx_coord+1,:].T * scale_angles, c=colors[c], label='Dynamic simulation: ' + cases[c], linewidth=linewidth)   
@@ -2209,7 +2230,261 @@ def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
         # Clean up ticks and labels.
         for i in range(0, mm):
             axs.flatten()[i].set_xticklabels([])
+        fig.tight_layout()
         plt.show()
+
+    # %% Muscle forces.
+    if not grfPlotOnly:
+        plotMuscleForces = False
+        for case in cases:
+            if 'muscle_forces' in optimaltrajectories[case]:
+                plotMuscleForces = True
+    
+        if not plotMuscleForces:
+            return
+    
+        muscles = optimaltrajectories[cases[0]]['muscles']
+        NMuscles = len(muscles)
+        ny = np.ceil(np.sqrt(NMuscles))
+        fig, axs = plt.subplots(int(ny), int(ny))
+        fig.suptitle('Muscle forces', fontsize=fontsizeSubTitle, fontweight='bold') 
+        for i, ax in enumerate(axs.flat):
+            if i < NMuscles:
+                for c, case in enumerate(cases):
+                    if 'muscle_forces' in optimaltrajectories[case]:
+                        ax.plot(optimaltrajectories[case]['time'][0,:-1].T,
+                                optimaltrajectories[case]['muscle_forces'][i:i+1,:].T, c=colors[c], label='Dynamic simulation: ' + cases[c], linewidth=linewidth)         
+                ax.set_title(muscles[i], fontsize=fontsizeTitle, fontweight='bold')
+                # ax.set_ylim((0,1))
+                handles, labels = ax.get_legend_handles_labels()
+        fig.align_ylabels()
+        
+        # Remove empty subplots.
+        for i in range(NMuscles, int(ny)**2):
+            fig.delaxes(axs.flatten()[i])
+        # Remove top and right spines.
+        for ax in axs.flat:
+            ax.spines['top'].set_visible(False)
+            ax.spines['right'].set_visible(False)
+            ax.tick_params(axis='both', which='major', labelsize=fontsizeTicks)
+        # Add labels
+        mm = int(ny)*(int(ny)-1) -(int(ny)*int(ny)-NMuscles)
+        for i in range(mm,NMuscles):
+            axs.flatten()[i].set_xlabel('Time (s)', fontsize=fontsizeLabel, fontweight='bold')
+        for ax in axs[:, 0]:
+            ax.set_ylabel('()', fontsize=fontsizeLabel, fontweight='bold')
+        # Add legend.
+        fig.legend(handles, labels, loc='upper right', fontsize=fontsizeLegend)
+        # Change subplot spacing.
+        fig.subplots_adjust(hspace=0.4, wspace=0.4)
+        # Clean up ticks and labels.
+        for i in range(0, mm):
+            axs.flatten()[i].set_xticklabels([])
+        fig.tight_layout()
+        plt.show()
+        
+    # %% Fiber lengths.
+    if not grfPlotOnly:
+        plotMuscleForces = False
+        for case in cases:
+            if 'normalized_fiber_length' in optimaltrajectories[case]:
+                plotMuscleForces = True
+    
+        if not plotMuscleForces:
+            return
+    
+        muscles = optimaltrajectories[cases[0]]['muscles']
+        NMuscles = len(muscles)
+        ny = np.ceil(np.sqrt(NMuscles))
+        fig, axs = plt.subplots(int(ny), int(ny))
+        fig.suptitle('Normalized fiber lengths', fontsize=fontsizeSubTitle, fontweight='bold') 
+        for i, ax in enumerate(axs.flat):
+            if i < NMuscles:
+                for c, case in enumerate(cases):
+                    if 'normalized_fiber_length' in optimaltrajectories[case]:
+                        ax.plot(optimaltrajectories[case]['time'][0,:-1].T,
+                                optimaltrajectories[case]['normalized_fiber_length'][i:i+1,:].T, c=colors[c], label='Dynamic simulation: ' + cases[c], linewidth=linewidth)         
+                ax.set_title(muscles[i], fontsize=fontsizeTitle, fontweight='bold')
+                # ax.set_ylim((0,1))
+                handles, labels = ax.get_legend_handles_labels()
+        fig.align_ylabels()
+        
+        # Remove empty subplots.
+        for i in range(NMuscles, int(ny)**2):
+            fig.delaxes(axs.flatten()[i])
+        # Remove top and right spines.
+        for ax in axs.flat:
+            ax.spines['top'].set_visible(False)
+            ax.spines['right'].set_visible(False)
+            ax.tick_params(axis='both', which='major', labelsize=fontsizeTicks)
+        # Add labels
+        mm = int(ny)*(int(ny)-1) -(int(ny)*int(ny)-NMuscles)
+        for i in range(mm,NMuscles):
+            axs.flatten()[i].set_xlabel('Time (s)', fontsize=fontsizeLabel, fontweight='bold')
+        for ax in axs[:, 0]:
+            ax.set_ylabel('()', fontsize=fontsizeLabel, fontweight='bold')
+        # Add legend.
+        fig.legend(handles, labels, loc='upper right', fontsize=fontsizeLegend)
+        # Change subplot spacing.
+        fig.subplots_adjust(hspace=0.4, wspace=0.4)
+        # Clean up ticks and labels.
+        for i in range(0, mm):
+            axs.flatten()[i].set_xticklabels([])
+        fig.tight_layout()
+        plt.show()
+        
+    # %% Fiber velocity.
+    if not grfPlotOnly:
+        plotFiberVelocity = False
+        for case in cases:
+            if 'fiber_velocity' in optimaltrajectories[case]:
+                plotFiberVelocity = True
+    
+        if not plotFiberVelocity:
+            return
+    
+        muscles = optimaltrajectories[cases[0]]['muscles']
+        NMuscles = len(muscles)
+        ny = np.ceil(np.sqrt(NMuscles))
+        fig, axs = plt.subplots(int(ny), int(ny))
+        fig.suptitle('Normalized fiber velocities', fontsize=fontsizeSubTitle, fontweight='bold') 
+        for i, ax in enumerate(axs.flat):
+            if i < NMuscles:
+                for c, case in enumerate(cases):
+                    if 'fiber_velocity' in optimaltrajectories[case]:
+                        ax.plot(optimaltrajectories[case]['time'][0,:-1].T,
+                                optimaltrajectories[case]['fiber_velocity'][i:i+1,:].T, c=colors[c], label='Dynamic simulation: ' + cases[c], linewidth=linewidth)         
+                ax.set_title(muscles[i], fontsize=fontsizeTitle, fontweight='bold')
+                # ax.set_ylim((0,1))
+                handles, labels = ax.get_legend_handles_labels()
+        fig.align_ylabels()
+        
+        # Remove empty subplots.
+        for i in range(NMuscles, int(ny)**2):
+            fig.delaxes(axs.flatten()[i])
+        # Remove top and right spines.
+        for ax in axs.flat:
+            ax.spines['top'].set_visible(False)
+            ax.spines['right'].set_visible(False)
+            ax.tick_params(axis='both', which='major', labelsize=fontsizeTicks)
+        # Add labels
+        mm = int(ny)*(int(ny)-1) -(int(ny)*int(ny)-NMuscles)
+        for i in range(mm,NMuscles):
+            axs.flatten()[i].set_xlabel('Time (s)', fontsize=fontsizeLabel, fontweight='bold')
+        for ax in axs[:, 0]:
+            ax.set_ylabel('()', fontsize=fontsizeLabel, fontweight='bold')
+        # Add legend.
+        fig.legend(handles, labels, loc='upper right', fontsize=fontsizeLegend)
+        # Change subplot spacing.
+        fig.subplots_adjust(hspace=0.4, wspace=0.4)
+        # Clean up ticks and labels.
+        for i in range(0, mm):
+            axs.flatten()[i].set_xticklabels([])
+        fig.tight_layout()
+        plt.show()
+        
+    # %% Moment arms
+    if not mainPlots and not grfPlotOnly and momentArmsPlots:
+        plotMomentArms = False
+        for case in cases:
+            if 'moment_arms' in optimaltrajectories[case]:
+                plotMomentArms = True
+    
+        if not plotMomentArms:
+            return
+        
+        for c_joint in optimaltrajectories[case]['moment_arms']:
+            c_muscles = optimaltrajectories[case]['moment_arms_muscles'][c_joint]
+            c_NMuscles = len(c_muscles)
+            ny = np.ceil(np.sqrt(c_NMuscles))
+            fig, axs = plt.subplots(int(ny), int(ny))
+            fig.suptitle('{} - moment arms'.format(c_joint), fontsize=fontsizeSubTitle, fontweight='bold') 
+            for i, ax in enumerate(axs.flat):
+                if i < c_NMuscles:
+                    for c, case in enumerate(cases):
+                        if 'moment_arms' in optimaltrajectories[case]:
+                            ax.plot(optimaltrajectories[case]['time'][0,:-1].T,
+                                    optimaltrajectories[case]['moment_arms'][c_joint][i:i+1,:].T, c=colors[c], label='Dynamic simulation: ' + cases[c], linewidth=linewidth)         
+                    ax.set_title(c_muscles[i], fontsize=fontsizeTitle, fontweight='bold')
+                    # ax.set_ylim((0,1))
+                    handles, labels = ax.get_legend_handles_labels()
+            fig.align_ylabels()
+            
+            # Remove empty subplots.
+            for i in range(c_NMuscles, int(ny)**2):
+                fig.delaxes(axs.flatten()[i])
+            # Remove top and right spines.
+            for ax in axs.flat:
+                ax.spines['top'].set_visible(False)
+                ax.spines['right'].set_visible(False)
+                ax.tick_params(axis='both', which='major', labelsize=fontsizeTicks)
+            # Add labels
+            mm = int(ny)*(int(ny)-1) -(int(ny)*int(ny)-c_NMuscles)
+            for i in range(mm,c_NMuscles):
+                axs.flatten()[i].set_xlabel('Time (s)', fontsize=fontsizeLabel, fontweight='bold')
+            for ax in axs[:, 0]:
+                ax.set_ylabel('()', fontsize=fontsizeLabel, fontweight='bold')
+            # Add legend.
+            fig.legend(handles, labels, loc='upper right', fontsize=fontsizeLegend)
+            # Change subplot spacing.
+            fig.subplots_adjust(hspace=0.4, wspace=0.4)
+            # Clean up ticks and labels.
+            for i in range(0, mm):
+                axs.flatten()[i].set_xticklabels([])
+            # fig.tight_layout()
+            plt.show()
+        
+    # %% Moment arm torques
+    if not mainPlots and not grfPlotOnly and momentArmsPlots:
+        plotMomentTorques = False
+        for case in cases:
+            if 'individual_muscle_torques' in optimaltrajectories[case]:
+                plotMomentTorques = True
+    
+        if not plotMomentTorques:
+            return
+        
+        for c_joint in optimaltrajectories[case]['individual_muscle_torques']:
+            c_muscles = optimaltrajectories[case]['moment_arms_muscles'][c_joint]
+            c_NMuscles = len(c_muscles)
+            ny = np.ceil(np.sqrt(c_NMuscles))
+            fig, axs = plt.subplots(int(ny), int(ny))
+            fig.suptitle('{} - muscle torques'.format(c_joint), fontsize=fontsizeSubTitle, fontweight='bold') 
+            for i, ax in enumerate(axs.flat):
+                if i < c_NMuscles:
+                    for c, case in enumerate(cases):
+                        if 'moment_arms' in optimaltrajectories[case]:
+                            ax.plot(optimaltrajectories[case]['time'][0,:-1].T,
+                                    optimaltrajectories[case]['individual_muscle_torques'][c_joint][i:i+1,:].T, c=colors[c], label='Dynamic simulation: ' + cases[c], linewidth=linewidth)         
+                    ax.set_title(c_muscles[i], fontsize=fontsizeTitle, fontweight='bold')
+                    # ax.set_ylim((0,1))
+                    handles, labels = ax.get_legend_handles_labels()
+            fig.align_ylabels()
+            
+            # Remove empty subplots.
+            for i in range(c_NMuscles, int(ny)**2):
+                fig.delaxes(axs.flatten()[i])
+            # Remove top and right spines.
+            for ax in axs.flat:
+                ax.spines['top'].set_visible(False)
+                ax.spines['right'].set_visible(False)
+                ax.tick_params(axis='both', which='major', labelsize=fontsizeTicks)
+            # Add labels
+            mm = int(ny)*(int(ny)-1) -(int(ny)*int(ny)-c_NMuscles)
+            for i in range(mm,c_NMuscles):
+                axs.flatten()[i].set_xlabel('Time (s)', fontsize=fontsizeLabel, fontweight='bold')
+            for ax in axs[:, 0]:
+                ax.set_ylabel('(Nm)', fontsize=fontsizeLabel, fontweight='bold')
+            # Add legend.
+            fig.legend(handles, labels, loc='upper right', fontsize=fontsizeLegend)
+            # Change subplot spacing.
+            fig.subplots_adjust(hspace=0.4, wspace=0.4)
+            # Clean up ticks and labels.
+            for i in range(0, mm):
+                axs.flatten()[i].set_xticklabels([])
+            # fig.tight_layout()
+            plt.show()
+        
         
     # %% KAMs.
     if not mainPlots and not grfPlotOnly:
@@ -2410,7 +2685,7 @@ def processInputsOpenSimAD(baseDir, dataFolder, session_id, trial_name,
                                   trial_name + '.mot')
     if (repetition is not None and 
         ('squats' in motion_type or 'sit_to_stand' in motion_type)): 
-        if motion_type == 'squats':
+        if 'squats' in motion_type:
             times_window = segment_squats(pathMotionFile, visualize=True)
         elif 'sit_to_stand' in motion_type:
             if periodicSTS:

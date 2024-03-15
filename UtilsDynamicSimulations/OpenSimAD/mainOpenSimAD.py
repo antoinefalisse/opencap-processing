@@ -2406,8 +2406,15 @@ def run_tracking(baseDir, dataDir, settings, case='0',
             pMT_opt = np.zeros((len(muscleDrivenJoints), N))
             aMT_opt = np.zeros((len(muscleDrivenJoints), N))
             Ft_opt = np.zeros((nMuscles, N))
+            normFiberLength_opt = np.zeros((nMuscles, N))
+            fiberVelocity_opt = np.zeros((nMuscles, N))
+            moment_arms_opt, muscle_torques_opt, moment_arms_muscles = {}, {}, {}
+            for joint in muscleDrivenJoints:
+                moment_arms_opt[joint] = np.zeros((len(momentArmIndices[joint]), N))
+                muscle_torques_opt[joint] = np.zeros((len(momentArmIndices[joint]), N))
         pT_opt = np.zeros((nPassiveTorqueJoints, N))                    
-        h = timeElapsed / N           
+        h = timeElapsed / N
+        
         for k in range(N):
             # States.
             if not torque_driven_model:
@@ -2486,10 +2493,13 @@ def run_tracking(baseDir, dataDir, settings, case='0',
                             dMk_opt[joint] = dMk_opt_r[
                                 c_ma, rightPolynomialJoints.index(joint)]
                 # Hill-equilibrium.
-                [hillEqk_opt, Fk_opt, _, _,_, _, _, aFPk_opt, pFPk_opt] = (
+                [hillEqk_opt, Fk_opt, _, _,_, normFiberLengthk_opt, 
+                 fiberVelocityk_opt, aFPk_opt, pFPk_opt] = (
                     f_hillEquilibrium(akj_opt[:, 0], lMTk_opt_lr, vMTk_opt_lr,
                                     nFkj_opt_nsc[:, 0], nFDtk_opt_nsc))
-                Ft_opt[:,k] = Fk_opt.full().flatten()   
+                Ft_opt[:,k] = Fk_opt.full().flatten()
+                normFiberLength_opt[:,k] = normFiberLengthk_opt.full().flatten()
+                fiberVelocity_opt[:,k] = fiberVelocityk_opt.full().flatten()  
                 # Passive muscle moments.
                 for c_j, joint in enumerate(muscleDrivenJoints):
                     pFk_opt_joint = pFPk_opt[momentArmIndices[joint]]
@@ -2497,7 +2507,11 @@ def run_tracking(baseDir, dataDir, settings, case='0',
                 # Active muscle moments.
                 for c_j, joint in enumerate(muscleDrivenJoints):
                     aFk_opt_joint = aFPk_opt[momentArmIndices[joint]]
-                    aMT_opt[c_j, k] = ca.sum1(dMk_opt[joint]*aFk_opt_joint)    
+                    aMT_opt[c_j, k] = ca.sum1(dMk_opt[joint]*aFk_opt_joint)                    
+                    moment_arms_opt[joint][:, k] = dMk_opt[joint].full().flatten()
+                    muscle_torques_opt[joint][:, k] = (dMk_opt[joint]*aFk_opt_joint).full().flatten()
+                    moment_arms_muscles[joint] = [bothSidesMuscles[i] for i in momentArmIndices[joint]]
+                    
             # Passive limit moments.
             if enableLimitTorques:
                 for c_j, joint in enumerate(passiveTorqueJoints):
@@ -2598,7 +2612,9 @@ def run_tracking(baseDir, dataDir, settings, case='0',
         JTerms["positionTerm"] = positionTrackingTerm_opt_all.full()[0][0]
         JTerms["velocityTerm"] = velocityTrackingTerm_opt_all.full()[0][0]
         if trackQdds:
-            JTerms["accelerationTerm"] = accelerationTrackingTerm_opt_all.full()[0][0]        
+            JTerms["accelerationTerm"] = accelerationTrackingTerm_opt_all.full()[0][0]
+        if withReserveActuators:
+            JTerms["reserveActuatorTerm"] = reserveActuatorTerm_opt_all.full()[0][0]
         if torque_driven_model:
             JTerms["coordinateExcitationTerm_sc"] = JTerms["coordinateExcitationTerm"] / JAll_opt[0][0]
         else:
@@ -2614,7 +2630,9 @@ def run_tracking(baseDir, dataDir, settings, case='0',
         JTerms["positionTerm_sc"] = JTerms["positionTerm"] / JAll_opt[0][0]
         JTerms["velocityTerm_sc"] = JTerms["velocityTerm"] / JAll_opt[0][0]
         if trackQdds:
-            JTerms["accelerationTerm_sc"] = JTerms["accelerationTerm"] / JAll_opt[0][0]                
+            JTerms["accelerationTerm_sc"] = JTerms["accelerationTerm"] / JAll_opt[0][0]      
+        if withReserveActuators:  
+            JTerms["reserveActuatorTerm_sc"] = JTerms["reserveActuatorTerm"] / JAll_opt[0][0] 
         # Print out contributions to the cost function.
         print("\nContributions to the objective function:")
         if torque_driven_model:
@@ -2631,7 +2649,9 @@ def run_tracking(baseDir, dataDir, settings, case='0',
         print("\tPosition tracking: {}%".format(np.round(JTerms["positionTerm_sc"] * 100, 2)))
         print("\tVelocity tracking: {}%".format(np.round(JTerms["velocityTerm_sc"] * 100, 2)))
         if trackQdds:
-            print("\tAcceleration tracking: {}%".format(np.round(JTerms["accelerationTerm_sc"] * 100, 2)))           
+            print("\tAcceleration tracking: {}%".format(np.round(JTerms["accelerationTerm_sc"] * 100, 2)))
+        if withReserveActuators:  
+            print("\tReserve actuators: {}%".format(np.round(JTerms["reserveActuatorTerm_sc"] * 100, 2)))
         print("\nNumber of iterations: {}\n".format(stats["iter_count"]))
             
         # %% Compute knee adduction moments.
@@ -2930,9 +2950,14 @@ def run_tracking(baseDir, dataDir, settings, case='0',
             optimaltrajectories[case]['coordinate_activations'] = aCoord_opt_nsc
         else:
             optimaltrajectories[case]['muscle_activations'] = a_opt
-            optimaltrajectories[case]['muscle_forces'] = Ft_opt  
+            optimaltrajectories[case]['muscle_forces'] = Ft_opt 
+            optimaltrajectories[case]['fiber_velocity'] = fiberVelocity_opt
+            optimaltrajectories[case]['normalized_fiber_length'] = normFiberLength_opt
             optimaltrajectories[case]['passive_muscle_torques'] = pMT_opt
             optimaltrajectories[case]['active_muscle_torques'] = aMT_opt
+            optimaltrajectories[case]['moment_arms'] = moment_arms_opt
+            optimaltrajectories[case]['individual_muscle_torques'] = muscle_torques_opt
+            optimaltrajectories[case]['moment_arms_muscles'] = moment_arms_muscles            
             
         if 'timeIntervalRising' in settings:
             optimaltrajectories[case]['timeIntervalRising'] = settings['timeIntervalRising']

@@ -41,9 +41,8 @@ from utils import storage_to_numpy
 # dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark_mocap_updated')
 i = 2
-subjects = ['subject' + str(i) for i in range(i,i+2)]
-
-# TODO: subject 10 might be 56.6 instead of 60kgs, check if that makes a diff.
+# subjects = ['subject' + str(i) for i in range(i,i+1)]
+subjects = ['subject' + str(i) for i in range(2,3)]
 
 trials = {
     'subject2': {
@@ -51,7 +50,10 @@ trials = {
             'walking1': {'start':-1, 'end':1.85}, 'walking2': {'start':-0.9, 'end':1.76}, 'walking3': {'start':-1, 'end':1.90}, # case 2: 'walking3': {'start':-1, 'end':1.76},
             'walkingTS1': {'start':-1, 'end':2.15}, 'walkingTS2': {'start':-1, 'end':1.97}, 'walkingTS4': {'start':-0.9, 'end':2.13}}, # case 2: 'walkingTS1': {'start':-1, 'end':2.25}},
         'STS':     {
-            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
+        'Squats':{
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+        },
     'subject3': {
         'walking': {
             # Case 1: Warning, I re-organised stuff such that the good cases are 1.
@@ -63,77 +65,123 @@ trials = {
              # Case 12
             # 'walking2': {'start':-1.8, 'end':1.46}, 'walking3': {'start':-1.7, 'end':1.48}, 
             # 'walkingTS3': {'start':-2, 'end':2.00}},
-        'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+        'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
+        'Squats':{
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+        },
     'subject4': {
         'walking': {
             'walking1': {'start':-0.7, 'end':1.6}, 'walking2': {'start':-0.7, 'end':1.87}, 'walking4': {'start':-0.7, 'end':1.7},
             'walkingTS1': {'start':-0.7, 'end':1.7}, 'walkingTS2': {'start':-0.7, 'end':1.6}, 'walkingTS3': {'start':-0.7, 'end':1.95}},
         'STS':     {
-            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
+        'Squats':{
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+        },
     'subject5': {
         'walking': {
             'walking1': {'start':-0.7, 'end':1.83}, 'walking2': {'start':-0.7, 'end':1.8}, 'walking3': {'start':-0.7, 'end':1.8},
             'walkingTS1': {'start':-0.8, 'end':1.88}, 'walkingTS2': {'start':-0.7, 'end':1.75}, 'walkingTS3': {'start':-0.7, 'end':1.72}},
-        'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+        'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
+        'Squats':{
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+        },
     'subject6': {
         'walking': {
             'walking1': {'start':-1.2, 'end':1.63}, 'walking2': {'start':-1.2, 'end':1.6}, 'walking3': {'start':-1.2, 'end':2},
             'walkingTS1': {'start':-0.7, 'end':1.65}, 'walkingTS2': {'start':-0.8, 'end':1.72}, 'walkingTS3': {'start':-1.1, 'end':1.78}},
         'STS':     {
-            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
+        'Squats':{
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+        },
     'subject7': {
         'walking': {
             'walking1': {'start':-0.8, 'end':1.79}, 'walking2': {'start':-0.7, 'end':1.82}, 'walking3': {'start':-0.7, 'end':1.87},
             'walkingTS1': {'start':-1.1, 'end':1.83}, 'walkingTS2': {'start':-1.1, 'end':1.9}, 'walkingTS3': {'start':-1.1, 'end':2.12}},
         'STS':     {
-            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
+        'Squats':{
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+        },
     'subject8': {
         'walking': {
             'walking1': {'start':-1, 'end':1.83}, 'walking2': {'start':-0.7, 'end':1.89}, 'walking3': {'start':-0.7, 'end':1.92}, 
             'walkingTS1': {'start':-0.7, 'end':2.3}, 'walkingTS2': {'start':-1.0, 'end':2.06}, 'walkingTS3': {'start':-0.7, 'end':1.9}},
         'STS':     {
-            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
+        'Squats':{
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+        },
     'subject9': {
         'walking': {
             'walking1': {'start':-0.6, 'end':1.65}, 'walking2': {'start':-0.5, 'end':1.55}, 'walking3': {'start':-0.6, 'end':1.6}, 
             'walkingTS1': {'start':-0.7, 'end':1.68}, 'walkingTS2': {'start':-0.7, 'end':1.63}, 'walkingTS3': {'start':-0.7, 'end':1.56}},
-        'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+        'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
+        'Squats':{
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+        },
     'subject10': {
         'walking': {
             'walking1': {'start':-0.7, 'end':1.46}, 'walking2': {'start':-0.7, 'end':1.49}, 'walking3': {'start':-0.7, 'end':1.5}, 
             'walkingTS1': {'start':-0.8, 'end':1.78}, 'walkingTS2': {'start':-0.9, 'end':1.85}, 'walkingTS3': {'start':-0.8, 'end':1.66}},
         'STS':     {
-            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
+        'Squats':{
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+        },
     'subject11': {
         'walking': {
             'walking2': {'start':-0.7, 'end':1.6}, 'walking3': {'start':-0.7, 'end':1.55}, 'walking4': {'start':-0.7, 'end':1.62}, 
             'walkingTS1': {'start':-0.7, 'end':1.9}, 'walkingTS2': {'start':-0.7, 'end':1.85}, 'walkingTS3': {'start':-0.7, 'end':1.9}},
         'STS':     {
-            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
+        'Squats':{
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+        },
     }
 
 # %% User-defined variables.
 filter_frequency = 6
 
 # Settings for dynamic simulation.
+# motion_style = 'Squats'
+# repetitions = [1,2,3]
+# cases = ['2']
+
 motion_style = 'STS'
-repetitions = [1, 2, 3]
-cases = ['47', '48']
+repetitions = [1]
+cases = ['45', '55', '56']
 
 # motion_style = 'walking'
 # motion_type = 'walking_formulation2'
 # cases = ['1']
 
-runProblem = True
+runProblem = False
 processInputs = True
 runSimulation = True
-solveProblem = True
-analyzeResults = False
-plotResults = False
+solveProblem = False
+analyzeResults = True
+plotResults = True
 
 for case in cases:
 
-    if motion_style == 'walking':
+    if motion_style == 'Squats':
+        if case == '0':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'squats'
+        elif case == '1':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'squats_formulation0'
+        elif case == '2':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'squats_formulation0'
+            weight_activation = 10
+
+    elif motion_style == 'walking':
         if case == '0':
             buffer_start = 0
             buffer_end = 0
@@ -182,7 +230,7 @@ for case in cases:
             buffer_start = 0.7
             buffer_end = 0.5
 
-    if motion_style == 'STS':
+    elif motion_style == 'STS':
         if case == '0':
             buffer_start = 0
             buffer_end = 0
@@ -314,7 +362,7 @@ for case in cases:
             meshDensity = 100
             weight_pelvis_tilt = 500
             weight_position_tracking = 100
-            weigth_lumbar_extension = 100
+            weight_lumbar_extension = 100
         elif case == '22':
             buffer_start = 0
             buffer_end = 0
@@ -323,7 +371,7 @@ for case in cases:
             meshDensity = 100
             weight_pelvis_tilt = 500
             weight_position_tracking = 100
-            weigth_lumbar_extension = 100
+            weight_lumbar_extension = 100
             min_ratio_vGRF = False
         elif case == '23':
             buffer_start = 0
@@ -333,7 +381,7 @@ for case in cases:
             meshDensity = 100
             weight_pelvis_tilt = 500
             weight_position_tracking = 100
-            weigth_lumbar_extension = 100
+            weight_lumbar_extension = 100
             heel_vGRF_threshold = 5
         elif case == '24':
             buffer_start = 0
@@ -343,7 +391,7 @@ for case in cases:
             meshDensity = 100
             weight_pelvis_tilt = 500
             weight_position_tracking = 100
-            weigth_lumbar_extension = 100
+            weight_lumbar_extension = 100
             periodic_mtp_angle = True
             reserve_mtp_angle = 100
         elif case == '25':
@@ -354,7 +402,7 @@ for case in cases:
             meshDensity = 100
             weight_pelvis_tilt = 500
             weight_position_tracking = 100
-            weigth_lumbar_extension = 100
+            weight_lumbar_extension = 100
             heel_vGRF_threshold = 5
             trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
             weight_trackValueTerm = 100
@@ -366,7 +414,7 @@ for case in cases:
             meshDensity = 100
             weight_pelvis_tilt = 500
             weight_position_tracking = 100
-            weigth_lumbar_extension = 100
+            weight_lumbar_extension = 100
             heel_vGRF_threshold = 5
             trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
             weight_trackValueTerm = 50
@@ -378,7 +426,7 @@ for case in cases:
             meshDensity = 100
             weight_pelvis_tilt = 500
             weight_position_tracking = 100
-            weigth_lumbar_extension = 100
+            weight_lumbar_extension = 100
             heel_vGRF_threshold = 5
             trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
             weight_trackValueTerm = 10
@@ -390,7 +438,7 @@ for case in cases:
             meshDensity = 100
             weight_pelvis_tilt = 500
             weight_position_tracking = 100
-            weigth_lumbar_extension = 100
+            weight_lumbar_extension = 100
             heel_vGRF_threshold = 5
             trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
             weight_trackValueTerm = 1
@@ -402,7 +450,7 @@ for case in cases:
             meshDensity = 100
             weight_pelvis_tilt = 500
             weight_position_tracking = 100
-            weigth_lumbar_extension = 100
+            weight_lumbar_extension = 100
             heel_vGRF_threshold = 5
             trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
             weight_trackValueTerm = 1
@@ -415,7 +463,7 @@ for case in cases:
             meshDensity = 100
             weight_pelvis_tilt = 500
             weight_position_tracking = 100
-            weigth_lumbar_extension = 100
+            weight_lumbar_extension = 100
             heel_vGRF_threshold = 5
             trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
             weight_trackValueTerm = 1
@@ -428,7 +476,7 @@ for case in cases:
             meshDensity = 100
             weight_pelvis_tilt = 500
             weight_position_tracking = 100
-            weigth_lumbar_extension = 100
+            weight_lumbar_extension = 100
             heel_vGRF_threshold = 5
             trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
             weight_trackValueTerm = 1
@@ -441,7 +489,7 @@ for case in cases:
             meshDensity = 100
             weight_pelvis_tilt = 500
             weight_position_tracking = 100
-            weigth_lumbar_extension = 100
+            weight_lumbar_extension = 100
             heel_vGRF_threshold = 5
             trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
             weight_trackValueTerm = 1
@@ -454,7 +502,7 @@ for case in cases:
             meshDensity = 100
             weight_pelvis_tilt = 500
             weight_position_tracking = 100
-            weigth_lumbar_extension = 100
+            weight_lumbar_extension = 100
             heel_vGRF_threshold = 10
             trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
             weight_trackValueTerm = 1
@@ -467,7 +515,7 @@ for case in cases:
             meshDensity = 100
             weight_pelvis_tilt = 500
             weight_position_tracking = 100
-            weigth_lumbar_extension = 100
+            weight_lumbar_extension = 100
             heel_vGRF_threshold = 20
             trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
             weight_trackValueTerm = 1
@@ -480,7 +528,7 @@ for case in cases:
             meshDensity = 100
             weight_pelvis_tilt = 500
             weight_position_tracking = 100
-            weigth_lumbar_extension = 100
+            weight_lumbar_extension = 100
             heel_vGRF_threshold = 10
             trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
             weight_trackValueTerm = 1
@@ -493,7 +541,7 @@ for case in cases:
             meshDensity = 100
             weight_pelvis_tilt = 500
             weight_position_tracking = 100
-            weigth_lumbar_extension = 100
+            weight_lumbar_extension = 100
             heel_vGRF_threshold = 20
             trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
             weight_trackValueTerm = 1
@@ -506,7 +554,7 @@ for case in cases:
             meshDensity = 100
             weight_pelvis_tilt = 500
             weight_position_tracking = 100
-            weigth_lumbar_extension = 100
+            weight_lumbar_extension = 100
             heel_vGRF_threshold = 5
             trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
             weight_trackValueTerm = 1
@@ -518,7 +566,7 @@ for case in cases:
             meshDensity = 100
             weight_pelvis_tilt = 500
             weight_position_tracking = 100
-            weigth_lumbar_extension = 100
+            weight_lumbar_extension = 100
             heel_vGRF_threshold = 5
             trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
             weight_trackValueTerm = 1
@@ -531,7 +579,7 @@ for case in cases:
             meshDensity = 100
             weight_pelvis_tilt = 500
             weight_position_tracking = 100
-            weigth_lumbar_extension = 100
+            weight_lumbar_extension = 100
             heel_vGRF_threshold = 5
             trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
             weight_trackValueTerm = 1
@@ -544,7 +592,7 @@ for case in cases:
             meshDensity = 100
             weight_pelvis_tilt = 500
             weight_position_tracking = 100
-            weigth_lumbar_extension = 100
+            weight_lumbar_extension = 100
             heel_vGRF_threshold = 5
             trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
             weight_trackValueTerm = 1
@@ -558,7 +606,7 @@ for case in cases:
             meshDensity = 100
             weight_pelvis_tilt = 500
             weight_position_tracking = 100
-            weigth_lumbar_extension = 100
+            weight_lumbar_extension = 100
             heel_vGRF_threshold = 5
             trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
             weight_trackValueTerm = 1
@@ -571,7 +619,7 @@ for case in cases:
             meshDensity = 100
             weight_pelvis_tilt = 500
             weight_position_tracking = 100
-            weigth_lumbar_extension = 100
+            weight_lumbar_extension = 100
             heel_vGRF_threshold = 5
             trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
             weight_trackValueTerm = 1
@@ -585,7 +633,7 @@ for case in cases:
             meshDensity = 100
             weight_pelvis_tilt = 500
             weight_position_tracking = 100
-            weigth_lumbar_extension = 100
+            weight_lumbar_extension = 100
             heel_vGRF_threshold = 5
             trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
             weight_trackValueTerm = 1
@@ -600,7 +648,7 @@ for case in cases:
             meshDensity = 100
             weight_pelvis_tilt = 500
             weight_position_tracking = 100
-            weigth_lumbar_extension = 100
+            weight_lumbar_extension = 100
             heel_vGRF_threshold = 5
             trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
             weight_trackValueTerm = 1
@@ -613,7 +661,7 @@ for case in cases:
             meshDensity = 100
             weight_pelvis_tilt = 500
             weight_position_tracking = 100
-            weigth_lumbar_extension = 100
+            weight_lumbar_extension = 100
             heel_vGRF_threshold = 5
             trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
             weight_trackValueTerm = 1
@@ -631,9 +679,9 @@ for case in cases:
             meshDensity = 100
             weight_pelvis_tilt = 500
             weight_position_tracking = 100
-            weigth_lumbar_extension = 100
-            weigth_subtalar = 50
-            weigth_hip_rotation = 50
+            weight_lumbar_extension = 100
+            weight_subtalar = 50
+            weight_hip_rotation = 50
             heel_vGRF_threshold = 5
             trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
             weight_trackValueTerm = 1
@@ -646,13 +694,141 @@ for case in cases:
             meshDensity = 100
             weight_pelvis_tilt = 500
             weight_position_tracking = 200
-            weigth_lumbar_extension = 100
-            weigth_subtalar = 50
-            weigth_hip_rotation = 50
+            weight_lumbar_extension = 100
+            weight_subtalar = 50
+            weight_hip_rotation = 50
             heel_vGRF_threshold = 5
             trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
             weight_trackValueTerm = 1
             weight_acceleration = 500
+        elif case == '49':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation9'
+            periodicSTS = True
+            meshDensity = 100
+            weight_pelvis_tilt = 500
+            weight_position_tracking = 100
+            weight_lumbar_extension = 100
+            weight_subtalar = 50
+            weight_hip_rotation = 50
+            heel_vGRF_threshold = 5
+            trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
+            weight_trackValueTerm = 1
+            weight_acceleration = 500
+            torque_driven_model = True
+        elif case == '50':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation9'
+            periodicSTS = True
+            meshDensity = 100
+            weight_pelvis_tilt = 500
+            weight_position_tracking = 200
+            weight_lumbar_extension = 100
+            weight_subtalar = 50
+            weight_hip_rotation = 50
+            heel_vGRF_threshold = 5
+            trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
+            weight_trackValueTerm = 1
+            weight_acceleration = 500
+            torque_driven_model = True
+        elif case == '51':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation9'
+            periodicSTS = True
+            meshDensity = 100
+            weight_pelvis_tilt = 500
+            weight_position_tracking = 100
+            weight_lumbar_extension = 100
+            weight_subtalar = 50
+            weight_hip_rotation = 50
+            heel_vGRF_threshold = 5
+            trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
+            weight_trackValueTerm = 1
+            weight_acceleration = 500
+            torque_driven_model = True
+            meshDensity = 50
+        elif case == '52':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation9'
+            periodicSTS = True
+            meshDensity = 100
+            weight_pelvis_tilt = 500
+            weight_position_tracking = 100
+            weight_lumbar_extension = 100
+            weight_subtalar = 50
+            weight_hip_rotation = 50
+            heel_vGRF_threshold = 5
+            trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
+            weight_trackValueTerm = 1
+            weight_acceleration = 500
+            torque_driven_model = True
+            meshDensity = 50
+            weight_hip_adduction = 100
+        elif case == '53':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation8'
+            periodicSTS = False
+            meshDensity = 100
+            weight_pelvis_tilt = 500
+            weight_position_tracking = 100
+            weight_lumbar_extension = 100
+            weight_pelvis_ty = 100
+            heel_vGRF_threshold = 5
+            trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
+            weight_trackValueTerm = 1
+            weight_acceleration = 500 
+            torque_driven_model = True 
+        elif case == '54':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation8'
+            periodicSTS = False
+            meshDensity = 100
+            weight_pelvis_tilt = 500
+            weight_position_tracking = 100
+            weight_lumbar_extension = 100
+            weight_pelvis_ty = 100
+            heel_vGRF_threshold = 5
+            trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
+            weight_trackValueTerm = 1
+            weight_acceleration = 500 
+            torque_driven_model = True 
+            weight_velocity = 100
+        elif case == '55':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation8'
+            periodicSTS = False
+            meshDensity = 100
+            weight_pelvis_tilt = 500
+            weight_position_tracking = 100
+            weight_lumbar_extension = 100
+            heel_vGRF_threshold = 5
+            trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
+            weight_trackValueTerm = 1
+            weight_acceleration = 500
+            scaleIsometricMuscleForce = 2
+        elif case == '56':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation8'
+            periodicSTS = False
+            meshDensity = 100
+            weight_pelvis_tilt = 500
+            weight_position_tracking = 100
+            weight_lumbar_extension = 100
+            heel_vGRF_threshold = 5
+            trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
+            weight_trackValueTerm = 1
+            weight_acceleration = 500
+            scaleIsometricMuscleForce = 3
+        
+        
         
     # %% Gait segmentation and kinematic analysis.
 
@@ -665,7 +841,10 @@ for case in cases:
         # pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
         for count, trial_name in enumerate(list(trials[subject][motion_style].keys())):
             
-            # if count != 0:
+            if count != 1:
+                continue
+        
+            # if count < 2:
             #     continue
 
             if not 'repetitions' in locals():
@@ -733,27 +912,21 @@ for case in cases:
                                     settings['timeInterval'] = [round(float(i),6) for i in time_window]
                                     settings['timeIntervalWithoutBuffers'] = [round(float(settings['timeInterval'][0] + settings['buffers'][0]),6),
                                                                             round(float(settings['timeInterval'][1] - settings['buffers'][1]),6)]     
+                                        
+                                elif 'STS' in trial_name:
                                     
-                                    if 'weight_activation' in locals():
-                                        settings['weights']['activationTerm'] = weight_activation
-                                    
-                                    # if case == '4' or case == '5' or case == '7':
-                                    #     settings['weights']['activationTerm'] = weight_activation
+                                    time_start = np.round(max(settings['timeInterval'][0] - buffer_start, full_time_window[0]),2)
+                                    time_end = np.round(min(settings['timeInterval'][1] + buffer_end, full_time_window[1]),2)
+                                    buffer_start_applied = np.abs(np.round(time_start - settings['timeInterval'][0], 2))
+                                    buffer_end_applied = np.abs(np.round(time_end - settings['timeInterval'][1], 2))
+                                    settings['buffers'] = [round(float(buffer_start_applied),6),
+                                                        round(float(buffer_end_applied),6)]
+                                    time_window = [time_start, time_end]
+                                    settings['timeInterval'] = [round(float(i),6) for i in time_window]
+                                    settings['timeIntervalWithoutBuffers'] = [round(float(settings['timeInterval'][0] + settings['buffers'][0]),6),
+                                                                            round(float(settings['timeInterval'][1] - settings['buffers'][1]),6)] 
                                         
-                                    if 'weight_acceleration' in locals():
-                                        settings['weights']['accelerationTrackingTerm'] = weight_acceleration
-
-                                    if 'weight_velocity' in locals():
-                                        settings['weights']['velocityTrackingTerm'] = weight_velocity
-
-                                    if 'use_same_weight_individual_coordinate_value_acceleration' in locals():
-                                        settings['use_same_weight_individual_coordinate_value_acceleration'] = True
-
-                                    if 'use_same_weight_individual_coordinate_value_speed' in locals():
-                                        settings['use_same_weight_individual_coordinate_value_speed'] = True
-                                        
-                                        
-                                if 'STS' in trial_name:
+                                elif 'squats' in trial_name.lower():
                                     
                                     time_start = np.round(max(settings['timeInterval'][0] - buffer_start, full_time_window[0]),2)
                                     time_end = np.round(min(settings['timeInterval'][1] + buffer_end, full_time_window[1]),2)
@@ -766,73 +939,91 @@ for case in cases:
                                     settings['timeIntervalWithoutBuffers'] = [round(float(settings['timeInterval'][0] + settings['buffers'][0]),6),
                                                                             round(float(settings['timeInterval'][1] - settings['buffers'][1]),6)] 
                                     
-                                    if 'meshDensity' in locals():
-                                        settings['meshDensity'] = meshDensity
-        
-                                    if 'vGRFRatioTerm' in locals():
-                                        settings['weights']['vGRFRatioTerm'] = vGRFRatioTerm
-        
-                                    if 'weight_activation' in locals():
-                                        settings['weights']['activationTerm'] = weight_activation
+                                if 'meshDensity' in locals():
+                                    settings['meshDensity'] = meshDensity
+    
+                                if 'vGRFRatioTerm' in locals():
+                                    settings['weights']['vGRFRatioTerm'] = vGRFRatioTerm
+    
+                                if 'weight_activation' in locals():
+                                    settings['weights']['activationTerm'] = weight_activation
 
-                                    if 'weight_pelvis_tilt' in locals():
-                                        settings['coordinates_toTrack']['pelvis_tilt']['weight'] = weight_pelvis_tilt
-                                        
-                                    if 'weight_position_tracking' in locals():
-                                        settings['weights']['positionTrackingTerm'] = weight_position_tracking
-
-                                    if 'weigth_lumbar_extension' in locals():
-                                        settings['coordinates_toTrack']['lumbar_extension']['weight'] = weigth_lumbar_extension
-
-                                    if 'min_ratio_vGRF' in locals():
-                                        settings['min_ratio_vGRF'] = min_ratio_vGRF
-
-                                    if 'heel_vGRF_threshold' in locals():
-                                        settings['heel_vGRF_threshold'] = heel_vGRF_threshold
-
-                                    if 'periodic_mtp_angle' in locals():
-                                        if 'periodicConstraints' in settings:
-                                            periodicCoordinates = settings['periodicConstraints']['coordinateValues']
-                                            periodicCoordinates.append('mtp_angle_r')
-                                            periodicCoordinates.append('mtp_angle_l')
-                                            settings['periodicConstraints']['coordinateValues'] = periodicCoordinates
-                                        else:
-                                            settings['periodicConstraints'] = {}
-                                            settings['periodicConstraints']['coordinateValues'] = ['mtp_angle_r', 'mtp_angle_r']
-                                            
-                                    if 'reserve_mtp_angle' in locals():
-                                        if 'reserveActuatorCoordinates' in settings:
-                                            reserveActuatorCoordinates = settings['reserveActuatorCoordinates']
-                                            reserveActuatorCoordinates['mtp_angle_r'] = reserve_mtp_angle
-                                            reserveActuatorCoordinates['mtp_angle_l'] = reserve_mtp_angle
-                                            settings['reserveActuatorCoordinates'] = reserveActuatorCoordinates
-                                        else:
-                                            reserveActuatorCoordinates = {}                                        
-                                            reserveActuatorCoordinates['mtp_angle_r'] = reserve_mtp_angle
-                                            reserveActuatorCoordinates['mtp_angle_l'] = reserve_mtp_angle
-                                            settings['reserveActuatorCoordinates'] = reserveActuatorCoordinates
-
-                                    # TODO
-                                    if 'trackValueCoordinates' in locals():
-                                        settings['trackValueCoordinates'] = trackValueCoordinates
-
-                                    if 'weight_trackValueTerm' in locals():
-                                        settings['weights']['trackValueTerm'] = weight_trackValueTerm
-                                        
-                                    if 'weight_acceleration' in locals():
-                                        settings['weights']['accelerationTrackingTerm'] = weight_acceleration
-
-                                    if 'weight_velocity' in locals():
-                                        settings['weights']['velocityTrackingTerm'] = weight_velocity
-
-                                    if 'weigth_subtalar' in locals():
-                                        settings['coordinates_toTrack']['subtalar_angle_r']['weight'] = weigth_subtalar
-                                        settings['coordinates_toTrack']['subtalar_angle_l']['weight'] = weigth_subtalar
-
-                                    if 'weigth_hip_rotation' in locals():
-                                        settings['coordinates_toTrack']['hip_rotation_r']['weight'] = weigth_hip_rotation
-                                        settings['coordinates_toTrack']['hip_rotation_l']['weight'] = weigth_hip_rotation
+                                if 'weight_pelvis_tilt' in locals():
+                                    settings['coordinates_toTrack']['pelvis_tilt']['weight'] = weight_pelvis_tilt
                                     
+                                if 'weight_position_tracking' in locals():
+                                    settings['weights']['positionTrackingTerm'] = weight_position_tracking
+
+                                if 'weight_lumbar_extension' in locals():
+                                    settings['coordinates_toTrack']['lumbar_extension']['weight'] = weight_lumbar_extension
+
+                                if 'min_ratio_vGRF' in locals():
+                                    settings['min_ratio_vGRF'] = min_ratio_vGRF
+
+                                if 'heel_vGRF_threshold' in locals():
+                                    settings['heel_vGRF_threshold'] = heel_vGRF_threshold
+
+                                if 'periodic_mtp_angle' in locals():
+                                    if 'periodicConstraints' in settings:
+                                        periodicCoordinates = settings['periodicConstraints']['coordinateValues']
+                                        periodicCoordinates.append('mtp_angle_r')
+                                        periodicCoordinates.append('mtp_angle_l')
+                                        settings['periodicConstraints']['coordinateValues'] = periodicCoordinates
+                                    else:
+                                        settings['periodicConstraints'] = {}
+                                        settings['periodicConstraints']['coordinateValues'] = ['mtp_angle_r', 'mtp_angle_r']
+                                        
+                                if 'reserve_mtp_angle' in locals():
+                                    if 'reserveActuatorCoordinates' in settings:
+                                        reserveActuatorCoordinates = settings['reserveActuatorCoordinates']
+                                        reserveActuatorCoordinates['mtp_angle_r'] = reserve_mtp_angle
+                                        reserveActuatorCoordinates['mtp_angle_l'] = reserve_mtp_angle
+                                        settings['reserveActuatorCoordinates'] = reserveActuatorCoordinates
+                                    else:
+                                        reserveActuatorCoordinates = {}                                        
+                                        reserveActuatorCoordinates['mtp_angle_r'] = reserve_mtp_angle
+                                        reserveActuatorCoordinates['mtp_angle_l'] = reserve_mtp_angle
+                                        settings['reserveActuatorCoordinates'] = reserveActuatorCoordinates
+
+                                # TODO
+                                if 'trackValueCoordinates' in locals():
+                                    settings['trackValueCoordinates'] = trackValueCoordinates
+
+                                if 'weight_trackValueTerm' in locals():
+                                    settings['weights']['trackValueTerm'] = weight_trackValueTerm
+                                    
+                                if 'weight_acceleration' in locals():
+                                    settings['weights']['accelerationTrackingTerm'] = weight_acceleration
+
+                                if 'weight_velocity' in locals():
+                                    settings['weights']['velocityTrackingTerm'] = weight_velocity
+
+                                if 'weight_subtalar' in locals():
+                                    settings['coordinates_toTrack']['subtalar_angle_r']['weight'] = weight_subtalar
+                                    settings['coordinates_toTrack']['subtalar_angle_l']['weight'] = weight_subtalar
+
+                                if 'weight_hip_rotation' in locals():
+                                    settings['coordinates_toTrack']['hip_rotation_r']['weight'] = weight_hip_rotation
+                                    settings['coordinates_toTrack']['hip_rotation_l']['weight'] = weight_hip_rotation
+
+                                if 'use_same_weight_individual_coordinate_value_acceleration' in locals():
+                                    settings['use_same_weight_individual_coordinate_value_acceleration'] = True
+
+                                if 'use_same_weight_individual_coordinate_value_speed' in locals():
+                                    settings['use_same_weight_individual_coordinate_value_speed'] = True
+
+                                if 'torque_driven_model' in locals():
+                                    settings['torque_driven_model'] = torque_driven_model
+
+                                if 'weight_hip_adduction' in locals():
+                                    settings['coordinates_toTrack']['hip_adduction_r']['weight'] = weight_hip_adduction
+                                    settings['coordinates_toTrack']['hip_adduction_l']['weight'] = weight_hip_adduction
+
+                                if 'weight_pelvis_ty' in locals():
+                                    settings['coordinates_toTrack']['pelvis_ty']['weight'] = weight_pelvis_ty
+
+                                if 'scaleIsometricMuscleForce' in locals():
+                                    settings['scaleIsometricMuscleForce'] = scaleIsometricMuscleForce
                                 
                             except Exception as e:
                                 print(f"Error setting up dynamic optimization for trial {trial_name}: {e}")
@@ -855,9 +1046,9 @@ for case in cases:
 
                     # Load settings
                     # Overwritting
-                    # trial_name = 'STS1_video'
-                    # trial_name = 'STSweakLegs1_video'
-                    # repetition = 3
+                    # trial_name = 'squats1_video'
+                    # trial_name = 'squatsAsym1_video'
+                    # repetition = 1
 
                     pathResults = os.path.join(dataFolder, subject, 'OpenSimData', 'Dynamics', trial_name)
                     if 'repetition' in locals():
@@ -868,7 +1059,7 @@ for case in cases:
 
 
                     # plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['37', '44'], mainPlots=False, grfPlotOnly=False)
-                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['39', '45', '46'], mainPlots=True, grfPlotOnly=False)
+                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['45', '55', '56'], mainPlots=False, grfPlotOnly=False)
                 
                 test=1
 
