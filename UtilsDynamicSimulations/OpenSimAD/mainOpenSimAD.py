@@ -383,6 +383,13 @@ def run_tracking(baseDir, dataDir, settings, case='0',
         weights['trackValueTerm'] = 1
         if 'trackValueTerm' in settings['weights']:
             weights['trackValueTerm'] = settings['weights']['trackValueTerm']
+
+    ignoreFLV = False
+    if 'ignoreFLV' in settings:
+        ignoreFLV = settings['ignoreFLV']
+    # TODO
+    if ignoreFLV:
+        computeMCF=False
         
     # %% Paths and dirs.
     pathMain = os.getcwd()
@@ -1104,12 +1111,13 @@ def run_tracking(baseDir, dataDir, settings, case='0',
         lw['Ak'] = ca.vec(lw['A'].to_numpy().T * np.ones((1, N+1))).full()
         uw['Aj'] = ca.vec(uw['A'].to_numpy().T * np.ones((1, d*N))).full()
         lw['Aj'] = ca.vec(lw['A'].to_numpy().T * np.ones((1, d*N))).full()
-        # Muscle forces.
-        uw['F'], lw['F'], scaling['F'] = bounds.getBoundsForce()
-        uw['Fk'] = ca.vec(uw['F'].to_numpy().T * np.ones((1, N+1))).full()
-        lw['Fk'] = ca.vec(lw['F'].to_numpy().T * np.ones((1, N+1))).full()
-        uw['Fj'] = ca.vec(uw['F'].to_numpy().T * np.ones((1, d*N))).full()
-        lw['Fj'] = ca.vec(lw['F'].to_numpy().T * np.ones((1, d*N))).full()
+        if not ignoreFLV:
+            # Muscle forces.
+            uw['F'], lw['F'], scaling['F'] = bounds.getBoundsForce()
+            uw['Fk'] = ca.vec(uw['F'].to_numpy().T * np.ones((1, N+1))).full()
+            lw['Fk'] = ca.vec(lw['F'].to_numpy().T * np.ones((1, N+1))).full()
+            uw['Fj'] = ca.vec(uw['F'].to_numpy().T * np.ones((1, d*N))).full()
+            lw['Fj'] = ca.vec(lw['F'].to_numpy().T * np.ones((1, d*N))).full()
     # Joint positions.
     uw['Qs'], lw['Qs'], scaling['Qs'] =  bounds.getBoundsPosition(polynomial_bounds)
     uw['Qsk'] = ca.vec(uw['Qs'].to_numpy().T * np.ones((1, N+1))).full()
@@ -1149,10 +1157,11 @@ def run_tracking(baseDir, dataDir, settings, case='0',
             deactivationTimeConstant=deactivationTimeConstant)
         uw['ADtk'] = ca.vec(uw['ADt'].to_numpy().T * np.ones((1, N))).full()
         lw['ADtk'] = ca.vec(lw['ADt'].to_numpy().T * np.ones((1, N))).full()
-        # Muscle force derivatives.      
-        uw['FDt'], lw['FDt'], scaling['FDt'] = bounds.getBoundsForceDerivative()
-        uw['FDtk'] = ca.vec(uw['FDt'].to_numpy().T * np.ones((1, N))).full()
-        lw['FDtk'] = ca.vec(lw['FDt'].to_numpy().T * np.ones((1, N))).full()
+        if not ignoreFLV:
+            # Muscle force derivatives.      
+            uw['FDt'], lw['FDt'], scaling['FDt'] = bounds.getBoundsForceDerivative()
+            uw['FDtk'] = ca.vec(uw['FDt'].to_numpy().T * np.ones((1, N))).full()
+            lw['FDtk'] = ca.vec(lw['FDt'].to_numpy().T * np.ones((1, N))).full()
     if withArms:
         # Arm excitations.
         uw['ArmE'], lw['ArmE'], scaling['ArmE'] = bounds.getBoundsCoordinateDynamics(armJoints, coordinate_optimal_forces)
@@ -1198,9 +1207,10 @@ def run_tracking(baseDir, dataDir, settings, case='0',
         # Muscle activations.
         w0['A'] = guess.getGuessActivation(scaling['A'])
         w0['Aj'] = guess.getGuessActivationCol()
-        # Muscle forces.
-        w0['F'] = guess.getGuessForce(scaling['F'])
-        w0['Fj'] = guess.getGuessForceCol()
+        if not ignoreFLV:
+            # Muscle forces.
+            w0['F'] = guess.getGuessForce(scaling['F'])
+            w0['Fj'] = guess.getGuessForceCol()
     # Joint positions.
     w0['Qs'] = guess.getGuessPosition(scaling['Qs'])
     w0['Qsj'] = guess.getGuessPositionCol()
@@ -1222,8 +1232,9 @@ def run_tracking(baseDir, dataDir, settings, case='0',
     else:
         # Muscle activation derivatives.
         w0['ADt'] = guess.getGuessActivationDerivative(scaling['ADt'])
-        # Muscle force derivatives.
-        w0['FDt'] = guess.getGuessForceDerivative(scaling['FDt'])
+        if not ignoreFLV:
+            # Muscle force derivatives.
+            w0['FDt'] = guess.getGuessForceDerivative(scaling['FDt'])
     if withArms:
         # Arm excitations.
         w0['ArmE'] = guess.getGuessTorqueActuatorExcitation(armJoints)
@@ -1428,18 +1439,19 @@ def run_tracking(baseDir, dataDir, settings, case='0',
             opti.set_initial(a_col, w0['Aj'].to_numpy().T)
             assert np.all(lw['Aj'] <= ca.vec(w0['Aj'].to_numpy().T).full()), "Issue with lower bound muscle activations (collocation points)"
             assert np.all(uw['Aj'] >= ca.vec(w0['Aj'].to_numpy().T).full()), "Issue with upper bound muscle activations (collocation points)"
-            # Muscle force at mesh points.
-            nF = opti.variable(nMuscles, N+1)
-            opti.subject_to(opti.bounded(lw['Fk'], ca.vec(nF), uw['Fk']))
-            opti.set_initial(nF, w0['F'].to_numpy().T)
-            assert np.all(lw['Fk'] <= ca.vec(w0['F'].to_numpy().T).full()), "Issue with lower bound muscle forces"
-            assert np.all(uw['Fk'] >= ca.vec(w0['F'].to_numpy().T).full()), "Issue with upper bound muscle forces"
-            # Muscle force at collocation points.
-            nF_col = opti.variable(nMuscles, d*N)
-            opti.subject_to(opti.bounded(lw['Fj'], ca.vec(nF_col), uw['Fj']))
-            opti.set_initial(nF_col, w0['Fj'].to_numpy().T)
-            assert np.all(lw['Fj'] <= ca.vec(w0['Fj'].to_numpy().T).full()), "Issue with lower bound muscle forces (collocation points)"
-            assert np.all(uw['Fj'] >= ca.vec(w0['Fj'].to_numpy().T).full()), "Issue with upper bound muscle forces (collocation points)"
+            if not ignoreFLV:
+                # Muscle force at mesh points.
+                nF = opti.variable(nMuscles, N+1)
+                opti.subject_to(opti.bounded(lw['Fk'], ca.vec(nF), uw['Fk']))
+                opti.set_initial(nF, w0['F'].to_numpy().T)
+                assert np.all(lw['Fk'] <= ca.vec(w0['F'].to_numpy().T).full()), "Issue with lower bound muscle forces"
+                assert np.all(uw['Fk'] >= ca.vec(w0['F'].to_numpy().T).full()), "Issue with upper bound muscle forces"
+                # Muscle force at collocation points.
+                nF_col = opti.variable(nMuscles, d*N)
+                opti.subject_to(opti.bounded(lw['Fj'], ca.vec(nF_col), uw['Fj']))
+                opti.set_initial(nF_col, w0['Fj'].to_numpy().T)
+                assert np.all(lw['Fj'] <= ca.vec(w0['Fj'].to_numpy().T).full()), "Issue with lower bound muscle forces (collocation points)"
+                assert np.all(uw['Fj'] >= ca.vec(w0['Fj'].to_numpy().T).full()), "Issue with upper bound muscle forces (collocation points)"
         # Joint position at mesh points.
         Qs = opti.variable(nJoints, N+1)
         opti.subject_to(opti.bounded(lw['Qsk'], ca.vec(Qs), uw['Qsk']))
@@ -1530,12 +1542,13 @@ def run_tracking(baseDir, dataDir, settings, case='0',
             assert np.all(lw['LumbarEk'] <= ca.vec(w0['LumbarE'].to_numpy().T).full()), "Issue with lower bound lumbar excitations"
             assert np.all(uw['LumbarEk'] >= ca.vec(w0['LumbarE'].to_numpy().T).full()), "Issue with upper bound lumbar excitations"
         if not torque_driven_model:
-            # Muscle force derivative at mesh points.
-            nFDt = opti.variable(nMuscles, N)
-            opti.subject_to(opti.bounded(lw['FDtk'], ca.vec(nFDt), uw['FDtk']))
-            opti.set_initial(nFDt, w0['FDt'].to_numpy().T)
-            assert np.all(lw['FDtk'] <= ca.vec(w0['FDt'].to_numpy().T).full()), "Issue with lower bound muscle force derivatives"
-            assert np.all(uw['FDtk'] >= ca.vec(w0['FDt'].to_numpy().T).full()), "Issue with upper bound muscle force derivatives"
+            if not ignoreFLV:
+                # Muscle force derivative at mesh points.
+                nFDt = opti.variable(nMuscles, N)
+                opti.subject_to(opti.bounded(lw['FDtk'], ca.vec(nFDt), uw['FDtk']))
+                opti.set_initial(nFDt, w0['FDt'].to_numpy().T)
+                assert np.all(lw['FDtk'] <= ca.vec(w0['FDt'].to_numpy().T).full()), "Issue with lower bound muscle force derivatives"
+                assert np.all(uw['FDtk'] >= ca.vec(w0['FDt'].to_numpy().T).full()), "Issue with upper bound muscle force derivatives"
         # Joint velocity derivative (acceleration) at mesh points.
         Qdds = opti.variable(nJoints, N)
         opti.subject_to(opti.bounded(lw['Qddsk'], ca.vec(Qdds), uw['Qddsk']))
@@ -1564,10 +1577,11 @@ def run_tracking(baseDir, dataDir, settings, case='0',
             
         # %% Unscale design variables.
         if not torque_driven_model:
-            nF_nsc = nF * (scaling['F'].to_numpy().T * np.ones((1, N+1)))
-            nF_col_nsc = nF_col * (scaling['F'].to_numpy().T * np.ones((1, d*N)))
-            aDt_nsc = aDt * (scaling['ADt'].to_numpy().T * np.ones((1, N)))
-            nFDt_nsc = nFDt * (scaling['FDt'].to_numpy().T * np.ones((1, N)))
+            if not ignoreFLV:
+                nF_nsc = nF * (scaling['F'].to_numpy().T * np.ones((1, N+1)))
+                nF_col_nsc = nF_col * (scaling['F'].to_numpy().T * np.ones((1, d*N)))
+                nFDt_nsc = nFDt * (scaling['FDt'].to_numpy().T * np.ones((1, N)))
+            aDt_nsc = aDt * (scaling['ADt'].to_numpy().T * np.ones((1, N)))                
         Qs_nsc = Qs * (scaling['Qs'].to_numpy().T * np.ones((1, N+1)))
         Qs_col_nsc = Qs_col * (scaling['Qs'].to_numpy().T * np.ones((1, d*N)))
         Qds_nsc = Qds * (scaling['Qds'].to_numpy().T * np.ones((1, N+1)))
@@ -1600,8 +1614,9 @@ def run_tracking(baseDir, dataDir, settings, case='0',
                 aCoordkj = (ca.horzcat(aCoord[:, k], aCoord_col[:, k*d:(k+1)*d]))
             else:
                 akj = (ca.horzcat(a[:, k], a_col[:, k*d:(k+1)*d]))
-                nFkj = (ca.horzcat(nF[:, k], nF_col[:, k*d:(k+1)*d]))
-                nFkj_nsc = (ca.horzcat(nF_nsc[:, k], nF_col_nsc[:, k*d:(k+1)*d]))
+                if not ignoreFLV:
+                    nFkj = (ca.horzcat(nF[:, k], nF_col[:, k*d:(k+1)*d]))
+                    nFkj_nsc = (ca.horzcat(nF_nsc[:, k], nF_col_nsc[:, k*d:(k+1)*d]))
             Qskj = (ca.horzcat(Qs[:, k], Qs_col[:, k*d:(k+1)*d]))
             Qskj_nsc = (ca.horzcat(Qs_nsc[:, k], Qs_col_nsc[:, k*d:(k+1)*d]))
             Qdskj = (ca.horzcat(Qds[:, k], Qds_col[:, k*d:(k+1)*d]))    
@@ -1616,8 +1631,9 @@ def run_tracking(baseDir, dataDir, settings, case='0',
             else:
                 aDtk = aDt[:, k]
                 aDtk_nsc = aDt_nsc[:, k]
-                nFDtk = nFDt[:, k]
-                nFDtk_nsc = nFDt_nsc[:, k]
+                if not ignoreFLV:
+                    nFDtk = nFDt[:, k]
+                    nFDtk_nsc = nFDt_nsc[:, k]
             Qddsk = Qdds[:, k]
             Qddsk_nsc = Qdds_nsc[:, k]
             if withArms:
@@ -1675,11 +1691,14 @@ def run_tracking(baseDir, dataDir, settings, case='0',
                             dMk[joint] = dMk_r[
                                 c_ma, rightPolynomialJoints.index(joint)]            
                 
-                # Hill-equilibrium.
-                [hillEquilibriumk, Fk, activeFiberForcek, passiveFiberForcek,
-                normActiveFiberLengthForcek, nFiberLengthk,
-                fiberVelocityk, _, _] = (f_hillEquilibrium(
-                    akj[:, 0], lMTk_lr, vMTk_lr, nFkj_nsc[:, 0], nFDtk_nsc))
+               
+                if ignoreFLV: # F = a * Fmax
+                    Fk = ca.times(mtParameters[0, :], akj[:, 0])
+                else:  # Hill-equilibrium.
+                    [hillEquilibriumk, Fk, activeFiberForcek, passiveFiberForcek,
+                    normActiveFiberLengthForcek, nFiberLengthk,
+                    fiberVelocityk, _, _] = (f_hillEquilibrium(
+                        akj[:, 0], lMTk_lr, vMTk_lr, nFkj_nsc[:, 0], nFDtk_nsc))
                  
             # Limit torques.
             passiveTorque_k = {}
@@ -1724,8 +1743,9 @@ def run_tracking(baseDir, dataDir, settings, case='0',
                 if torque_driven_model:
                     aCoordp = ca.mtimes(aCoordkj, C[j+1])
                 else:
-                    ap = ca.mtimes(akj, C[j+1])        
-                    nFp_nsc = ca.mtimes(nFkj_nsc, C[j+1])
+                    ap = ca.mtimes(akj, C[j+1])
+                    if not ignoreFLV:
+                        nFp_nsc = ca.mtimes(nFkj_nsc, C[j+1])
                 Qsp_nsc = ca.mtimes(Qskj_nsc, C[j+1])
                 Qdsp_nsc = ca.mtimes(Qdskj_nsc, C[j+1])
                 if withArms:
@@ -1742,9 +1762,10 @@ def run_tracking(baseDir, dataDir, settings, case='0',
                 else:
                     # Muscle activation dynamics.
                     opti.subject_to((h*aDtk_nsc - ap) == 0)
-                    # Muscle contraction dynamics. 
-                    opti.subject_to((h*nFDtk_nsc - nFp_nsc) / 
-                                    scaling['F'].to_numpy().T == 0)
+                    if not ignoreFLV: 
+                        # Muscle contraction dynamics. 
+                        opti.subject_to((h*nFDtk_nsc - nFp_nsc) / 
+                                        scaling['F'].to_numpy().T == 0)
                 # Skeleton dynamics.
                 # Position derivative.
                 opti.subject_to((h*Qdskj_nsc[:, j+1] - Qsp_nsc) / 
@@ -1785,11 +1806,13 @@ def run_tracking(baseDir, dataDir, settings, case='0',
                     activationTerm = f_NMusclesSumWeightedPow(
                         akj[:, j+1], s_muscleVolume * w_muscles)
                     activationDtTerm = f_NMusclesSum2(aDtk)
-                    forceDtTerm = f_NMusclesSum2(nFDtk)
                     J += ((
                         weights['activationTerm'] * activationTerm +                       
-                        weights['activationDtTerm'] * activationDtTerm + 
-                        weights['forceDtTerm'] * forceDtTerm) * h * B[j + 1])                
+                        weights['activationDtTerm'] * activationDtTerm) * h * B[j + 1])
+                    if not ignoreFLV: 
+                        forceDtTerm = f_NMusclesSum2(nFDtk)
+                        J += (weights['forceDtTerm'] * 
+                          forceDtTerm * h * B[j + 1])                                    
                 if withArms:     
                     armExcitationTerm = f_nArmJointsSum2(eArmk)
                     J += (weights['armExcitationTerm'] * 
@@ -1851,7 +1874,7 @@ def run_tracking(baseDir, dataDir, settings, case='0',
                     opti.subject_to(diffTk_joint == 0)
             else:
                 # Muscle-driven joint torques.
-                for joint in muscleDrivenJoints:                
+                for joint in muscleDrivenJoints:
                     Fk_joint = Fk[momentArmIndices[joint]]
                     mTk_joint = ca.sum1(dMk[joint]*Fk_joint)
                     # Add contribution of reserve actuator.
@@ -1914,14 +1937,16 @@ def run_tracking(baseDir, dataDir, settings, case='0',
                 opti.subject_to(act2 <= 1 / activationTimeConstant)
                 
                 # Contraction dynamics.
-                opti.subject_to(hillEquilibriumk == 0)
+                if not ignoreFLV:
+                    opti.subject_to(hillEquilibriumk == 0)
             
             # Equality / continuity constraints.
             if torque_driven_model:
                 opti.subject_to(aCoord[:, k+1] == ca.mtimes(aCoordkj, D))
             else:
                 opti.subject_to(a[:, k+1] == ca.mtimes(akj, D))
-                opti.subject_to(nF[:, k+1] == ca.mtimes(nFkj, D))    
+                if not ignoreFLV:
+                    opti.subject_to(nF[:, k+1] == ca.mtimes(nFkj, D))    
             opti.subject_to(Qs[:, k+1] == ca.mtimes(Qskj, D))
             opti.subject_to(Qds[:, k+1] == ca.mtimes(Qdskj, D))    
             if withArms:
@@ -1960,8 +1985,9 @@ def run_tracking(baseDir, dataDir, settings, case='0',
             if 'muscleActivationsForces' in periodicConstraints:
                 opti.subject_to(a[idxPeriodicMuscles, -1] - 
                                 a[idxPeriodicMuscles, 0] == 0)
-                opti.subject_to(nF[idxPeriodicMuscles, -1] - 
-                                nF[idxPeriodicMuscles, 0] == 0)
+                if not ignoreFLV:
+                    opti.subject_to(nF[idxPeriodicMuscles, -1] - 
+                                    nF[idxPeriodicMuscles, 0] == 0)
                 
             # Coordinate activations.
             if ('lowerLimbJointActivations' in periodicConstraints and
@@ -2031,12 +2057,13 @@ def run_tracking(baseDir, dataDir, settings, case='0',
             a_col_opt = (
                 np.reshape(w_opt[starti:starti+nMuscles*(d*N)], (d*N, nMuscles))).T    
             starti = starti + nMuscles*(d*N)
-            nF_opt = (
-                np.reshape(w_opt[starti:starti+nMuscles*(N+1)], (N+1, nMuscles))).T  
-            starti = starti + nMuscles*(N+1)
-            nF_col_opt = (
-                np.reshape(w_opt[starti:starti+nMuscles*(d*N)], (d*N, nMuscles))).T
-            starti = starti + nMuscles*(d*N)
+            if not ignoreFLV:
+                nF_opt = (
+                    np.reshape(w_opt[starti:starti+nMuscles*(N+1)], (N+1, nMuscles))).T  
+                starti = starti + nMuscles*(N+1)
+                nF_col_opt = (
+                    np.reshape(w_opt[starti:starti+nMuscles*(d*N)], (d*N, nMuscles))).T
+                starti = starti + nMuscles*(d*N)
         Qs_opt = (
             np.reshape(w_opt[starti:starti+nJoints*(N+1)], (N+1, nJoints))  ).T  
         starti = starti + nJoints*(N+1)    
@@ -2087,9 +2114,10 @@ def run_tracking(baseDir, dataDir, settings, case='0',
                            (N, nLumbarJoints))).T
             starti = starti + nLumbarJoints*N
         if not torque_driven_model:
-            nFDt_opt = (
-                np.reshape(w_opt[starti:starti+nMuscles*(N)], (N, nMuscles))).T
-            starti = starti + nMuscles*(N)
+            if not ignoreFLV:
+                nFDt_opt = (
+                    np.reshape(w_opt[starti:starti+nMuscles*(N)], (N, nMuscles))).T
+                starti = starti + nMuscles*(N)
         Qdds_opt = (
             np.reshape(w_opt[starti:starti+nJoints*(N)],(N, nJoints))).T
         starti = starti + nJoints*(N)
@@ -2115,8 +2143,9 @@ def run_tracking(baseDir, dataDir, settings, case='0',
             else:
                 c_wopt['a_opt'] = a_opt
                 c_wopt['a_col_opt'] = a_col_opt
-                c_wopt['nF_opt'] = nF_opt
-                c_wopt['nF_col_opt'] = nF_col_opt
+                if not ignoreFLV:
+                    c_wopt['nF_opt'] = nF_opt
+                    c_wopt['nF_col_opt'] = nF_col_opt
                 c_wopt['aDt_opt'] = aDt_opt
                 c_wopt['nFDt_opt'] = nFDt_opt
             plotOptimalSolutionVSBounds(lw, uw, c_wopt, 
@@ -2133,8 +2162,9 @@ def run_tracking(baseDir, dataDir, settings, case='0',
             aCoord_opt_nsc = aCoord_opt * (
                 scaling['CoordA'].to_numpy().T * np.ones((1, N+1)))
         else:
-            nFDt_opt_nsc = nFDt_opt * (
-                scaling['FDt'].to_numpy().T * np.ones((1, N)))
+            if not ignoreFLV:
+                nFDt_opt_nsc = nFDt_opt * (
+                    scaling['FDt'].to_numpy().T * np.ones((1, N)))
         if withReserveActuators:
             rAct_opt_nsc = {}
             for c_j in reserveActuatorCoordinates:
@@ -2386,7 +2416,8 @@ def run_tracking(baseDir, dataDir, settings, case='0',
         else:
             activationTerm_opt_all = 0
             activationDtTerm_opt_all = 0
-            forceDtTerm_opt_all = 0
+            if not ignoreFLV:
+                forceDtTerm_opt_all = 0
         if withArms:
             armExcitationTerm_opt_all = 0
         if withLumbarCoordinateActuators:    
@@ -2419,9 +2450,10 @@ def run_tracking(baseDir, dataDir, settings, case='0',
             # States.
             if not torque_driven_model:
                 akj_opt = ca.horzcat(a_opt[:, k], a_col_opt[:, k*d:(k+1)*d])
-                nFkj_opt = ca.horzcat(nF_opt[:, k], nF_col_opt[:, k*d:(k+1)*d])
-                nFkj_opt_nsc = nFkj_opt * (
-                    scaling['F'].to_numpy().T * np.ones((1, d+1)))   
+                if not ignoreFLV:
+                    nFkj_opt = ca.horzcat(nF_opt[:, k], nF_col_opt[:, k*d:(k+1)*d])
+                    nFkj_opt_nsc = nFkj_opt * (
+                        scaling['F'].to_numpy().T * np.ones((1, d+1)))   
             Qskj_opt = (ca.horzcat(Qs_opt[:, k], Qs_col_opt[:, k*d:(k+1)*d]))
             Qskj_opt_nsc = Qskj_opt * (
                 scaling['Qs'].to_numpy().T * np.ones((1, d+1)))
@@ -2433,8 +2465,9 @@ def run_tracking(baseDir, dataDir, settings, case='0',
                 eCoordk_opt = eCoord_opt[:, k]
             else:
                 aDtk_opt = aDt_opt[:, k]
-                nFDtk_opt = nFDt_opt[:, k] 
-                nFDtk_opt_nsc = nFDt_opt_nsc[:, k]
+                if not ignoreFLV:
+                    nFDtk_opt = nFDt_opt[:, k] 
+                    nFDtk_opt_nsc = nFDt_opt_nsc[:, k]
             if withArms:
                 eArmk_opt = eArm_opt[:, k]
             if withLumbarCoordinateActuators:
@@ -2492,18 +2525,21 @@ def run_tracking(baseDir, dataDir, settings, case='0',
                                     i in momentArmIndices[joint]]
                             dMk_opt[joint] = dMk_opt_r[
                                 c_ma, rightPolynomialJoints.index(joint)]
-                # Hill-equilibrium.
-                [hillEqk_opt, Fk_opt, _, _,_, normFiberLengthk_opt, 
-                 fiberVelocityk_opt, aFPk_opt, pFPk_opt] = (
-                    f_hillEquilibrium(akj_opt[:, 0], lMTk_opt_lr, vMTk_opt_lr,
-                                    nFkj_opt_nsc[:, 0], nFDtk_opt_nsc))
-                Ft_opt[:,k] = Fk_opt.full().flatten()
-                normFiberLength_opt[:,k] = normFiberLengthk_opt.full().flatten()
-                fiberVelocity_opt[:,k] = fiberVelocityk_opt.full().flatten()  
-                # Passive muscle moments.
-                for c_j, joint in enumerate(muscleDrivenJoints):
-                    pFk_opt_joint = pFPk_opt[momentArmIndices[joint]]
-                    pMT_opt[c_j, k] = ca.sum1(dMk_opt[joint]*pFk_opt_joint)
+                if ignoreFLV:
+                    Fk_opt = np.multiply(mtParameters[0, :], akj_opt[:, 0])
+                    aFPk_opt = Fk_opt # TODO, not really the case
+                else:
+                    # Hill-equilibrium.
+                    [hillEqk_opt, Fk_opt, _, _,_, normFiberLengthk_opt, 
+                    fiberVelocityk_opt, aFPk_opt, pFPk_opt] = (
+                        f_hillEquilibrium(akj_opt[:, 0], lMTk_opt_lr, vMTk_opt_lr,
+                                        nFkj_opt_nsc[:, 0], nFDtk_opt_nsc))
+                    normFiberLength_opt[:,k] = normFiberLengthk_opt.full().flatten()
+                    fiberVelocity_opt[:,k] = fiberVelocityk_opt.full().flatten()
+                    # Passive muscle moments.
+                    for c_j, joint in enumerate(muscleDrivenJoints):
+                        pFk_opt_joint = pFPk_opt[momentArmIndices[joint]]
+                        pMT_opt[c_j, k] = ca.sum1(dMk_opt[joint]*pFk_opt_joint)
                 # Active muscle moments.
                 for c_j, joint in enumerate(muscleDrivenJoints):
                     aFk_opt_joint = aFPk_opt[momentArmIndices[joint]]
@@ -2511,6 +2547,7 @@ def run_tracking(baseDir, dataDir, settings, case='0',
                     moment_arms_opt[joint][:, k] = dMk_opt[joint].full().flatten()
                     muscle_torques_opt[joint][:, k] = (dMk_opt[joint]*aFk_opt_joint).full().flatten()
                     moment_arms_muscles[joint] = [bothSidesMuscles[i] for i in momentArmIndices[joint]]
+                Ft_opt[:,k] = Fk_opt.full().flatten()
                     
             # Passive limit moments.
             if enableLimitTorques:
@@ -2525,10 +2562,11 @@ def run_tracking(baseDir, dataDir, settings, case='0',
                 else:
                     activationTerm_opt = f_NMusclesSumWeightedPow(akj_opt[:, j+1], s_muscleVolume * w_muscles)
                     activationDtTerm_opt = f_NMusclesSum2(aDtk_opt)
-                    forceDtTerm_opt = f_NMusclesSum2(nFDtk_opt)
+                    if not ignoreFLV:
+                        forceDtTerm_opt = f_NMusclesSum2(nFDtk_opt)
+                        forceDtTerm_opt_all += weights['forceDtTerm'] * forceDtTerm_opt * h * B[j + 1]
                     activationTerm_opt_all += weights['activationTerm'] * activationTerm_opt * h * B[j + 1]
                     activationDtTerm_opt_all += weights['activationDtTerm'] * activationDtTerm_opt * h * B[j + 1]
-                    forceDtTerm_opt_all += weights['forceDtTerm'] * forceDtTerm_opt * h * B[j + 1]
                 jointAccelerationTerm_opt = f_nJointsSum2(Qddsk_opt)                
                 positionTrackingTerm_opt = f_NQsToTrackWSum2(Qskj_opt[idx_coordinates_toTrack, 0], dataToTrack_Qs_sc_offset_opt[:, k], w_dataToTrack_values)                
                 velocityTrackingTerm_opt = f_NQsToTrackWSum2(Qdskj_opt[idx_coordinates_toTrack, 0], dataToTrack_Qds_sc[:, k], w_dataToTrack_speeds)                    
@@ -2573,8 +2611,9 @@ def run_tracking(baseDir, dataDir, settings, case='0',
             JMotor_opt = coordExcitationTerm_opt_all.full()
         else:
             JMotor_opt = (activationTerm_opt_all.full() + 
-                        activationDtTerm_opt_all.full() + 
-                        forceDtTerm_opt_all.full())
+                        activationDtTerm_opt_all.full())
+            if not ignoreFLV:
+                JMotor_opt += forceDtTerm_opt_all.full()
         JMotor_opt += jointAccelerationTerm_opt_all.full()
         if withArms:                
             JMotor_opt += armExcitationTerm_opt_all.full()
@@ -2603,7 +2642,8 @@ def run_tracking(baseDir, dataDir, settings, case='0',
         else:
             JTerms["activationTerm"] = activationTerm_opt_all.full()[0][0]
             JTerms["activationDtTerm"] = activationDtTerm_opt_all.full()[0][0]
-            JTerms["forceDtTerm"] = forceDtTerm_opt_all.full()[0][0]
+            if not ignoreFLV:
+                JTerms["forceDtTerm"] = forceDtTerm_opt_all.full()[0][0]
         if withArms:
             JTerms["armExcitationTerm"] = armExcitationTerm_opt_all.full()[0][0]
         if withLumbarCoordinateActuators:
@@ -2620,13 +2660,13 @@ def run_tracking(baseDir, dataDir, settings, case='0',
         else:
             JTerms["activationTerm_sc"] = JTerms["activationTerm"] / JAll_opt[0][0]
             JTerms["activationDtTerm_sc"] = JTerms["activationDtTerm"] / JAll_opt[0][0]
-            JTerms["forceDtTerm_sc"] = JTerms["forceDtTerm"] / JAll_opt[0][0]
+            if not ignoreFLV:
+                JTerms["forceDtTerm_sc"] = JTerms["forceDtTerm"] / JAll_opt[0][0]
         if withArms:
             JTerms["armExcitationTerm_sc"] = JTerms["armExcitationTerm"] / JAll_opt[0][0]
         if withLumbarCoordinateActuators:
             JTerms["lumbarExcitationTerm_sc"] = JTerms["lumbarExcitationTerm"] / JAll_opt[0][0]
-        JTerms["jointAccelerationTerm_sc"] = JTerms["jointAccelerationTerm"] / JAll_opt[0][0]
-        
+        JTerms["jointAccelerationTerm_sc"] = JTerms["jointAccelerationTerm"] / JAll_opt[0][0]        
         JTerms["positionTerm_sc"] = JTerms["positionTerm"] / JAll_opt[0][0]
         JTerms["velocityTerm_sc"] = JTerms["velocityTerm"] / JAll_opt[0][0]
         if trackQdds:
@@ -2640,7 +2680,8 @@ def run_tracking(baseDir, dataDir, settings, case='0',
         else:
             print("\tMuscle activations: {}%".format(np.round(JTerms["activationTerm_sc"] * 100, 2)))
             print("\tMuscle activation derivatives: {}%".format(np.round(JTerms["activationDtTerm_sc"] * 100, 2)))
-            print("\tMuscle-tendon force derivatives: {}%".format(np.round(JTerms["forceDtTerm_sc"] * 100, 2)))
+            if not ignoreFLV:
+                print("\tMuscle-tendon force derivatives: {}%".format(np.round(JTerms["forceDtTerm_sc"] * 100, 2)))
         if withArms:
             print("\tArm excitations: {}%".format(np.round(JTerms["armExcitationTerm_sc"] * 100, 2)))
         if withLumbarCoordinateActuators:
