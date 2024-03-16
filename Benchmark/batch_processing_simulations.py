@@ -157,19 +157,19 @@ cases = ['57', '60']
 # motion_type = 'walking_formulation2'
 # cases = ['1']
 
-# runProblem = True
-# processInputs = True
-# runSimulation = True
-# solveProblem = True
-# analyzeResults = True
-# plotResults = False
-
-runProblem = False
+runProblem = True
 processInputs = True
 runSimulation = True
 solveProblem = True
-analyzeResults = False
-plotResults = True
+analyzeResults = True
+plotResults = False
+
+# runProblem = False
+# processInputs = True
+# runSimulation = True
+# solveProblem = True
+# analyzeResults = False
+# plotResults = True
 
 for case in cases:
 
