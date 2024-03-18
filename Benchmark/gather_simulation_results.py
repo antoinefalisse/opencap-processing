@@ -91,7 +91,7 @@ trials = {
         'STS':     {
             'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
     }
-tempKeys = ['47']
+tempKeys = ['60']
 
 
 # %% User inputs
@@ -191,6 +191,8 @@ for iSub, subject in enumerate(subjects):
                 c_tr = np.load(os.path.join(pathOSData,tName,
                                             'optimaltrajectories.npy'),
                                allow_pickle=True).item()
+                # TODO
+                optimaltrajectories[tName] = c_tr[tempKeys[0]]
             except:
                 print('No optimal trajectories found for {} - {}'.format(subject,tName))
                 continue
@@ -200,8 +202,7 @@ for iSub, subject in enumerate(subjects):
             
             # case_toPlot = list(c_tr[tempKeys[0]].keys())[0].replace('_videoAndMocap','')
             
-            # TODO
-            optimaltrajectories[tName] = c_tr[tempKeys[0]]
+            
         
         # %% process settings
         cases = list(optimaltrajectories.keys())

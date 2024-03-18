@@ -2230,7 +2230,7 @@ def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
         # Clean up ticks and labels.
         for i in range(0, mm):
             axs.flatten()[i].set_xticklabels([])
-        fig.tight_layout()
+        # fig.tight_layout()
         plt.show()
 
     # %% Muscle forces.
@@ -2280,7 +2280,7 @@ def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
         # Clean up ticks and labels.
         for i in range(0, mm):
             axs.flatten()[i].set_xticklabels([])
-        fig.tight_layout()
+        # fig.tight_layout()
         plt.show()
         
     # %% Fiber lengths.
@@ -2330,7 +2330,7 @@ def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
         # Clean up ticks and labels.
         for i in range(0, mm):
             axs.flatten()[i].set_xticklabels([])
-        fig.tight_layout()
+        # fig.tight_layout()
         plt.show()
         
     # %% Fiber velocity.
@@ -2380,7 +2380,7 @@ def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
         # Clean up ticks and labels.
         for i in range(0, mm):
             axs.flatten()[i].set_xticklabels([])
-        fig.tight_layout()
+        # fig.tight_layout()
         plt.show()
         
     # %% Moment arms
