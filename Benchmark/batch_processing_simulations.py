@@ -41,7 +41,7 @@ from utils import storage_to_numpy
 # dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark_mocap_updated')
 i = 2
-subjects = ['subject' + str(i) for i in range(i,i+2)]
+subjects = ['subject' + str(i) for i in range(i,i+3)]
 # subjects = ['subject' + str(i) for i in range(2,3)]
 
 trials = {
@@ -147,11 +147,11 @@ filter_frequency = 6
 # Settings for dynamic simulation.
 # motion_style = 'Squats'
 # repetitions = [1,2,3]
-# cases = ['2']
+# cases = ['1']
 
 motion_style = 'STS'
 repetitions = [1,2,3]
-cases = ['61']
+cases = ['62']
 
 # motion_style = 'walking'
 # motion_type = 'walking_formulation2'
@@ -161,7 +161,7 @@ runProblem = True
 processInputs = True
 runSimulation = True
 solveProblem = True
-analyzeResults = True
+analyzeResults = False
 plotResults = False
 
 # runProblem = False
@@ -174,7 +174,7 @@ plotResults = False
 for case in cases:
 
     if motion_style == 'Squats':
-        if case == '0':
+        if case == '0': # better than 1 and 2
             buffer_start = 0
             buffer_end = 0
             motion_type = 'squats'
@@ -187,6 +187,34 @@ for case in cases:
             buffer_end = 0
             motion_type = 'squats_formulation0'
             weight_activation = 10
+        elif case == '3':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'squats'
+            ignoreFLV = True
+        elif case == '4':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'squats'
+            ignoreFLV = True
+            weight_activation = 1
+            scaleIsometricMuscleForce = 3
+        elif case == '5':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'squats_formulation0'
+            ignoreFLV = True
+        elif case == '6':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'squats_formulation0'
+            weight_activation = 200
+        elif case == '7':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'squats_formulation0'
+            ignoreFLV = True
+            weight_activation = 200
 
     elif motion_style == 'walking':
         if case == '0':
@@ -906,6 +934,20 @@ for case in cases:
             weight_trackValueTerm = 1
             vGRFRatioTerm = 0.5
             ignoreFLV = True
+        elif case == '62':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation9'
+            periodicSTS = True
+            meshDensity = 100
+            weight_pelvis_tilt = 500
+            weight_position_tracking = 100
+            weight_lumbar_extension = 100
+            heel_vGRF_threshold = 20
+            trackValueCoordinates = {'mtp_angle_r': 0, 'mtp_angle_l': 0}
+            weight_trackValueTerm = 1
+            vGRFRatioTerm = 0.5
+            weight_activation = 100
         
         
     # %% Gait segmentation and kinematic analysis.
@@ -919,8 +961,8 @@ for case in cases:
         # pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
         for count, trial_name in enumerate(list(trials[subject][motion_style].keys())):
             
-            if count != 0:
-                continue
+            # if count != 1:
+            #     continue
         
             # if count < 2:
             #     continue
@@ -932,8 +974,8 @@ for case in cases:
 
             for rep in range(nReps):
                 
-                if rep != 0:
-                    continue
+                # if rep != 0:
+                #     continue
 
                 if 'repetitions' in locals():
                     repetition = repetitions[rep]   
@@ -1140,7 +1182,7 @@ for case in cases:
 
 
                     # plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['37', '44'], mainPlots=False, grfPlotOnly=False)
-                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['57', '60'], mainPlots=False, grfPlotOnly=False)
+                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['0','1'], mainPlots=True, grfPlotOnly=False)
                 
                 test=1
 

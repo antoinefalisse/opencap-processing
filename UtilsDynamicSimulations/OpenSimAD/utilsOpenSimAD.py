@@ -1874,7 +1874,7 @@ def download_file_2(url, file_name):
 # TODO: simplify and clean up.
 def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
                          cases=['default'], mainPlots=True, grfPlotOnly=False,
-                         momentArmsPlots=False):
+                         momentArmsPlots=False, detailedMusclePlots=False):
     
     # %% Load optimal trajectories.
     pathOSData = os.path.join(dataDir, 'OpenSimData')
@@ -2284,7 +2284,7 @@ def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
         plt.show()
         
     # %% Fiber lengths.
-    if not grfPlotOnly:
+    if not grfPlotOnly and detailedMusclePlots:
         plotMuscleForces = False
         for case in cases:
             if 'normalized_fiber_length' in optimaltrajectories[case]:
@@ -2334,7 +2334,7 @@ def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
         plt.show()
         
     # %% Fiber velocity.
-    if not grfPlotOnly:
+    if not grfPlotOnly and detailedMusclePlots:
         plotFiberVelocity = False
         for case in cases:
             if 'fiber_velocity' in optimaltrajectories[case]:
