@@ -151,7 +151,7 @@ filter_frequency = 6
 
 motion_style = 'STS'
 repetitions = [1,2,3]
-cases = ['63']
+cases = ['64', '65', '66']
 
 # motion_style = 'walking'
 # motion_type = 'walking_formulation2'
@@ -953,6 +953,24 @@ for case in cases:
             buffer_end = 0
             motion_type = 'sit_to_stand_formulation11'
             periodicSTS = False
+        elif case == '64':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation11'
+            periodicSTS = False
+            vGRFRatioTerm = 0.2
+        elif case == '65':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation11'
+            periodicSTS = False
+            vGRFRatioTerm = 0.5
+        elif case == '66':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation11'
+            periodicSTS = False
+            vGRFRatioTerm = 0.5
         
         
     # %% Gait segmentation and kinematic analysis.
