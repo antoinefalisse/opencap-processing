@@ -151,7 +151,7 @@ filter_frequency = 6
 
 motion_style = 'STS'
 repetitions = [1,2,3]
-cases = ['64', '65', '66']
+cases = ['67']
 
 # motion_style = 'walking'
 # motion_type = 'walking_formulation2'
@@ -951,25 +951,46 @@ for case in cases:
         elif case == '63':
             buffer_start = 0
             buffer_end = 0
+            motion_type = 'sit_to_stand_formulation11' # without min_ratio_vGRF = True, todo remove in settings
+            periodicSTS = False
+        elif case == '64': # Same as 63, because min_ratio_vGRF is False by default
+            buffer_start = 0
+            buffer_end = 0
             motion_type = 'sit_to_stand_formulation11'
             periodicSTS = False
-        elif case == '64':
+            vGRFRatioTerm = 0.1
+        elif case == '65': # Same as 63, because min_ratio_vGRF is False by default
             buffer_start = 0
             buffer_end = 0
             motion_type = 'sit_to_stand_formulation11'
             periodicSTS = False
             vGRFRatioTerm = 0.2
-        elif case == '65':
+        elif case == '66': # Same as 63, because min_ratio_vGRF is False by default
             buffer_start = 0
             buffer_end = 0
             motion_type = 'sit_to_stand_formulation11'
             periodicSTS = False
             vGRFRatioTerm = 0.5
-        elif case == '66':
+        elif case == '67':
             buffer_start = 0
             buffer_end = 0
             motion_type = 'sit_to_stand_formulation11'
             periodicSTS = False
+            min_ratio_vGRF = True
+            vGRFRatioTerm = 0.1
+        elif case == '68':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation11'
+            periodicSTS = False
+            min_ratio_vGRF = True
+            vGRFRatioTerm = 0.2
+        elif case == '69':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation11'
+            periodicSTS = False
+            min_ratio_vGRF = True
             vGRFRatioTerm = 0.5
         
         
