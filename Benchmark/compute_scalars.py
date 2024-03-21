@@ -136,7 +136,7 @@ else:
     
     motion_style = 'STS'
     motion_types = ['STS','STSweakLegs']
-    risingOnlySTS = False
+    risingOnlySTS = True
 
     # Likely fixed settings
     data_type = 'Video' # only set up for video now

@@ -42,7 +42,7 @@ from utils import storage_to_numpy
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark_mocap_updated')
 i = 2
 subjects = ['subject' + str(i) for i in range(i,i+2)]
-# subjects = ['subject' + str(i) for i in range(2,7)]
+# subjects = ['subject' + str(i) for i in range(2,3)]
 
 trials = {
     'subject2': {
@@ -151,7 +151,7 @@ filter_frequency = 6
 
 motion_style = 'STS'
 repetitions = [1,2,3]
-cases = ['79', '71']
+cases = ['72']
 
 # motion_style = 'walking'
 # motion_type = 'walking_formulation2'
@@ -1006,6 +1006,14 @@ for case in cases:
             periodicSTS = True
             min_ratio_vGRF = True
             vGRFRatioTerm = 0.5
+        elif case == '72':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation11'
+            periodicSTS = False
+            min_ratio_vGRF = True
+            vGRFRatioTerm = 0.5
+            startSTSnoDelay_to_Stand = True
         
         
     # %% Gait segmentation and kinematic analysis.
@@ -1240,7 +1248,7 @@ for case in cases:
 
 
                     # plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['37', '44'], mainPlots=False, grfPlotOnly=False)
-                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['1','6'], mainPlots=True, grfPlotOnly=False)
+                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['67', '68', '69', '70'], mainPlots=True, grfPlotOnly=False)
                 
                 test=1
 
