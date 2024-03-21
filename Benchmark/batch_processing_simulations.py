@@ -42,7 +42,7 @@ from utils import storage_to_numpy
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark_mocap_updated')
 i = 2
 subjects = ['subject' + str(i) for i in range(i,i+2)]
-# subjects = ['subject' + str(i) for i in range(2,12)]
+# subjects = ['subject' + str(i) for i in range(2,7)]
 
 trials = {
     'subject2': {
@@ -151,7 +151,7 @@ filter_frequency = 6
 
 motion_style = 'STS'
 repetitions = [1,2,3]
-cases = ['67']
+cases = ['79', '71']
 
 # motion_style = 'walking'
 # motion_type = 'walking_formulation2'
@@ -990,6 +990,20 @@ for case in cases:
             buffer_end = 0
             motion_type = 'sit_to_stand_formulation11'
             periodicSTS = False
+            min_ratio_vGRF = True
+            vGRFRatioTerm = 0.5
+        elif case == '70':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation11'
+            periodicSTS = False
+            min_ratio_vGRF = True
+            vGRFRatioTerm = 1
+        elif case == '71':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation11'
+            periodicSTS = True
             min_ratio_vGRF = True
             vGRFRatioTerm = 0.5
         
