@@ -147,11 +147,11 @@ filter_frequency = 6
 # Settings for dynamic simulation.
 # motion_style = 'Squats'
 # repetitions = [1]
-# cases = ['1']
+# cases = ['12']
 
 motion_style = 'STS'
 repetitions = [1,2,3]
-cases = ['72']
+cases = ['73']
 
 # motion_style = 'walking'
 # motion_type = 'walking_formulation2'
@@ -215,6 +215,29 @@ for case in cases:
             motion_type = 'squats_formulation0'
             ignoreFLV = True
             weight_activation = 200
+        elif case == '8':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'squats'
+            reserve_hip_flexion = 30
+        elif case == '9':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'squats'
+            reserve_hip_adduction = 30
+        elif case == '10':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'squats_torque_driven'
+        elif case == '11':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'squats_torque_driven'
+            meshDensity = 50
+        if case == '12':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'squats_formulation1'
 
     elif motion_style == 'walking':
         if case == '0':
@@ -1014,7 +1037,14 @@ for case in cases:
             min_ratio_vGRF = True
             vGRFRatioTerm = 0.5
             startSTSnoDelay_to_Stand = True
-        
+        elif case == '73':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation11'
+            periodicSTS = False
+            min_ratio_vGRF = True
+            vGRFRatioTerm = 0.5
+            buffer_start = 0.3        
         
     # %% Gait segmentation and kinematic analysis.
 
@@ -1027,8 +1057,8 @@ for case in cases:
         # pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
         for count, trial_name in enumerate(list(trials[subject][motion_style].keys())):
             
-            # if count != 1:
-            #     continue
+            if count != 0:
+                continue
         
             # if count < 2:
             #     continue
@@ -1040,8 +1070,8 @@ for case in cases:
 
             for rep in range(nReps):
                 
-                # if rep != 0:
-                #     continue
+                if rep != 0:
+                    continue
 
                 if 'repetitions' in locals():
                     repetition = repetitions[rep]   
@@ -1170,6 +1200,28 @@ for case in cases:
                                         reserveActuatorCoordinates['mtp_angle_r'] = reserve_mtp_angle
                                         reserveActuatorCoordinates['mtp_angle_l'] = reserve_mtp_angle
                                         settings['reserveActuatorCoordinates'] = reserveActuatorCoordinates
+                                if 'reserve_hip_flexion' in locals():
+                                    if 'reserveActuatorCoordinates' in settings:
+                                        reserveActuatorCoordinates = settings['reserveActuatorCoordinates']
+                                        reserveActuatorCoordinates['hip_flexion_r'] = reserve_hip_flexion
+                                        reserveActuatorCoordinates['hip_flexion_l'] = reserve_hip_flexion
+                                        settings['reserveActuatorCoordinates'] = reserveActuatorCoordinates
+                                    else:
+                                        reserveActuatorCoordinates = {}                                        
+                                        reserveActuatorCoordinates['hip_flexion_r'] = reserve_hip_flexion
+                                        reserveActuatorCoordinates['hip_flexion_l'] = reserve_hip_flexion
+                                        settings['reserveActuatorCoordinates'] = reserveActuatorCoordinates
+                                if 'reserve_hip_adduction' in locals():
+                                    if 'reserveActuatorCoordinates' in settings:
+                                        reserveActuatorCoordinates = settings['reserveActuatorCoordinates']
+                                        reserveActuatorCoordinates['hip_adduction_r'] = reserve_hip_adduction
+                                        reserveActuatorCoordinates['hip_adduction_l'] = reserve_hip_adduction
+                                        settings['reserveActuatorCoordinates'] = reserveActuatorCoordinates
+                                    else:
+                                        reserveActuatorCoordinates = {}                                        
+                                        reserveActuatorCoordinates['hip_adduction_r'] = reserve_hip_adduction
+                                        reserveActuatorCoordinates['hip_adduction_l'] = reserve_hip_adduction
+                                        settings['reserveActuatorCoordinates'] = reserveActuatorCoordinates
 
                                 # TODO
                                 if 'trackValueCoordinates' in locals():
@@ -1248,7 +1300,7 @@ for case in cases:
 
 
                     # plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['37', '44'], mainPlots=False, grfPlotOnly=False)
-                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['67', '68', '69', '70'], mainPlots=True, grfPlotOnly=False)
+                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['69', '72'], mainPlots=True, grfPlotOnly=False)
                 
                 test=1
 

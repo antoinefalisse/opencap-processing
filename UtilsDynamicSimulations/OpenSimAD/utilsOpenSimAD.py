@@ -1956,7 +1956,7 @@ def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
         # Clean up ticks and labels.    
         for i in range(0, mm):
             axs.flatten()[i].set_xticklabels([])
-        plt.show()
+        plt.draw()
         
     # %% Joint speeds.
     if not mainPlots and not grfPlotOnly:
@@ -2011,7 +2011,7 @@ def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
         # Clean up ticks and labels.
         for i in range(0, mm):
             axs.flatten()[i].set_xticklabels([])
-        plt.show()
+        plt.draw()
         
     # %% Joint accelerations.
     if not mainPlots and not grfPlotOnly:
@@ -2066,7 +2066,7 @@ def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
         # Clean up ticks and labels.
         for i in range(0, mm):
             axs.flatten()[i].set_xticklabels([])
-        plt.show()
+        plt.draw()
         
     # %% Joint torques.
     if not grfPlotOnly:
@@ -2112,7 +2112,7 @@ def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
         # Clean up ticks and labels.
         for i in range(0, mm):
             axs.flatten()[i].set_xticklabels([])
-        plt.show()
+        plt.draw()
         
     # %% GRFs.
     GRF_labels = optimaltrajectories[cases[0]]['GRF_labels']
@@ -2146,7 +2146,7 @@ def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
     fig.legend(handles, labels, loc='upper right', fontsize=fontsizeLegend)
     # Change subplot spacing.
     fig.subplots_adjust(hspace=0.4, wspace=0.4)
-    plt.show()
+    plt.draw()
         
     # %% GRMs.
     if not mainPlots and not grfPlotOnly:
@@ -2181,7 +2181,7 @@ def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
         fig.legend(handles, labels, loc='upper right', fontsize=fontsizeLegend)
         # Change subplot spacing.
         fig.subplots_adjust(hspace=0.4, wspace=0.4)
-        plt.show()
+        plt.draw()
         
     # %% Muscle activations.
     if not grfPlotOnly:
@@ -2231,7 +2231,7 @@ def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
         for i in range(0, mm):
             axs.flatten()[i].set_xticklabels([])
         # fig.tight_layout()
-        plt.show()
+        plt.draw()
 
     # %% Muscle forces.
     if not grfPlotOnly:
@@ -2281,7 +2281,7 @@ def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
         for i in range(0, mm):
             axs.flatten()[i].set_xticklabels([])
         # fig.tight_layout()
-        plt.show()
+        plt.draw()
         
     # %% Fiber lengths.
     if not grfPlotOnly and detailedMusclePlots:
@@ -2331,7 +2331,7 @@ def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
         for i in range(0, mm):
             axs.flatten()[i].set_xticklabels([])
         # fig.tight_layout()
-        plt.show()
+        plt.draw()
         
     # %% Fiber velocity.
     if not grfPlotOnly and detailedMusclePlots:
@@ -2381,7 +2381,7 @@ def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
         for i in range(0, mm):
             axs.flatten()[i].set_xticklabels([])
         # fig.tight_layout()
-        plt.show()
+        plt.draw()
         
     # %% Moment arms
     if not mainPlots and not grfPlotOnly and momentArmsPlots:
@@ -2432,7 +2432,7 @@ def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
             for i in range(0, mm):
                 axs.flatten()[i].set_xticklabels([])
             # fig.tight_layout()
-            plt.show()
+            plt.draw()
         
     # %% Moment arm torques
     if not mainPlots and not grfPlotOnly and momentArmsPlots:
@@ -2483,7 +2483,7 @@ def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
             for i in range(0, mm):
                 axs.flatten()[i].set_xticklabels([])
             # fig.tight_layout()
-            plt.show()
+            plt.draw()
         
         
     # %% KAMs.
@@ -2538,7 +2538,7 @@ def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
         # Clean up ticks and labels.
         for i in range(0, mm):
             axs.flatten()[i].set_xticklabels([])
-        plt.show()
+        plt.draw()
     
     # %% MCFs.
     if not mainPlots and not grfPlotOnly:
@@ -2592,7 +2592,7 @@ def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
         # Clean up ticks and labels.
         for i in range(0, mm):
             axs.flatten()[i].set_xticklabels([])
-        plt.show()
+        plt.draw()
         
     # # %% Joint torques: breakdown.  
     # if not mainPlots:
