@@ -145,13 +145,13 @@ trials = {
 filter_frequency = 6
 
 # Settings for dynamic simulation.
-# motion_style = 'Squats'
-# repetitions = [1]
-# cases = ['12']
-
-motion_style = 'STS'
+motion_style = 'Squats'
 repetitions = [1,2,3]
-cases = ['73']
+cases = ['0', '12']
+
+# motion_style = 'STS'
+# repetitions = [1,2,3]
+# cases = ['73']
 
 # motion_style = 'walking'
 # motion_type = 'walking_formulation2'
@@ -1057,8 +1057,8 @@ for case in cases:
         # pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
         for count, trial_name in enumerate(list(trials[subject][motion_style].keys())):
             
-            if count != 0:
-                continue
+            # if count != 0:
+            #     continue
         
             # if count < 2:
             #     continue
@@ -1070,8 +1070,8 @@ for case in cases:
 
             for rep in range(nReps):
                 
-                if rep != 0:
-                    continue
+                # if rep != 0:
+                #     continue
 
                 if 'repetitions' in locals():
                     repetition = repetitions[rep]   
@@ -1300,7 +1300,7 @@ for case in cases:
 
 
                     # plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['37', '44'], mainPlots=False, grfPlotOnly=False)
-                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['69', '72'], mainPlots=True, grfPlotOnly=False)
+                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['0', '12'], mainPlots=True, grfPlotOnly=False)
                 
                 test=1
 
