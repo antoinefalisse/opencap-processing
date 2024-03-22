@@ -2638,7 +2638,8 @@ def processInputsOpenSimAD(baseDir, dataFolder, session_id, trial_name,
                            contact_configuration='generic',
                            periodicSTS=False, stand_to_stand=False,
                            endSTS_to_endSTS=False,
-                           startSTSnoDelay_to_Stand=False):
+                           startSTSnoDelay_to_Stand=False,
+                           startSTSnoDelay_to_endSTS=False):
         
     # Path session folder.
     # sessionFolder =  os.path.join(dataFolder, session_id)
@@ -2715,7 +2716,13 @@ def processInputsOpenSimAD(baseDir, dataFolder, session_id, trial_name,
                         times_window.append([times_window_periodic[i-1][1], times_window_periodic[i][1]])                        
             elif startSTSnoDelay_to_Stand:
                 times_window, times_window_rising_delayed, _ = segment_STS(pathMotionFile, visualize=True)
-                settings['timeIntervalRising'] = [float(i) for i in times_window_rising_delayed[repetition]]                       
+                settings['timeIntervalRising'] = [float(i) for i in times_window_rising_delayed[repetition]]
+            elif startSTSnoDelay_to_endSTS:
+                times_window_rising, times_window_rising_delayed, times_window_periodic = segment_STS(pathMotionFile, visualize=True)
+                times_window = []
+                for i, _  in enumerate(times_window_rising):
+                    times_window.append([times_window_rising[i][0], times_window_periodic[i][1]]) 
+                settings['timeIntervalRising'] = [float(i) for i in times_window_rising_delayed[repetition]]
             else:
                 _, times_window, _ = segment_STS(pathMotionFile, visualize=True)
         time_window = times_window[repetition]

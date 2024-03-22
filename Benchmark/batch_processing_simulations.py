@@ -41,8 +41,8 @@ from utils import storage_to_numpy
 # dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark_mocap_updated')
 i = 2
-subjects = ['subject' + str(i) for i in range(i,i+2)]
-# subjects = ['subject' + str(i) for i in range(2,3)]
+# subjects = ['subject' + str(i) for i in range(i,i+1)]
+subjects = ['subject' + str(i) for i in range(7,12)]
 
 trials = {
     'subject2': {
@@ -145,13 +145,13 @@ trials = {
 filter_frequency = 6
 
 # Settings for dynamic simulation.
-motion_style = 'Squats'
-repetitions = [1,2,3]
-cases = ['0', '12']
-
-# motion_style = 'STS'
+# motion_style = 'Squats'
 # repetitions = [1,2,3]
-# cases = ['73']
+# cases = ['0', '12']
+
+motion_style = 'STS'
+repetitions = [1, 2, 3]
+cases = ['74']
 
 # motion_style = 'walking'
 # motion_type = 'walking_formulation2'
@@ -161,7 +161,7 @@ runProblem = True
 processInputs = True
 runSimulation = True
 solveProblem = True
-analyzeResults = False
+analyzeResults = True
 plotResults = False
 
 # runProblem = False
@@ -1044,7 +1044,15 @@ for case in cases:
             periodicSTS = False
             min_ratio_vGRF = True
             vGRFRatioTerm = 0.5
-            buffer_start = 0.3        
+            buffer_start = 0.3
+        elif case == '74':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation11'
+            periodicSTS = False
+            min_ratio_vGRF = True
+            vGRFRatioTerm = 0.5
+            startSTSnoDelay_to_endSTS = True
         
     # %% Gait segmentation and kinematic analysis.
 
@@ -1100,10 +1108,12 @@ for case in cases:
                                     endSTS_to_endSTS = False                                    
                                 if not 'startSTSnoDelay_to_Stand' in locals():
                                     startSTSnoDelay_to_Stand = False
+                                if not 'startSTSnoDelay_to_endSTS' in locals():
+                                    startSTSnoDelay_to_endSTS = False
                                     
                                 settings = processInputsOpenSimAD(
                                     baseDir, sessionDir, session_id, trial_name, 
-                                    motion_type, repetition=repetition, periodicSTS=periodicSTS, stand_to_stand=stand_to_stand, endSTS_to_endSTS=endSTS_to_endSTS, startSTSnoDelay_to_Stand=startSTSnoDelay_to_Stand)
+                                    motion_type, repetition=repetition, periodicSTS=periodicSTS, stand_to_stand=stand_to_stand, endSTS_to_endSTS=endSTS_to_endSTS, startSTSnoDelay_to_Stand=startSTSnoDelay_to_Stand, startSTSnoDelay_to_endSTS=startSTSnoDelay_to_endSTS)
                                 
                                 pathMotionFile = os.path.join(dataFolder, subject, 'OpenSimData', 'Kinematics', trial_name + '.mot')
                                 motion_file = storage_to_numpy(pathMotionFile)
