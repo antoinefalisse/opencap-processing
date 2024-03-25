@@ -51,7 +51,10 @@ trials = {
             'walking1': {'start':-1, 'end':1.85}, 'walking2': {'start':-0.9, 'end':1.76}, 'walking3': {'start':-1, 'end':1.90}, # case 2: 'walking3': {'start':-1, 'end':1.76},
             'walkingTS1': {'start':-1, 'end':2.15}, 'walkingTS2': {'start':-1, 'end':1.97}, 'walkingTS4': {'start':-0.9, 'end':2.13}}, # case 2: 'walkingTS1': {'start':-1, 'end':2.25}},
         'STS':     {
-            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
+        'Squats':{
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+        },
     'subject3': {
         'walking': {
             # Case 1: Warning, I re-organised stuff such that the good cases are 1.
@@ -63,53 +66,80 @@ trials = {
              # Case 12
             # 'walking2': {'start':-1.8, 'end':1.46}, 'walking3': {'start':-1.7, 'end':1.48}, 
             # 'walkingTS3': {'start':-2, 'end':2.00}},
-        'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
-    'subject4': {
-        'walking': {
-            'walking1': {'start':-0.7, 'end':1.6}, 'walking2': {'start':-0.7, 'end':1.87}, 'walking4': {'start':-0.7, 'end':1.7},
-            'walkingTS1': {'start':-0.7, 'end':1.7}, 'walkingTS2': {'start':-0.7, 'end':1.6}, 'walkingTS3': {'start':-0.7, 'end':1.95}},
-        'STS':     {
-            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+        'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
+        'Squats':{
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+        },
+    # 'subject4': {
+    #     'walking': {
+    #         'walking1': {'start':-0.7, 'end':1.6}, 'walking2': {'start':-0.7, 'end':1.87}, 'walking4': {'start':-0.7, 'end':1.7},
+    #         'walkingTS1': {'start':-0.7, 'end':1.7}, 'walkingTS2': {'start':-0.7, 'end':1.6}, 'walkingTS3': {'start':-0.7, 'end':1.95}},
+    #     'STS':     {
+    #         'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
+    #     'Squats':{
+    #         'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+    #     },
     'subject5': {
         'walking': {
             'walking1': {'start':-0.7, 'end':1.83}, 'walking2': {'start':-0.7, 'end':1.8}, 'walking3': {'start':-0.7, 'end':1.8},
             'walkingTS1': {'start':-0.8, 'end':1.88}, 'walkingTS2': {'start':-0.7, 'end':1.75}, 'walkingTS3': {'start':-0.7, 'end':1.72}},
-        'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+        'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
+        'Squats':{
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+        },
     'subject6': {
         'walking': {
             'walking1': {'start':-1.2, 'end':1.63}, 'walking2': {'start':-1.2, 'end':1.6}, 'walking3': {'start':-1.2, 'end':2},
             'walkingTS1': {'start':-0.7, 'end':1.65}, 'walkingTS2': {'start':-0.8, 'end':1.72}, 'walkingTS3': {'start':-1.1, 'end':1.78}},
         'STS':     {
-            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
+        'Squats':{
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+        },
     'subject7': {
         'walking': {
             'walking1': {'start':-0.8, 'end':1.79}, 'walking2': {'start':-0.7, 'end':1.82}, 'walking3': {'start':-0.7, 'end':1.87},
             'walkingTS1': {'start':-1.1, 'end':1.83}, 'walkingTS2': {'start':-1.1, 'end':1.9}, 'walkingTS3': {'start':-1.1, 'end':2.12}},
         'STS':     {
-            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
+        'Squats':{
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+        },
     'subject8': {
         'walking': {
             'walking1': {'start':-1, 'end':1.83}, 'walking2': {'start':-0.7, 'end':1.89}, 'walking3': {'start':-0.7, 'end':1.92}, 
             'walkingTS1': {'start':-0.7, 'end':2.3}, 'walkingTS2': {'start':-1.0, 'end':2.06}, 'walkingTS3': {'start':-0.7, 'end':1.9}},
         'STS':     {
-            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
+        'Squats':{
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+        },
     'subject9': {
         'walking': {
             'walking1': {'start':-0.6, 'end':1.65}, 'walking2': {'start':-0.5, 'end':1.55}, 'walking3': {'start':-0.6, 'end':1.6}, 
             'walkingTS1': {'start':-0.7, 'end':1.68}, 'walkingTS2': {'start':-0.7, 'end':1.63}, 'walkingTS3': {'start':-0.7, 'end':1.56}},
-        'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+        'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
+        'Squats':{
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+        },
     'subject10': {
         'walking': {
             'walking1': {'start':-0.7, 'end':1.46}, 'walking2': {'start':-0.7, 'end':1.49}, 'walking3': {'start':-0.7, 'end':1.5}, 
             'walkingTS1': {'start':-0.8, 'end':1.78}, 'walkingTS2': {'start':-0.9, 'end':1.85}, 'walkingTS3': {'start':-0.8, 'end':1.66}},
         'STS':     {
-            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
+        'Squats':{
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+        },
     'subject11': {
         'walking': {
             'walking2': {'start':-0.7, 'end':1.6}, 'walking3': {'start':-0.7, 'end':1.55}, 'walking4': {'start':-0.7, 'end':1.62}, 
             'walkingTS1': {'start':-0.7, 'end':1.9}, 'walkingTS2': {'start':-0.7, 'end':1.85}, 'walkingTS3': {'start':-0.7, 'end':1.9}},
         'STS':     {
-            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}}},
+            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
+        'Squats':{
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+        },
     }
 
 # %% Settings
@@ -131,12 +161,12 @@ else:
     subjects = list(trials.keys())
     # motion_types = motion_types = ['DJ', 'DJAsym', 'walking', 'walkingTS', 
     #                                'squats','squatsAsym','STS','STSweakLegs']
-    # motion_style = 'walking'
     # motion_types = ['walking', 'walkingTS']
     
-    motion_style = 'STS'
-    motion_types = ['STS','STSweakLegs']
-    risingOnlySTS = True
+    # motion_types = ['STS','STSweakLegs']
+    # risingOnlySTS = True
+
+    motion_types = ['squats','squatsAsym']
 
     # Likely fixed settings
     data_type = 'Video' # only set up for video now
@@ -236,8 +266,7 @@ for iSub,subject in enumerate(subjects):
                 resTimeIdx = results_sel['video']['positions'][case]['headers'].index('time')
                 timeVec = results_sel['video']['positions'][case][segSource][resTimeIdx,:]
                 sfInds = getIndsFromTimes(sfTimes,timeVec)
-                selInds[case] = np.arange(sfInds[0],sfInds[1]+1)
-               
+                selInds[case] = np.arange(sfInds[0],sfInds[1]+1)               
             elif 'squat' in motion_type:
                 resTimeIdx = results_sel['video']['positions'][case]['headers'].index('time')
                 pelvTyIdx = results_sel['video']['positions'][case]['headers'].index('pelvis_ty')
@@ -247,10 +276,12 @@ for iSub,subject in enumerate(subjects):
                     sfInds = []
                     sfInds.append([0, pelvis_ty.shape[0]-1]) 
                 else: 
-                    sfInds, _ = segmentSquats(None , pelvis_ty=pelvis_ty , timeVec=timeVec)
+                    # Why did we segment again? We did it already when running the sims
+                    # sfInds, _ = segmentSquats(None , pelvis_ty=pelvis_ty , timeVec=timeVec)
+                    sfInds = []
+                    sfInds.append([0, pelvis_ty.shape[0]-1])
                 selInds[case] = np.arange(sfInds[0][0],sfInds[0][1]+1)
-            elif 'STS' in motion_type:
-                
+            elif 'STS' in motion_type:                
                 if risingOnlySTS:
                     resTimeIdx = results_sel['video']['positions'][case]['headers'].index('time')
                     risingTimes =  results_sel['video']['positions'][case]['timeIntervalRising']
@@ -265,7 +296,6 @@ for iSub,subject in enumerate(subjects):
                     pelvis_ty = results_sel['video']['positions'][case][segSource][pelvTyIdx,:]
                     sfInds = []
                     sfInds.append([0, pelvis_ty.shape[0]-1])
-
                     selInds[case] = np.arange(sfInds[0][0],sfInds[0][1]+1)                
             else:
                 raise Exception('Motion type:' + motion_type + ' not supported')
@@ -678,9 +708,9 @@ for iSub,subject in enumerate(subjects):
                 results_con[motion_type]['video']['activations' + actSuffix]['ref'][[idx_VL,idx_VM],:,:],axis=0),axis=1)
             results_con[motion_type]['video']['scalars']['sim_meanVLVMAct_l'] = np.mean(np.mean(
                 results_con[motion_type]['video']['activations' + actSuffix]['sim'][[idx_VL,idx_VM],:,:],axis=0),axis=1)
-            if not fieldStudy:
-                results_con[motion_type]['video']['scalars']['so_meanVLVMAct_l'] = np.mean(np.mean(
-                    results_con[motion_type]['video']['activations']['so'][[idx_VL,idx_VM],:,:],axis=0),axis=1)
+            # if not fieldStudy:
+            #     results_con[motion_type]['video']['scalars']['so_meanVLVMAct_l'] = np.mean(np.mean(
+            #         results_con[motion_type]['video']['activations']['so'][[idx_VL,idx_VM],:,:],axis=0),axis=1)
             
             # mean(VL,VM)_r
             idx_VL = [results_con[motion_type]['video']['activations' + actSuffix]['headers'].index('vaslat_r')]
@@ -689,9 +719,9 @@ for iSub,subject in enumerate(subjects):
                 results_con[motion_type]['video']['activations' + actSuffix]['ref'][[idx_VL,idx_VM],:,:],axis=0),axis=1)
             results_con[motion_type]['video']['scalars']['sim_meanVLVMAct_r'] = np.mean(np.mean(
                 results_con[motion_type]['video']['activations' + actSuffix]['sim'][[idx_VL,idx_VM],:,:],axis=0),axis=1)
-            if not fieldStudy:
-                results_con[motion_type]['video']['scalars']['so_meanVLVMAct_r'] = np.mean(np.mean(
-                    results_con[motion_type]['video']['activations']['so'][[idx_VL,idx_VM],:,:],axis=0),axis=1)
+            # if not fieldStudy:
+            #     results_con[motion_type]['video']['scalars']['so_meanVLVMAct_r'] = np.mean(np.mean(
+            #         results_con[motion_type]['video']['activations']['so'][[idx_VL,idx_VM],:,:],axis=0),axis=1)
             
             # mean KEM_both
             results_con[motion_type]['video']['scalars']['ref_meanVLVMAct_both'] = np.mean(np.concatenate((
@@ -708,10 +738,10 @@ for iSub,subject in enumerate(subjects):
             results_con[motion_type]['video']['scalars']['sim_meanVLVMAct_Asym'] = calc_LSI(results_con[
                 motion_type]['video']['scalars']['sim_meanVLVMAct_l'] , results_con[
                 motion_type]['video']['scalars']['sim_meanVLVMAct_r'])
-            if not fieldStudy:
-                results_con[motion_type]['video']['scalars']['so_meanVLVMAct_Asym'] = calc_LSI(results_con[
-                    motion_type]['video']['scalars']['so_meanVLVMAct_l'] , results_con[
-                    motion_type]['video']['scalars']['so_meanVLVMAct_r'])
+            # if not fieldStudy:
+            #     results_con[motion_type]['video']['scalars']['so_meanVLVMAct_Asym'] = calc_LSI(results_con[
+            #         motion_type]['video']['scalars']['so_meanVLVMAct_l'] , results_con[
+            #         motion_type]['video']['scalars']['so_meanVLVMAct_r'])
                     
             # peak(VL,VM)_l
             idx_VL = [results_con[motion_type]['video']['activations' + actSuffix]['headers'].index('vaslat_l')]
@@ -720,9 +750,9 @@ for iSub,subject in enumerate(subjects):
                 results_con[motion_type]['video']['activations' + actSuffix]['ref'][[idx_VL,idx_VM],:,:],axis=0),axis=1)
             results_con[motion_type]['video']['scalars']['sim_peakVLVMAct_l'] = np.max(np.mean(
                 results_con[motion_type]['video']['activations' + actSuffix]['sim'][[idx_VL,idx_VM],:,:],axis=0),axis=1)
-            if not fieldStudy:
-                results_con[motion_type]['video']['scalars']['so_peakVLVMAct_l'] = np.max(np.mean(
-                    results_con[motion_type]['video']['activations']['so'][[idx_VL,idx_VM],:,:],axis=0),axis=1)
+            # if not fieldStudy:
+            #     results_con[motion_type]['video']['scalars']['so_peakVLVMAct_l'] = np.max(np.mean(
+            #         results_con[motion_type]['video']['activations']['so'][[idx_VL,idx_VM],:,:],axis=0),axis=1)
             
             # mean(VL,VM)_r
             idx_VL = [results_con[motion_type]['video']['activations' + actSuffix]['headers'].index('vaslat_r')]
@@ -731,9 +761,9 @@ for iSub,subject in enumerate(subjects):
                 results_con[motion_type]['video']['activations' + actSuffix]['ref'][[idx_VL,idx_VM],:,:],axis=0),axis=1)
             results_con[motion_type]['video']['scalars']['sim_peakVLVMAct_r'] = np.max(np.mean(
                 results_con[motion_type]['video']['activations' + actSuffix]['sim'][[idx_VL,idx_VM],:,:],axis=0),axis=1)
-            if not fieldStudy:
-                results_con[motion_type]['video']['scalars']['so_peakVLVMAct_r'] = np.max(np.mean(
-                    results_con[motion_type]['video']['activations']['so'][[idx_VL,idx_VM],:,:],axis=0),axis=1)
+            # if not fieldStudy:
+            #     results_con[motion_type]['video']['scalars']['so_peakVLVMAct_r'] = np.max(np.mean(
+            #         results_con[motion_type]['video']['activations']['so'][[idx_VL,idx_VM],:,:],axis=0),axis=1)
             
             # mean KEM_both
             results_con[motion_type]['video']['scalars']['ref_peakVLVMAct_both'] = np.mean(np.concatenate((
@@ -750,10 +780,10 @@ for iSub,subject in enumerate(subjects):
             results_con[motion_type]['video']['scalars']['sim_peakVLVMAct_Asym'] = calc_LSI(results_con[
                 motion_type]['video']['scalars']['sim_peakVLVMAct_l'] , results_con[
                 motion_type]['video']['scalars']['sim_peakVLVMAct_r'])
-            if not fieldStudy:
-                results_con[motion_type]['video']['scalars']['so_peakVLVMAct_Asym'] = calc_LSI(results_con[
-                    motion_type]['video']['scalars']['so_peakVLVMAct_l'] , results_con[
-                    motion_type]['video']['scalars']['so_peakVLVMAct_r'])
+            # if not fieldStudy:
+            #     results_con[motion_type]['video']['scalars']['so_peakVLVMAct_Asym'] = calc_LSI(results_con[
+            #         motion_type]['video']['scalars']['so_peakVLVMAct_l'] , results_con[
+            #         motion_type]['video']['scalars']['so_peakVLVMAct_r'])
                            
             # mean KEM_l
             idx_KEM_l = [results_con[motion_type]['video']['torques_BWht']['headers'].index('knee_angle_l')]
