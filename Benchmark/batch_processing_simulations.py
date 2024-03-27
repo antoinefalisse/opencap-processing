@@ -166,7 +166,7 @@ filter_frequency = 6
 
 # Settings for dynamic simulation.
 motion_style = 'DJ'
-cases = ['8']
+cases = ['9']
 mocap_simulation = False
 
 
@@ -232,6 +232,9 @@ for case in cases:
         elif case == '8':
             motion_type = 'drop_jump'
             reserve_hip_adduction = 30
+        elif case == '9':
+            motion_type = 'drop_jump'
+            reserve_hip_rotation = 30
 
     elif motion_style == 'Squats':
         if case == '0':
@@ -1173,7 +1176,7 @@ for case in cases:
                 if 'repetitions' in locals():
                     repetition = repetitions[rep]   
             
-                if not '_video' in trial_name:
+                if not '_video' in trial_name and not mocap_simulation:
                     trial_name += '_video'
                     
                 # if trial_name == 'STS1_video' and repetition == 1:
@@ -1202,7 +1205,7 @@ for case in cases:
                                     
                                 settings = processInputsOpenSimAD(
                                     baseDir, sessionDir, session_id, trial_name, 
-                                    motion_type, repetition=repetition, periodicSTS=periodicSTS, stand_to_stand=stand_to_stand, endSTS_to_endSTS=endSTS_to_endSTS, startSTSnoDelay_to_Stand=startSTSnoDelay_to_Stand, startSTSnoDelay_to_endSTS=startSTSnoDelay_to_endSTS)
+                                    motion_type, os_folder_name=os_folder_name, repetition=repetition, periodicSTS=periodicSTS, stand_to_stand=stand_to_stand, endSTS_to_endSTS=endSTS_to_endSTS, startSTSnoDelay_to_Stand=startSTSnoDelay_to_Stand, startSTSnoDelay_to_endSTS=startSTSnoDelay_to_endSTS)
                                 
                                 pathMotionFile = os.path.join(dataFolder, subject, os_folder_name, 'Kinematics', trial_name + '.mot')
                                 motion_file = storage_to_numpy(pathMotionFile)
@@ -1210,7 +1213,10 @@ for case in cases:
                                 
                                 if 'DJ' in trial_name:
                                     # Get time interval from trimmed trial
-                                    pathTrimmedMotionFile = os.path.join(dataFolder, subject, 'OpenSimData', 'Kinematics_trimmed', trial_name.replace('_video', '_videoAndMocap') + '.mot')
+                                    if mocap_simulation:
+                                        pathTrimmedMotionFile = os.path.join(dataFolder, subject, 'OpenSimData', 'Kinematics_trimmed', trial_name + '_videoAndMocap.mot')
+                                    else:
+                                        pathTrimmedMotionFile = os.path.join(dataFolder, subject, 'OpenSimData', 'Kinematics_trimmed', trial_name.replace('_video', '_videoAndMocap') + '.mot')
                                     trimmed_motion_file = storage_to_numpy(pathTrimmedMotionFile)
                                     trimmed_time_window = [trimmed_motion_file['time'][0], trimmed_motion_file['time'][-1]]
 
@@ -1234,13 +1240,20 @@ for case in cases:
                                 
                                 elif 'walking' in trial_name:
                                     # Get time interval from trimmed trial
-                                    pathTrimmedMotionFile = os.path.join(dataFolder, subject, 'OpenSimData', 'Kinematics_trimmed', trial_name.replace('_video', '_videoAndMocap') + '.mot')
+                                    if mocap_simulation:
+                                        pathTrimmedMotionFile = os.path.join(dataFolder, subject, 'OpenSimData', 'Kinematics_trimmed', trial_name + '_videoAndMocap.mot')
+                                    else:
+                                        pathTrimmedMotionFile = os.path.join(dataFolder, subject, 'OpenSimData', 'Kinematics_trimmed', trial_name.replace('_video', '_videoAndMocap') + '.mot')
                                     trimmed_motion_file = storage_to_numpy(pathTrimmedMotionFile)
                                     trimmed_time_window = [trimmed_motion_file['time'][0], trimmed_motion_file['time'][-1]]
         
                                     # Update time window
-                                    time_start = np.round(max(trimmed_time_window[0] - buffer_start, full_time_window[0], trials[subject][motion_style][trial_name.replace('_video', '')]['start']),2)
-                                    time_end = np.round(min(trimmed_time_window[1] + buffer_end, full_time_window[1], trials[subject][motion_style][trial_name.replace('_video', '')]['end']),2)
+                                    if mocap_simulation:
+                                        time_start = np.round(max(trimmed_time_window[0] - buffer_start, full_time_window[0], trials[subject][motion_style][trial_name]['start']),2)
+                                        time_end = np.round(min(trimmed_time_window[1] + buffer_end, full_time_window[1], trials[subject][motion_style][trial_name]['end']),2)
+                                    else:
+                                        time_start = np.round(max(trimmed_time_window[0] - buffer_start, full_time_window[0], trials[subject][motion_style][trial_name.replace('_video', '')]['start']),2)
+                                        time_end = np.round(min(trimmed_time_window[1] + buffer_end, full_time_window[1], trials[subject][motion_style][trial_name.replace('_video', '')]['end']),2)
                                     buffer_start_applied = np.abs(np.round(time_start - trimmed_time_window[0], 2))
                                     buffer_end_applied = np.abs(np.round(time_end - trimmed_time_window[1], 2))
                                     settings['buffers'] = [round(float(buffer_start_applied),6),
