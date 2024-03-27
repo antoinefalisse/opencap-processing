@@ -53,7 +53,9 @@ trials = {
         'STS':     {
             'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
         'Squats':{
-            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}},
+        'DJ': {
+            'DJ1': {'start':None, 'end':None}, 'DJ2': {'start':None, 'end':None}, 'DJ3': {'start':None, 'end':None}, 'DJAsym1': {'start':None, 'end':None}, 'DJAsym4': {'start':None, 'end':None}, 'DJAsym5': {'start':None, 'end':None}}
         },
     'subject3': {
         'walking': {
@@ -68,7 +70,9 @@ trials = {
             # 'walkingTS3': {'start':-2, 'end':2.00}},
         'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
         'Squats':{
-            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}},
+        'DJ': {
+            'DJ1': {'start':None, 'end':None}, 'DJ2': {'start':None, 'end':None}, 'DJ4': {'start':None, 'end':None}, 'DJAsym1': {'start':None, 'end':None}, 'DJAsym2': {'start':None, 'end':None}, 'DJAsym4': {'start':None, 'end':None}}
         },
     'subject4': {
         'walking': {
@@ -77,7 +81,9 @@ trials = {
         'STS':     {
             'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
         'Squats':{
-            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}},
+        'DJ': {
+            'DJ1': {'start':None, 'end':None}, 'DJ2': {'start':None, 'end':None}, 'DJ3': {'start':None, 'end':None}, 'DJAsym1': {'start':None, 'end':None}, 'DJAsym2': {'start':None, 'end':None}, 'DJAsym3': {'start':None, 'end':None}}
         },
     'subject5': {
         'walking': {
@@ -85,7 +91,9 @@ trials = {
             'walkingTS1': {'start':-0.8, 'end':1.88}, 'walkingTS2': {'start':-0.7, 'end':1.75}, 'walkingTS3': {'start':-0.7, 'end':1.72}},
         'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
         'Squats':{
-            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}},
+        'DJ': {
+            'DJ1': {'start':None, 'end':None}, 'DJ2': {'start':None, 'end':None}, 'DJ3': {'start':None, 'end':None}, 'DJAsym1': {'start':None, 'end':None}, 'DJAsym2': {'start':None, 'end':None}, 'DJAsym3': {'start':None, 'end':None}}
         },
     'subject6': {
         'walking': {
@@ -94,7 +102,9 @@ trials = {
         'STS':     {
             'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
         'Squats':{
-            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}},
+        'DJ': {
+            'DJ1': {'start':None, 'end':None}, 'DJ2': {'start':None, 'end':None}, 'DJ3': {'start':None, 'end':None}, 'DJAsym1': {'start':None, 'end':None}, 'DJAsym2': {'start':None, 'end':None}, 'DJAsym3': {'start':None, 'end':None}}
         },
     'subject7': {
         'walking': {
@@ -103,7 +113,9 @@ trials = {
         'STS':     {
             'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
         'Squats':{
-            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}},
+        'DJ': {
+            'DJ2': {'start':None, 'end':None}, 'DJ3': {'start':None, 'end':None}, 'DJ4': {'start':None, 'end':None}, 'DJAsym1': {'start':None, 'end':None}, 'DJAsym2': {'start':None, 'end':None}, 'DJAsym3': {'start':None, 'end':None}}
         },
     'subject8': {
         'walking': {
@@ -112,7 +124,9 @@ trials = {
         'STS':     {
             'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
         'Squats':{
-            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}},
+        'DJ': {
+            'DJ1': {'start':None, 'end':None}, 'DJ2': {'start':None, 'end':None}, 'DJ3': {'start':None, 'end':None}, 'DJAsym1': {'start':None, 'end':None}, 'DJAsym2': {'start':None, 'end':None}, 'DJAsym3': {'start':None, 'end':None}}
         },
     'subject9': {
         'walking': {
@@ -120,7 +134,9 @@ trials = {
             'walkingTS1': {'start':-0.7, 'end':1.68}, 'walkingTS2': {'start':-0.7, 'end':1.63}, 'walkingTS3': {'start':-0.7, 'end':1.56}},
         'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
         'Squats':{
-            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}},
+        'DJ': {
+            'DJ1': {'start':None, 'end':None}, 'DJ2': {'start':None, 'end':None}, 'DJ3': {'start':None, 'end':None}, 'DJAsym1': {'start':None, 'end':None}, 'DJAsym2': {'start':None, 'end':None}, 'DJAsym3': {'start':None, 'end':None}}
         },
     'subject10': {
         'walking': {
@@ -129,7 +145,9 @@ trials = {
         'STS':     {
             'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
         'Squats':{
-            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}},
+        'DJ': {
+            'DJ1': {'start':None, 'end':None}, 'DJ2': {'start':None, 'end':None}, 'DJ3': {'start':None, 'end':None}, 'DJAsym1': {'start':None, 'end':None}, 'DJAsym2': {'start':None, 'end':None}, 'DJAsym3': {'start':None, 'end':None}}
         },
     'subject11': {
         'walking': {
@@ -138,7 +156,9 @@ trials = {
         'STS':     {
             'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
         'Squats':{
-            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}},
+        'DJ': {
+            'DJ1': {'start':None, 'end':None}, 'DJ4': {'start':None, 'end':None}, 'DJ5': {'start':None, 'end':None}, 'DJAsym3': {'start':None, 'end':None}, 'DJAsym4': {'start':None, 'end':None}, 'DJAsym5': {'start':None, 'end':None}}
         },
     }
 
@@ -166,7 +186,9 @@ else:
     # motion_types = ['STS','STSweakLegs']
     # risingOnlySTS = True
 
-    motion_types = ['squats','squatsAsym']
+    # motion_types = ['squats','squatsAsym']
+
+    motion_types = ['DJ','DJAsym']
 
     # Likely fixed settings
     data_type = 'Video' # only set up for video now
@@ -261,7 +283,7 @@ for iSub,subject in enumerate(subjects):
                 sfInds = getIndsFromTimes(sfTimes,timeVec)
                 selInds[case] = np.arange(sfInds[0],sfInds[1]+1)    
             elif 'DJ' in motion_type:
-                forcesFilePath = osDir = os.path.join(dataDir, 'LabValidation',subject, 'ForceData',case.replace('_video','') + '_forces.mot')
+                forcesFilePath = osDir = os.path.join(dataDir, subject, 'ForceData',case.replace('_video','') + '_forces.mot')
                 _, sfTimes = segmentDJ(forcesFilePath)
                 resTimeIdx = results_sel['video']['positions'][case]['headers'].index('time')
                 timeVec = results_sel['video']['positions'][case][segSource][resTimeIdx,:]
@@ -606,14 +628,14 @@ for iSub,subject in enumerate(subjects):
                 motion_type]['video']['scalars']['sim_meanKEM_r'])
                     
             # peak vGRF_l
-            idx = [results_con[motion_type]['video']['GRFs_BW']['headers'].index('ground_force_l_vy')]
+            idx = [results_con[motion_type]['video']['GRFs_BW']['headers'].index('ground_force_left_vy')]
             results_con[motion_type]['video']['scalars']['ref_peakvGRF_l'] = np.max(
                 results_con[motion_type]['video']['GRFs_BW']['ref'][idx,:,:],axis=1)
             results_con[motion_type]['video']['scalars']['sim_peakvGRF_l'] = np.max(
                 results_con[motion_type]['video']['GRFs_BW']['sim'][idx,:,:],axis=1)
             
             # peak vGRF_r
-            idx = [results_con[motion_type]['video']['GRFs_BW']['headers'].index('ground_force_r_vy')]
+            idx = [results_con[motion_type]['video']['GRFs_BW']['headers'].index('ground_force_right_vy')]
             results_con[motion_type]['video']['scalars']['ref_peakvGRF_r'] = np.max(
                 results_con[motion_type]['video']['GRFs_BW']['ref'][idx,:,:],axis=1)
             results_con[motion_type]['video']['scalars']['sim_peakvGRF_r'] = np.max(
@@ -628,14 +650,14 @@ for iSub,subject in enumerate(subjects):
                 motion_type]['video']['scalars']['sim_peakvGRF_r'])
                     
             # mean vGRF_l
-            idx = [results_con[motion_type]['video']['GRFs_BW']['headers'].index('ground_force_l_vy')]
+            idx = [results_con[motion_type]['video']['GRFs_BW']['headers'].index('ground_force_left_vy')]
             results_con[motion_type]['video']['scalars']['ref_meanvGRF_l'] = np.mean(
                 results_con[motion_type]['video']['GRFs_BW']['ref'][idx,:,:],axis=1)
             results_con[motion_type]['video']['scalars']['sim_meanvGRF_l'] = np.mean(
                 results_con[motion_type]['video']['GRFs_BW']['sim'][idx,:,:],axis=1)
             
             # mean vGRF_r
-            idx = [results_con[motion_type]['video']['GRFs_BW']['headers'].index('ground_force_r_vy')]
+            idx = [results_con[motion_type]['video']['GRFs_BW']['headers'].index('ground_force_right_vy')]
             results_con[motion_type]['video']['scalars']['ref_meanvGRF_r'] = np.mean(
                 results_con[motion_type]['video']['GRFs_BW']['ref'][idx,:,:],axis=1)
             results_con[motion_type]['video']['scalars']['sim_meanvGRF_r'] = np.mean(

@@ -33,7 +33,9 @@ trials = {
         'STS':     {
             'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
         'Squats':{
-            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}},
+        'DJ': {
+            'DJ1': {'start':None, 'end':None}, 'DJ2': {'start':None, 'end':None}, 'DJ3': {'start':None, 'end':None}, 'DJAsym1': {'start':None, 'end':None}, 'DJAsym4': {'start':None, 'end':None}, 'DJAsym5': {'start':None, 'end':None}}
         },
     'subject3': {
         'walking': {
@@ -48,7 +50,9 @@ trials = {
             # 'walkingTS3': {'start':-2, 'end':2.00}},
         'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
         'Squats':{
-            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}},
+        'DJ': {
+            'DJ1': {'start':None, 'end':None}, 'DJ2': {'start':None, 'end':None}, 'DJ4': {'start':None, 'end':None}, 'DJAsym1': {'start':None, 'end':None}, 'DJAsym2': {'start':None, 'end':None}, 'DJAsym4': {'start':None, 'end':None}}
         },
     'subject4': {
         'walking': {
@@ -57,7 +61,9 @@ trials = {
         'STS':     {
             'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
         'Squats':{
-            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}},
+        'DJ': {
+            'DJ1': {'start':None, 'end':None}, 'DJ2': {'start':None, 'end':None}, 'DJ3': {'start':None, 'end':None}, 'DJAsym1': {'start':None, 'end':None}, 'DJAsym2': {'start':None, 'end':None}, 'DJAsym3': {'start':None, 'end':None}}
         },
     'subject5': {
         'walking': {
@@ -65,7 +71,9 @@ trials = {
             'walkingTS1': {'start':-0.8, 'end':1.88}, 'walkingTS2': {'start':-0.7, 'end':1.75}, 'walkingTS3': {'start':-0.7, 'end':1.72}},
         'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
         'Squats':{
-            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}},
+        'DJ': {
+            'DJ1': {'start':None, 'end':None}, 'DJ2': {'start':None, 'end':None}, 'DJ3': {'start':None, 'end':None}, 'DJAsym1': {'start':None, 'end':None}, 'DJAsym2': {'start':None, 'end':None}, 'DJAsym3': {'start':None, 'end':None}}
         },
     'subject6': {
         'walking': {
@@ -74,7 +82,9 @@ trials = {
         'STS':     {
             'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
         'Squats':{
-            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}},
+        'DJ': {
+            'DJ1': {'start':None, 'end':None}, 'DJ2': {'start':None, 'end':None}, 'DJ3': {'start':None, 'end':None}, 'DJAsym1': {'start':None, 'end':None}, 'DJAsym2': {'start':None, 'end':None}, 'DJAsym3': {'start':None, 'end':None}}
         },
     'subject7': {
         'walking': {
@@ -83,7 +93,9 @@ trials = {
         'STS':     {
             'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
         'Squats':{
-            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}},
+        'DJ': {
+            'DJ2': {'start':None, 'end':None}, 'DJ3': {'start':None, 'end':None}, 'DJ4': {'start':None, 'end':None}, 'DJAsym1': {'start':None, 'end':None}, 'DJAsym2': {'start':None, 'end':None}, 'DJAsym3': {'start':None, 'end':None}}
         },
     'subject8': {
         'walking': {
@@ -92,7 +104,9 @@ trials = {
         'STS':     {
             'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
         'Squats':{
-            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}},
+        'DJ': {
+            'DJ1': {'start':None, 'end':None}, 'DJ2': {'start':None, 'end':None}, 'DJ3': {'start':None, 'end':None}, 'DJAsym1': {'start':None, 'end':None}, 'DJAsym2': {'start':None, 'end':None}, 'DJAsym3': {'start':None, 'end':None}}
         },
     'subject9': {
         'walking': {
@@ -100,7 +114,9 @@ trials = {
             'walkingTS1': {'start':-0.7, 'end':1.68}, 'walkingTS2': {'start':-0.7, 'end':1.63}, 'walkingTS3': {'start':-0.7, 'end':1.56}},
         'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
         'Squats':{
-            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}},
+        'DJ': {
+            'DJ1': {'start':None, 'end':None}, 'DJ2': {'start':None, 'end':None}, 'DJ3': {'start':None, 'end':None}, 'DJAsym1': {'start':None, 'end':None}, 'DJAsym2': {'start':None, 'end':None}, 'DJAsym3': {'start':None, 'end':None}}
         },
     'subject10': {
         'walking': {
@@ -109,7 +125,9 @@ trials = {
         'STS':     {
             'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
         'Squats':{
-            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}},
+        'DJ': {
+            'DJ1': {'start':None, 'end':None}, 'DJ2': {'start':None, 'end':None}, 'DJ3': {'start':None, 'end':None}, 'DJAsym1': {'start':None, 'end':None}, 'DJAsym2': {'start':None, 'end':None}, 'DJAsym3': {'start':None, 'end':None}}
         },
     'subject11': {
         'walking': {
@@ -118,10 +136,12 @@ trials = {
         'STS':     {
             'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
         'Squats':{
-            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}},
+        'DJ': {
+            'DJ1': {'start':None, 'end':None}, 'DJ4': {'start':None, 'end':None}, 'DJ5': {'start':None, 'end':None}, 'DJAsym3': {'start':None, 'end':None}, 'DJAsym4': {'start':None, 'end':None}, 'DJAsym5': {'start':None, 'end':None}}
         },
     }
-tempKeys = ['18']
+tempKeys = ['0']
 
 
 # %% User inputs
@@ -147,10 +167,12 @@ else:
     # motion_style = 'STS'
     # motion_types = ['STS','STSweakLegs']
 
-    motion_style = 'Squats'
-    motion_types = ['squats','squatsAsym']
+    # motion_style = 'Squats'
+    # motion_types = ['squats','squatsAsym']
 
-    # motion_types = ['DJ','DJAsym']
+    motion_style = 'DJ'
+    motion_types = ['DJ','DJAsym']
+
     # motion_types = ['DJ', 'DJAsym', 'walking', 'walkingTS', 'squats','squatsAsym','STS','STSweakLegs']
     
                 
@@ -198,6 +220,8 @@ for iSub, subject in enumerate(subjects):
                     trialNames_temp = [i for i in trialNamesAll if motion_type in i and not 'Asym' in i]
                 elif motion_type == 'squatsAsym':
                     trialNames_temp = [i for i in trialNamesAll if motion_type in i]
+                elif motion_type == 'DJ':
+                    trialNames = [i for i in trialNamesAll if motion_type in i and not 'DJAsym' in i]
                 else:
                     trialNames = [i for i in trialNamesAll if motion_type in i]
 

@@ -52,7 +52,7 @@ subjects = ['subject' + str(sub) for sub in range(2,12)]
 #%% Process settings
 # all_motions = ['squats', 'squatsAsym', 'walking', 'walkingTS', 'DJ', 'DJAsym', 'STS', 'STSweakLegs']
 # all_motions = ['walking', 'walkingTS']
-all_motions = ['squats', 'squatsAsym', 'walking', 'walkingTS', 'STS', 'STSweakLegs']
+all_motions = ['squats', 'squatsAsym', 'walking', 'walkingTS', 'STS', 'STSweakLegs', 'DJ', 'DJAsym']
 # all_motions = ['STS', 'STSweakLegs']
 # Also check line 614
 
@@ -613,7 +613,7 @@ if saveErrors:
     dynamicQuants = ['torques_BWht','GRFs_BW','positions','torques_BWht_limbAveraged','GRFs_BW_limbAveraged']
     
     # acts = ['DJ','walking','squats','STS']
-    acts = ['walking','STS','squats']
+    acts = ['walking','STS','squats', 'DJ']
     # acts = ['walking']
     metrics = ['mae_mean','rmse_mean','mape_mean']
     

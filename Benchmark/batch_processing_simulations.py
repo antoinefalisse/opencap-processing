@@ -41,8 +41,8 @@ from utils import storage_to_numpy
 # dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark_mocap_updated')
 i = 2
-subjects = ['subject' + str(i) for i in range(i,i+2)]
-# subjects = ['subject' + str(i) for i in range(2,12)]
+subjects = ['subject' + str(i) for i in range(i,i+1)]
+# subjects = ['subject' + str(i) for i in range(7,12)]
 
 trials = {
     'subject2': {
@@ -181,24 +181,38 @@ cases = ['0']
 # motion_type = 'walking_formulation2'
 # cases = ['1']
 
-runProblem = True
-processInputs = True
-runSimulation = True
-solveProblem = False
-analyzeResults = False
-plotResults = False
-
-# runProblem = False
+# runProblem = True
 # processInputs = True
 # runSimulation = True
 # solveProblem = True
-# analyzeResults = False
-# plotResults = True
+# analyzeResults = True
+# plotResults = False
+
+runProblem = False
+processInputs = True
+runSimulation = True
+solveProblem = True
+analyzeResults = False
+plotResults = True
 
 for case in cases:
     if motion_style == 'DJ':
         if case == '0':
             motion_type = 'drop_jump'
+        elif case == '1':
+            motion_type = 'drop_jump'
+            buffer_start = 0.1
+            buffer_end = 0.3
+        elif case == '2':
+            motion_type = 'drop_jump'
+            buffer_start = 0.1
+            buffer_end = 1.0
+        elif case == '3':
+            motion_type = 'drop_jump'
+            scaleIsometricMuscleForce = 2
+        elif case == '4':
+            motion_type = 'drop_jump'
+            torque_driven_model = True
 
     elif motion_style == 'Squats':
         if case == '0':
@@ -1121,8 +1135,8 @@ for case in cases:
         # pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
         for count, trial_name in enumerate(list(trials[subject][motion_style].keys())):
             
-            # if count != 0:
-            #     continue
+            if count != 0:
+                continue
         
             # if count < 2:
             #     continue
@@ -1388,7 +1402,7 @@ for case in cases:
 
 
                     # plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['37', '44'], mainPlots=False, grfPlotOnly=False)
-                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['0'], mainPlots=True, grfPlotOnly=False)
+                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['0'], mainPlots=False, grfPlotOnly=False)
                 
                 test=1
 
