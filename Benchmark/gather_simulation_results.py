@@ -121,7 +121,7 @@ trials = {
             'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
         },
     }
-tempKeys = ['12']
+tempKeys = ['18']
 
 
 # %% User inputs

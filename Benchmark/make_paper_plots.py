@@ -46,7 +46,7 @@ if fieldStudy:
 
 subjects = ['subject' + str(sub) for sub in range(2,12)]
 # Exclude subject3 and subject6
-subjects = [sub for sub in subjects if sub not in ['subject4']]
+# subjects = [sub for sub in subjects if sub not in ['subject4']]
 
 
 #%% Process settings
@@ -1221,78 +1221,78 @@ if activities['squats']:
             lineH = ax.get_lines()[-1]
             # plt.setp(lineH,linestyle='-')
         
-        # ROC curve
+        # # ROC curve
         
-        # Symmetry definition - based on Salem 2003, knee extension moment
-        # asymmetry in individuals 30 wk post ACLR. Here we create
-        # truth labels based on EMG and this literature value.
-        asymThresh = calc_LSI(.85,1) # Salem 2003
+        # # Symmetry definition - based on Salem 2003, knee extension moment
+        # # asymmetry in individuals 30 wk post ACLR. Here we create
+        # # truth labels based on EMG and this literature value.
+        # asymThresh = calc_LSI(.85,1) # Salem 2003
     
-        y_pred_cont = np.array(results_all['squatsAsym']['scalars']['sim_peakVLVMAct_Asym_mean'] +
-                results_all['squats']['scalars']['sim_peakVLVMAct_Asym_mean'])
-        y_pred_cont_so = np.array(results_all['squatsAsym']['scalars']['so_peakVLVMAct_Asym_mean'] +
-                results_all['squats']['scalars']['sim_peakVLVMAct_Asym_mean'])
-        y_true_cont = np.array(results_all['squatsAsym']['scalars']['ref_peakVLVMAct_Asym_mean'] +
-                results_all['squats']['scalars']['ref_peakVLVMAct_Asym_mean'])
-        y_class_litThresh = y_true_cont > asymThresh
+        # y_pred_cont = np.array(results_all['squatsAsym']['scalars']['sim_peakVLVMAct_Asym_mean'] +
+        #         results_all['squats']['scalars']['sim_peakVLVMAct_Asym_mean'])
+        # y_pred_cont_so = np.array(results_all['squatsAsym']['scalars']['so_peakVLVMAct_Asym_mean'] +
+        #         results_all['squats']['scalars']['sim_peakVLVMAct_Asym_mean'])
+        # y_true_cont = np.array(results_all['squatsAsym']['scalars']['ref_peakVLVMAct_Asym_mean'] +
+        #         results_all['squats']['scalars']['ref_peakVLVMAct_Asym_mean'])
+        # y_class_litThresh = y_true_cont > asymThresh
         
-        # AUC and ROC
-        fpr,tpr,thresh = roc_curve(y_class_litThresh,y_pred_cont)
-        aucVal = roc_auc_score(y_class_litThresh, y_pred_cont)
-        fpr_so,tpr_so,thresh_so = roc_curve(y_class_litThresh,y_pred_cont_so)
-        aucVal_so = roc_auc_score(y_class_litThresh, y_pred_cont_so)
-        idxOpt = np.argmax(tpr-fpr)
-        threshOpt = thresh[idxOpt]
-        idxOpt_so = np.argmax(tpr_so-fpr_so)
-        threshOpt_so = thresh[idxOpt_so]
+        # # AUC and ROC
+        # fpr,tpr,thresh = roc_curve(y_class_litThresh,y_pred_cont)
+        # aucVal = roc_auc_score(y_class_litThresh, y_pred_cont)
+        # fpr_so,tpr_so,thresh_so = roc_curve(y_class_litThresh,y_pred_cont_so)
+        # aucVal_so = roc_auc_score(y_class_litThresh, y_pred_cont_so)
+        # idxOpt = np.argmax(tpr-fpr)
+        # threshOpt = thresh[idxOpt]
+        # idxOpt_so = np.argmax(tpr_so-fpr_so)
+        # threshOpt_so = thresh[idxOpt_so]
         
-        # Accuracy of asymmetry predictions
-        acc_pred = np.sum(~np.logical_xor(y_pred_cont>threshOpt, y_class_litThresh))/len(y_pred_cont)
-        acc_pred_so = np.sum(~np.logical_xor(y_pred_cont_so>threshOpt_so, y_class_litThresh))/len(y_pred_cont_so)
+        # # Accuracy of asymmetry predictions
+        # acc_pred = np.sum(~np.logical_xor(y_pred_cont>threshOpt, y_class_litThresh))/len(y_pred_cont)
+        # acc_pred_so = np.sum(~np.logical_xor(y_pred_cont_so>threshOpt_so, y_class_litThresh))/len(y_pred_cont_so)
         
-        # Accuracy of change predictions
-        improved = y_true_cont[10:20]-y_true_cont[0:10] <0
-        improved_pred = y_pred_cont[10:20]-y_pred_cont[0:10] <0
-        improved_pred_so = y_pred_cont_so[10:20]-y_pred_cont_so[0:10] <0
+        # # Accuracy of change predictions
+        # improved = y_true_cont[10:20]-y_true_cont[0:10] <0
+        # improved_pred = y_pred_cont[10:20]-y_pred_cont[0:10] <0
+        # improved_pred_so = y_pred_cont_so[10:20]-y_pred_cont_so[0:10] <0
         
-        acc_chgPred = np.sum(~np.logical_xor(improved,improved_pred))/len(improved)
-        acc_chgPred_so = np.sum(~np.logical_xor(improved,improved_pred_so))/len(improved)
+        # acc_chgPred = np.sum(~np.logical_xor(improved,improved_pred))/len(improved)
+        # acc_chgPred_so = np.sum(~np.logical_xor(improved,improved_pred_so))/len(improved)
         
-        print('At opt threshold of {:.3f}, accuracy of symmetry detection was {:.3f} for OpenCap, and {:.3f} for static opt.'.format(
-            threshOpt,acc_pred,acc_pred_so))
+        # print('At opt threshold of {:.3f}, accuracy of symmetry detection was {:.3f} for OpenCap, and {:.3f} for static opt.'.format(
+        #     threshOpt,acc_pred,acc_pred_so))
         
-        print('Accuracy of change in symmetry was {:.2f} for OpenCap, and {:.2f} for static opt.'.format(
-            acc_chgPred, acc_chgPred_so))
+        # print('Accuracy of change in symmetry was {:.2f} for OpenCap, and {:.2f} for static opt.'.format(
+        #     acc_chgPred, acc_chgPred_so))
             
-        #Plot
-        ax = plt.subplot(gs[2])
-        ax.plot([0,1],[0,1],linestyle='--',color=0.5*np.ones(3),linewidth=0.75)
-        ax.plot(fpr,tpr,linewidth=2.5,color = ocColor,label='video (' + 'AUC={:.2f})'.format(aucVal))
-        ax.plot(fpr_so,tpr_so,linewidth=1,color=mcColor,label='mocap-based sim. (' + 'AUC={:.2f})'.format(aucVal_so))
-        ax.set_ylabel('True positive rate')
-        ax.set_xlabel('False positive rate')
-        ax.spines['top'].set_visible(False)
-        ax.spines['right'].set_visible(False)
-        # ax.legend(frameon=False,loc='lower right')
-        ax.set_aspect('equal')
-        ax.set_title('Vasti activation asymmetry')
-        plt.yticks(np.arange(0,1.05,.5))
-        plt.xticks(np.arange(0,1.05,.5))
-        plt.xlim([-.03,1.1])
-        plt.ylim([-.03,1.1])
-        plt.text(1.08,.13,'OpenCap AUC={:.2f}'.format(aucVal),color = ocColor,ha='right')
-        plt.text(1.08,0.02,'Mocap AUC={:.2f}'.format(aucVal_so),color = mcColor,ha='right')
-        plt.text(0.03,.93,'c',weight='bold',transform=ax.transAxes,fontsize=BIGGER_SIZE)
+        # #Plot
+        # ax = plt.subplot(gs[2])
+        # ax.plot([0,1],[0,1],linestyle='--',color=0.5*np.ones(3),linewidth=0.75)
+        # ax.plot(fpr,tpr,linewidth=2.5,color = ocColor,label='video (' + 'AUC={:.2f})'.format(aucVal))
+        # ax.plot(fpr_so,tpr_so,linewidth=1,color=mcColor,label='mocap-based sim. (' + 'AUC={:.2f})'.format(aucVal_so))
+        # ax.set_ylabel('True positive rate')
+        # ax.set_xlabel('False positive rate')
+        # ax.spines['top'].set_visible(False)
+        # ax.spines['right'].set_visible(False)
+        # # ax.legend(frameon=False,loc='lower right')
+        # ax.set_aspect('equal')
+        # ax.set_title('Vasti activation asymmetry')
+        # plt.yticks(np.arange(0,1.05,.5))
+        # plt.xticks(np.arange(0,1.05,.5))
+        # plt.xlim([-.03,1.1])
+        # plt.ylim([-.03,1.1])
+        # plt.text(1.08,.13,'OpenCap AUC={:.2f}'.format(aucVal),color = ocColor,ha='right')
+        # plt.text(1.08,0.02,'Mocap AUC={:.2f}'.format(aucVal_so),color = mcColor,ha='right')
+        # plt.text(0.03,.93,'c',weight='bold',transform=ax.transAxes,fontsize=BIGGER_SIZE)
     
     
-        figH.tight_layout()
-        plt.subplots_adjust(wspace=0.2)
+        # figH.tight_layout()
+        # plt.subplots_adjust(wspace=0.2)
         
-        if saveFigures:
-            figFolder = os.path.join(figDir,'SquatUseCase')
-            os.makedirs(figFolder,exist_ok=True)
-            thisFigPath = os.path.join(figDir,'SquatUseCase','squatEMG.svg')
-            plt.savefig(thisFigPath, format='svg')
+        # if saveFigures:
+        #     figFolder = os.path.join(figDir,'SquatUseCase')
+        #     os.makedirs(figFolder,exist_ok=True)
+        #     thisFigPath = os.path.join(figDir,'SquatUseCase','squatEMG.svg')
+        #     plt.savefig(thisFigPath, format='svg')
 
 
 # %% Figure 6: Field study. Can we detect asymmetries in squats and change between conditions?

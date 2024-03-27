@@ -42,7 +42,7 @@ from utils import storage_to_numpy
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark_mocap_updated')
 i = 2
 subjects = ['subject' + str(i) for i in range(i,i+2)]
-# subjects = ['subject' + str(i) for i in range(4,5)]
+# subjects = ['subject' + str(i) for i in range(2,12)]
 
 trials = {
     'subject2': {
@@ -52,7 +52,9 @@ trials = {
         'STS':     {
             'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
         'Squats':{
-            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}},
+        'DJ': {
+            'DJ1': {'start':None, 'end':None}, 'DJ2': {'start':None, 'end':None}, 'DJ3': {'start':None, 'end':None}, 'DJAsym1': {'start':None, 'end':None}, 'DJAsym4': {'start':None, 'end':None}, 'DJAsym5': {'start':None, 'end':None}}
         },
     'subject3': {
         'walking': {
@@ -67,7 +69,9 @@ trials = {
             # 'walkingTS3': {'start':-2, 'end':2.00}},
         'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
         'Squats':{
-            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}},
+        'DJ': {
+            'DJ1': {'start':None, 'end':None}, 'DJ2': {'start':None, 'end':None}, 'DJ4': {'start':None, 'end':None}, 'DJAsym1': {'start':None, 'end':None}, 'DJAsym2': {'start':None, 'end':None}, 'DJAsym4': {'start':None, 'end':None}}
         },
     'subject4': {
         'walking': {
@@ -76,7 +80,9 @@ trials = {
         'STS':     {
             'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
         'Squats':{
-            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}},
+        'DJ': {
+            'DJ1': {'start':None, 'end':None}, 'DJ2': {'start':None, 'end':None}, 'DJ3': {'start':None, 'end':None}, 'DJAsym1': {'start':None, 'end':None}, 'DJAsym2': {'start':None, 'end':None}, 'DJAsym3': {'start':None, 'end':None}}
         },
     'subject5': {
         'walking': {
@@ -84,7 +90,9 @@ trials = {
             'walkingTS1': {'start':-0.8, 'end':1.88}, 'walkingTS2': {'start':-0.7, 'end':1.75}, 'walkingTS3': {'start':-0.7, 'end':1.72}},
         'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
         'Squats':{
-            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}},
+        'DJ': {
+            'DJ1': {'start':None, 'end':None}, 'DJ2': {'start':None, 'end':None}, 'DJ3': {'start':None, 'end':None}, 'DJAsym1': {'start':None, 'end':None}, 'DJAsym2': {'start':None, 'end':None}, 'DJAsym3': {'start':None, 'end':None}}
         },
     'subject6': {
         'walking': {
@@ -93,7 +101,9 @@ trials = {
         'STS':     {
             'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
         'Squats':{
-            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}},
+        'DJ': {
+            'DJ1': {'start':None, 'end':None}, 'DJ2': {'start':None, 'end':None}, 'DJ3': {'start':None, 'end':None}, 'DJAsym1': {'start':None, 'end':None}, 'DJAsym2': {'start':None, 'end':None}, 'DJAsym3': {'start':None, 'end':None}}
         },
     'subject7': {
         'walking': {
@@ -102,7 +112,9 @@ trials = {
         'STS':     {
             'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
         'Squats':{
-            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}},
+        'DJ': {
+            'DJ2': {'start':None, 'end':None}, 'DJ3': {'start':None, 'end':None}, 'DJ4': {'start':None, 'end':None}, 'DJAsym1': {'start':None, 'end':None}, 'DJAsym2': {'start':None, 'end':None}, 'DJAsym3': {'start':None, 'end':None}}
         },
     'subject8': {
         'walking': {
@@ -111,7 +123,9 @@ trials = {
         'STS':     {
             'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
         'Squats':{
-            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}},
+        'DJ': {
+            'DJ1': {'start':None, 'end':None}, 'DJ2': {'start':None, 'end':None}, 'DJ3': {'start':None, 'end':None}, 'DJAsym1': {'start':None, 'end':None}, 'DJAsym2': {'start':None, 'end':None}, 'DJAsym3': {'start':None, 'end':None}}
         },
     'subject9': {
         'walking': {
@@ -119,7 +133,9 @@ trials = {
             'walkingTS1': {'start':-0.7, 'end':1.68}, 'walkingTS2': {'start':-0.7, 'end':1.63}, 'walkingTS3': {'start':-0.7, 'end':1.56}},
         'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
         'Squats':{
-            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}},
+        'DJ': {
+            'DJ1': {'start':None, 'end':None}, 'DJ2': {'start':None, 'end':None}, 'DJ3': {'start':None, 'end':None}, 'DJAsym1': {'start':None, 'end':None}, 'DJAsym2': {'start':None, 'end':None}, 'DJAsym3': {'start':None, 'end':None}}
         },
     'subject10': {
         'walking': {
@@ -128,7 +144,9 @@ trials = {
         'STS':     {
             'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
         'Squats':{
-            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}},
+        'DJ': {
+            'DJ1': {'start':None, 'end':None}, 'DJ2': {'start':None, 'end':None}, 'DJ3': {'start':None, 'end':None}, 'DJAsym1': {'start':None, 'end':None}, 'DJAsym2': {'start':None, 'end':None}, 'DJAsym3': {'start':None, 'end':None}}
         },
     'subject11': {
         'walking': {
@@ -137,7 +155,9 @@ trials = {
         'STS':     {
             'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
         'Squats':{
-            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}},
+        'DJ': {
+            'DJ1': {'start':None, 'end':None}, 'DJ4': {'start':None, 'end':None}, 'DJ5': {'start':None, 'end':None}, 'DJAsym3': {'start':None, 'end':None}, 'DJAsym4': {'start':None, 'end':None}, 'DJAsym5': {'start':None, 'end':None}}
         },
     }
 
@@ -145,9 +165,13 @@ trials = {
 filter_frequency = 6
 
 # Settings for dynamic simulation.
-motion_style = 'Squats'
-repetitions = [1,2,3]
-cases = ['18']
+motion_style = 'DJ'
+cases = ['0']
+
+
+# motion_style = 'Squats'
+# repetitions = [1,2,3]
+# cases = ['18']
 
 # motion_style = 'STS'
 # repetitions = [1, 2, 3]
@@ -172,9 +196,12 @@ plotResults = False
 # plotResults = True
 
 for case in cases:
+    if motion_style == 'DJ':
+        if case == '0':
+            motion_type = 'drop_jump'
 
-    if motion_style == 'Squats':
-        if case == '0': # better than 1 and 2
+    elif motion_style == 'Squats':
+        if case == '0':
             buffer_start = 0
             buffer_end = 0
             motion_type = 'squats'
@@ -1094,7 +1121,7 @@ for case in cases:
         # pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
         for count, trial_name in enumerate(list(trials[subject][motion_style].keys())):
             
-            # if count != 1:
+            # if count != 0:
             #     continue
         
             # if count < 2:
@@ -1148,13 +1175,35 @@ for case in cases:
                                 motion_file = storage_to_numpy(pathMotionFile)
                                 full_time_window = [motion_file['time'][0], motion_file['time'][-1]]
                                 
-                                if 'walking' in trial_name:
+                                if 'DJ' in trial_name:
                                     # Get time interval from trimmed trial
                                     pathTrimmedMotionFile = os.path.join(dataFolder, subject, 'OpenSimData', 'Kinematics_trimmed', trial_name.replace('_video', '_videoAndMocap') + '.mot')
                                     trimmed_motion_file = storage_to_numpy(pathTrimmedMotionFile)
                                     trimmed_time_window = [trimmed_motion_file['time'][0], trimmed_motion_file['time'][-1]]
-                                    
-                                    
+
+                                    if 'buffer_start' not in locals():
+                                        buffer_start = 0
+
+                                    if 'buffer_end' not in locals():
+                                        buffer_end = 0
+        
+                                    # Update time window
+                                    time_start = np.round(max(trimmed_time_window[0] - buffer_start, full_time_window[0]),2)
+                                    time_end = np.round(min(trimmed_time_window[1] + buffer_end, full_time_window[1]),2)
+                                    buffer_start_applied = np.abs(np.round(time_start - trimmed_time_window[0], 2))
+                                    buffer_end_applied = np.abs(np.round(time_end - trimmed_time_window[1], 2))
+                                    settings['buffers'] = [round(float(buffer_start_applied),6),
+                                                        round(float(buffer_end_applied),6)]
+                                    time_window = [time_start, time_end]
+                                    settings['timeInterval'] = [round(float(i),6) for i in time_window]
+                                    settings['timeIntervalWithoutBuffers'] = [round(float(settings['timeInterval'][0] + settings['buffers'][0]),6),
+                                                                            round(float(settings['timeInterval'][1] - settings['buffers'][1]),6)]  
+                                
+                                elif 'walking' in trial_name:
+                                    # Get time interval from trimmed trial
+                                    pathTrimmedMotionFile = os.path.join(dataFolder, subject, 'OpenSimData', 'Kinematics_trimmed', trial_name.replace('_video', '_videoAndMocap') + '.mot')
+                                    trimmed_motion_file = storage_to_numpy(pathTrimmedMotionFile)
+                                    trimmed_time_window = [trimmed_motion_file['time'][0], trimmed_motion_file['time'][-1]]
         
                                     # Update time window
                                     time_start = np.round(max(trimmed_time_window[0] - buffer_start, full_time_window[0], trials[subject][motion_style][trial_name.replace('_video', '')]['start']),2)
@@ -1339,7 +1388,7 @@ for case in cases:
 
 
                     # plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['37', '44'], mainPlots=False, grfPlotOnly=False)
-                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['0', '12'], mainPlots=True, grfPlotOnly=False)
+                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['0'], mainPlots=True, grfPlotOnly=False)
                 
                 test=1
 

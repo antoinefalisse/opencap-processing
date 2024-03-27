@@ -70,15 +70,15 @@ trials = {
         'Squats':{
             'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
         },
-    # 'subject4': {
-    #     'walking': {
-    #         'walking1': {'start':-0.7, 'end':1.6}, 'walking2': {'start':-0.7, 'end':1.87}, 'walking4': {'start':-0.7, 'end':1.7},
-    #         'walkingTS1': {'start':-0.7, 'end':1.7}, 'walkingTS2': {'start':-0.7, 'end':1.6}, 'walkingTS3': {'start':-0.7, 'end':1.95}},
-    #     'STS':     {
-    #         'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
-    #     'Squats':{
-    #         'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
-    #     },
+    'subject4': {
+        'walking': {
+            'walking1': {'start':-0.7, 'end':1.6}, 'walking2': {'start':-0.7, 'end':1.87}, 'walking4': {'start':-0.7, 'end':1.7},
+            'walkingTS1': {'start':-0.7, 'end':1.7}, 'walkingTS2': {'start':-0.7, 'end':1.6}, 'walkingTS3': {'start':-0.7, 'end':1.95}},
+        'STS':     {
+            'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
+        'Squats':{
+            'squats1': {'start':None, 'end':None}, 'squatsAsym1': {'start':None, 'end':None}}
+        },
     'subject5': {
         'walking': {
             'walking1': {'start':-0.7, 'end':1.83}, 'walking2': {'start':-0.7, 'end':1.8}, 'walking3': {'start':-0.7, 'end':1.8},
