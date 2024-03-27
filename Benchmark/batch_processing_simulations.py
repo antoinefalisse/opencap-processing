@@ -166,7 +166,7 @@ filter_frequency = 6
 
 # Settings for dynamic simulation.
 motion_style = 'DJ'
-cases = ['5']
+cases = ['6']
 
 
 # motion_style = 'Squats'
@@ -184,8 +184,8 @@ cases = ['5']
 runProblem = True
 processInputs = True
 runSimulation = True
-solveProblem = False
-analyzeResults = True
+solveProblem = True
+analyzeResults = False
 plotResults = False
 
 # runProblem = False
@@ -219,6 +219,10 @@ for case in cases:
         elif case == '6':
             motion_type = 'drop_jump'
             weight_activation = 10
+        elif case == '7':
+            motion_type = 'drop_jump'
+            weight_activation = 100
+            scaleIsometricMuscleForce = 2
 
     elif motion_style == 'Squats':
         if case == '0':
@@ -1408,7 +1412,7 @@ for case in cases:
 
 
                     # plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['37', '44'], mainPlots=False, grfPlotOnly=False)
-                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['0', '4'], mainPlots=False, grfPlotOnly=False)
+                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['0', '6'], mainPlots=False, grfPlotOnly=False)
                 
                 test=1
 
