@@ -166,7 +166,7 @@ filter_frequency = 6
 
 # Settings for dynamic simulation.
 motion_style = 'DJ'
-cases = ['0']
+cases = ['5']
 
 
 # motion_style = 'Squats'
@@ -181,19 +181,19 @@ cases = ['0']
 # motion_type = 'walking_formulation2'
 # cases = ['1']
 
-# runProblem = True
+runProblem = True
+processInputs = True
+runSimulation = True
+solveProblem = False
+analyzeResults = True
+plotResults = False
+
+# runProblem = False
 # processInputs = True
 # runSimulation = True
 # solveProblem = True
-# analyzeResults = True
-# plotResults = False
-
-runProblem = False
-processInputs = True
-runSimulation = True
-solveProblem = True
-analyzeResults = False
-plotResults = True
+# analyzeResults = False
+# plotResults = True
 
 for case in cases:
     if motion_style == 'DJ':
@@ -213,6 +213,12 @@ for case in cases:
         elif case == '4':
             motion_type = 'drop_jump'
             torque_driven_model = True
+        elif case == '5':
+            motion_type = 'drop_jump'
+            ignoreFLV = True
+        elif case == '6':
+            motion_type = 'drop_jump'
+            weight_activation = 10
 
     elif motion_style == 'Squats':
         if case == '0':
@@ -1402,7 +1408,7 @@ for case in cases:
 
 
                     # plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['37', '44'], mainPlots=False, grfPlotOnly=False)
-                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['0'], mainPlots=False, grfPlotOnly=False)
+                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['0', '4'], mainPlots=False, grfPlotOnly=False)
                 
                 test=1
 
