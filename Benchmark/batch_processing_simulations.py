@@ -167,6 +167,7 @@ filter_frequency = 6
 # Settings for dynamic simulation.
 motion_style = 'DJ'
 cases = ['8']
+mocap_simulation = False
 
 
 # motion_style = 'Squats'
@@ -194,6 +195,11 @@ plotResults = False
 # solveProblem = True
 # analyzeResults = False
 # plotResults = True
+
+if mocap_simulation:
+    os_folder_name = 'Mocap'
+else:
+    os_folder_name = 'OpenSimData'
 
 for case in cases:
     if motion_style == 'DJ':
@@ -1198,7 +1204,7 @@ for case in cases:
                                     baseDir, sessionDir, session_id, trial_name, 
                                     motion_type, repetition=repetition, periodicSTS=periodicSTS, stand_to_stand=stand_to_stand, endSTS_to_endSTS=endSTS_to_endSTS, startSTSnoDelay_to_Stand=startSTSnoDelay_to_Stand, startSTSnoDelay_to_endSTS=startSTSnoDelay_to_endSTS)
                                 
-                                pathMotionFile = os.path.join(dataFolder, subject, 'OpenSimData', 'Kinematics', trial_name + '.mot')
+                                pathMotionFile = os.path.join(dataFolder, subject, os_folder_name, 'Kinematics', trial_name + '.mot')
                                 motion_file = storage_to_numpy(pathMotionFile)
                                 full_time_window = [motion_file['time'][0], motion_file['time'][-1]]
                                 
@@ -1315,6 +1321,7 @@ for case in cases:
                                         reserveActuatorCoordinates['mtp_angle_r'] = reserve_mtp_angle
                                         reserveActuatorCoordinates['mtp_angle_l'] = reserve_mtp_angle
                                         settings['reserveActuatorCoordinates'] = reserveActuatorCoordinates
+                                        settings['withReserveActuators'] = True
                                 if 'reserve_hip_flexion' in locals():
                                     if 'reserveActuatorCoordinates' in settings:
                                         reserveActuatorCoordinates = settings['reserveActuatorCoordinates']
@@ -1326,6 +1333,7 @@ for case in cases:
                                         reserveActuatorCoordinates['hip_flexion_r'] = reserve_hip_flexion
                                         reserveActuatorCoordinates['hip_flexion_l'] = reserve_hip_flexion
                                         settings['reserveActuatorCoordinates'] = reserveActuatorCoordinates
+                                        settings['withReserveActuators'] = True
                                 if 'reserve_hip_adduction' in locals():
                                     if 'reserveActuatorCoordinates' in settings:
                                         reserveActuatorCoordinates = settings['reserveActuatorCoordinates']
@@ -1337,6 +1345,7 @@ for case in cases:
                                         reserveActuatorCoordinates['hip_adduction_r'] = reserve_hip_adduction
                                         reserveActuatorCoordinates['hip_adduction_l'] = reserve_hip_adduction
                                         settings['reserveActuatorCoordinates'] = reserveActuatorCoordinates
+                                        settings['withReserveActuators'] = True
                                 if 'reserve_hip_rotation' in locals():
                                     if 'reserveActuatorCoordinates' in settings:
                                         reserveActuatorCoordinates = settings['reserveActuatorCoordinates']
@@ -1348,6 +1357,7 @@ for case in cases:
                                         reserveActuatorCoordinates['hip_rotation_r'] = reserve_hip_rotation
                                         reserveActuatorCoordinates['hip_rotation_l'] = reserve_hip_rotation
                                         settings['reserveActuatorCoordinates'] = reserveActuatorCoordinates
+                                        settings['withReserveActuators'] = True
                                 
 
                                 # TODO
@@ -1401,7 +1411,7 @@ for case in cases:
                         if runSimulation:
                             try:
                                 # print('Running dynamic simulation...')
-                                run_tracking(baseDir, sessionDir, settings, case=case, 
+                                run_tracking(baseDir, sessionDir, settings, os_folder_name=os_folder_name, case=case, 
                                             solveProblem=solveProblem, analyzeResults=analyzeResults)
                                 test=1
                             except Exception as e:
@@ -1418,16 +1428,16 @@ for case in cases:
                     # trial_name = 'squatsAsym1_video'
                     # repetition = 1
 
-                    pathResults = os.path.join(dataFolder, subject, 'OpenSimData', 'Dynamics', trial_name)
+                    pathResults = os.path.join(dataFolder, subject, os_folder_name, 'Dynamics', trial_name)
                     if 'repetition' in locals():
-                        pathResults = os.path.join(dataFolder, subject, 'OpenSimData', 'Dynamics', trial_name + '_rep' + str(repetition))     
+                        pathResults = os.path.join(dataFolder, subject, os_folder_name, 'Dynamics', trial_name + '_rep' + str(repetition))     
                     pathSettings = os.path.join(pathResults, 'Setup_{}.yaml'.format(case))
                     with open(pathSettings, 'r') as file:
                         settings = yaml.safe_load(file)
 
 
                     # plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['37', '44'], mainPlots=False, grfPlotOnly=False)
-                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['0', '4'], mainPlots=False, grfPlotOnly=False)
+                    plotResultsOpenSimAD(sessionDir, trial_name, os_folder_name, settings, cases=['0', '8'], mainPlots=False, grfPlotOnly=False)
                 
                 test=1
 

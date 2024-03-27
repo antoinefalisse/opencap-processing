@@ -33,7 +33,7 @@ import platform
 import copy
 
 # %% Settings.
-def run_tracking(baseDir, dataDir, settings, case='0',
+def run_tracking(baseDir, dataDir, settings, os_folder_name='OpenSimData', case='0',
                  solveProblem=True, analyzeResults=True, writeGUI=True,
                  computeKAM=True, computeMCF=True):
     
@@ -393,7 +393,7 @@ def run_tracking(baseDir, dataDir, settings, case='0',
         
     # %% Paths and dirs.
     pathMain = os.getcwd()
-    pathOSData = os.path.join(dataDir, 'OpenSimData')
+    pathOSData = os.path.join(dataDir, os_folder_name)
     pathModelFolder = os.path.join(pathOSData, 'Model')
     pathModelFile = os.path.join(pathModelFolder, model_full_name + ".osim")
     pathExternalFunctionFolder = os.path.join(pathModelFolder,

@@ -239,12 +239,12 @@ def segment_STS(ikFilePath, pelvis_ty=None, timeVec=None, velSeated=0.3,
 # are made for the gmax1, iliacus, and psoas. Changes are documented in
 # modelAdjustment.log.
 def adjust_muscle_wrapping(
-        baseDir, dataDir, poseDetector='DefaultPD', 
+        baseDir, dataDir, os_folder_name='OpenSimData', poseDetector='DefaultPD', 
         cameraSetup='DefaultModel', OpenSimModel="LaiUhlrich2022",
         overwrite=False):
     
     # Paths
-    osDir = os.path.join(dataDir, 'OpenSimData')
+    osDir = os.path.join(dataDir, os_folder_name)
     pathModelFolder = os.path.join(osDir, 'Model')
     
     # We changed the OpenSim model name after some time:
@@ -515,12 +515,13 @@ def getMomentArms(model, poses, muscleName, coordinateForMomentArm):
 
 # %% Generate model with contacts.
 def generate_model_with_contacts(
-        dataDir, poseDetector='DefaultPD', cameraSetup='DefaultModel',
+        dataDir, os_folder_name='OpenSimData', poseDetector='DefaultPD',
+        cameraSetup='DefaultModel',
         OpenSimModel="LaiUhlrich2022", setPatellaMasstoZero=True, 
         overwrite=False, contact_configuration='generic'):
     
     # %% Process settings.
-    osDir = os.path.join(dataDir, 'OpenSimData')
+    osDir = os.path.join(dataDir, os_folder_name)
     # pathModelFolder = os.path.join(osDir, poseDetector, cameraSetup, 'Model')
     pathModelFolder = os.path.join(osDir, 'Model')
     suffix_MA = '_adjusted'

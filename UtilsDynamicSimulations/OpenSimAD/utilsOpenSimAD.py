@@ -551,7 +551,7 @@ def getIndices(mylist, items):
 
 # %% Generate external function.
 def generateExternalFunction(
-        baseDir, dataDir, 
+        baseDir, dataDir, os_folder_name='OpenSimData',
         OpenSimModel="LaiUhlrich2022",
         treadmill=False, build_externalFunction=True, verifyID=True, 
         externalFunctionName='F', overwrite=False,
@@ -560,7 +560,7 @@ def generateExternalFunction(
 
     # %% Process settings.
     pathCWD = os.getcwd()
-    osDir = os.path.join(dataDir, 'OpenSimData')
+    osDir = os.path.join(dataDir, os_folder_name)
     pathModelFolder = os.path.join(osDir, 'Model')
     suffix_MA = '_adjusted'
     if contact_configuration == 'generic':
@@ -1872,12 +1872,13 @@ def download_file_2(url, file_name):
     
 # %% Plot results simulations.
 # TODO: simplify and clean up.
-def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
-                         cases=['default'], mainPlots=True, grfPlotOnly=False,
-                         momentArmsPlots=False, detailedMusclePlots=False):
+def plotResultsOpenSimAD(dataDir, motion_filename, os_folder_name='OpenSimData',
+                         settings={}, cases=['default'], mainPlots=True, 
+                         grfPlotOnly=False, momentArmsPlots=False, 
+                         detailedMusclePlots=False):
     
     # %% Load optimal trajectories.
-    pathOSData = os.path.join(dataDir, 'OpenSimData')
+    pathOSData = os.path.join(dataDir, os_folder_name)
     suff_path = ''
     if settings:
         if 'repetition' in settings:
@@ -2632,7 +2633,8 @@ def plotResultsOpenSimAD(dataDir, motion_filename, settings={},
     
 # %% Process inputs for optimal control problem.   
 def processInputsOpenSimAD(baseDir, dataFolder, session_id, trial_name,
-                           motion_type, time_window=[], repetition=None,
+                           motion_type, os_folder_name='OpenSimData',
+                           time_window=[], repetition=None,
                            treadmill_speed=0, overwrite=False,
                            useExpressionGraphFunction=True,
                            contact_configuration='generic',
@@ -2645,7 +2647,7 @@ def processInputsOpenSimAD(baseDir, dataFolder, session_id, trial_name,
     # sessionFolder =  os.path.join(dataFolder, session_id)
     
     # Download kinematics and model.    
-    pathTrial = os.path.join(dataFolder, 'OpenSimData', 'Kinematics', 
+    pathTrial = os.path.join(dataFolder, os_folder_name, 'Kinematics', 
                              trial_name + '.mot') 
     if not os.path.exists(pathTrial) or overwrite:
         print('Download kinematic data and/or model.')
@@ -2665,15 +2667,16 @@ def processInputsOpenSimAD(baseDir, dataFolder, session_id, trial_name,
     
     # Prepare inputs for dynamic simulations.
     # Adjust muscle wrapping.    
-    adjust_muscle_wrapping(baseDir, dataFolder,
+    adjust_muscle_wrapping(baseDir, dataFolder, os_folder_name=os_folder_name,
                          OpenSimModel=OpenSimModel, overwrite=overwrite)
     # Add foot-ground contacts to musculoskeletal model.    
-    generate_model_with_contacts(dataFolder, 
+    generate_model_with_contacts(dataFolder, os_folder_name=os_folder_name,
                               OpenSimModel=OpenSimModel, overwrite=overwrite,
                               contact_configuration=contact_configuration)
     # Generate external function.    
     generateExternalFunction(baseDir, dataFolder,
                              OpenSimModel=OpenSimModel,
+                             os_folder_name=os_folder_name,
                              overwrite=overwrite, 
                              treadmill=bool(treadmill_speed),
                              useExpressionGraphFunction=useExpressionGraphFunction,
@@ -2682,7 +2685,7 @@ def processInputsOpenSimAD(baseDir, dataFolder, session_id, trial_name,
     # Get settings.
     settings = get_setup(motion_type)
     # Add time to settings if not specified.
-    pathMotionFile = os.path.join(dataFolder, 'OpenSimData', 'Kinematics',
+    pathMotionFile = os.path.join(dataFolder, os_folder_name, 'Kinematics',
                                   trial_name + '.mot')
     if (repetition is not None and 
         ('squats' in motion_type or 'sit_to_stand' in motion_type)): 
