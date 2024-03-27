@@ -166,7 +166,7 @@ filter_frequency = 6
 
 # Settings for dynamic simulation.
 motion_style = 'DJ'
-cases = ['6']
+cases = ['8']
 
 
 # motion_style = 'Squats'
@@ -223,6 +223,9 @@ for case in cases:
             motion_type = 'drop_jump'
             weight_activation = 100
             scaleIsometricMuscleForce = 2
+        elif case == '8':
+            motion_type = 'drop_jump'
+            reserve_hip_adduction = 30
 
     elif motion_style == 'Squats':
         if case == '0':
@@ -1334,6 +1337,18 @@ for case in cases:
                                         reserveActuatorCoordinates['hip_adduction_r'] = reserve_hip_adduction
                                         reserveActuatorCoordinates['hip_adduction_l'] = reserve_hip_adduction
                                         settings['reserveActuatorCoordinates'] = reserveActuatorCoordinates
+                                if 'reserve_hip_rotation' in locals():
+                                    if 'reserveActuatorCoordinates' in settings:
+                                        reserveActuatorCoordinates = settings['reserveActuatorCoordinates']
+                                        reserveActuatorCoordinates['hip_rotation_r'] = reserve_hip_rotation
+                                        reserveActuatorCoordinates['hip_rotation_l'] = reserve_hip_rotation
+                                        settings['reserveActuatorCoordinates'] = reserveActuatorCoordinates
+                                    else:
+                                        reserveActuatorCoordinates = {}                                        
+                                        reserveActuatorCoordinates['hip_rotation_r'] = reserve_hip_rotation
+                                        reserveActuatorCoordinates['hip_rotation_l'] = reserve_hip_rotation
+                                        settings['reserveActuatorCoordinates'] = reserveActuatorCoordinates
+                                
 
                                 # TODO
                                 if 'trackValueCoordinates' in locals():
@@ -1412,7 +1427,7 @@ for case in cases:
 
 
                     # plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['37', '44'], mainPlots=False, grfPlotOnly=False)
-                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['0', '6'], mainPlots=False, grfPlotOnly=False)
+                    plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['0', '4'], mainPlots=False, grfPlotOnly=False)
                 
                 test=1
 
