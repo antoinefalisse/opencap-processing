@@ -166,8 +166,8 @@ filter_frequency = 6
 
 # Settings for dynamic simulation.
 motion_style = 'DJ'
-cases = ['9']
-mocap_simulation = False
+cases = ['0']
+mocap_simulation = True
 
 
 # motion_style = 'Squats'
@@ -1157,8 +1157,8 @@ for case in cases:
         # pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
         for count, trial_name in enumerate(list(trials[subject][motion_style].keys())):
             
-            if count != 0:
-                continue
+            # if count != 0:
+            #     continue
         
             # if count < 2:
             #     continue
