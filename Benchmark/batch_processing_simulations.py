@@ -41,7 +41,7 @@ from utils import storage_to_numpy
 # dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark_mocap_updated')
 i = 2
-subjects = ['subject' + str(i) for i in range(i,i+2)]
+subjects = ['subject' + str(i) for i in range(i,i+1)]
 # subjects = ['subject' + str(i) for i in range(7,12)]
 
 trials = {
@@ -235,6 +235,11 @@ for case in cases:
         elif case == '9':
             motion_type = 'drop_jump'
             reserve_hip_rotation = 30
+        elif case == '10':
+            motion_type = 'drop_jump'
+            reserve_hip_rotation = 30
+            weight_activation = 10
+        
 
     elif motion_style == 'Squats':
         if case == '0':
@@ -1157,8 +1162,8 @@ for case in cases:
         # pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
         for count, trial_name in enumerate(list(trials[subject][motion_style].keys())):
             
-            # if count != 0:
-            #     continue
+            if count != 0:
+                continue
         
             # if count < 2:
             #     continue
