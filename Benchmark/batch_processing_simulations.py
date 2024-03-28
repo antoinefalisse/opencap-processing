@@ -42,7 +42,7 @@ from utils import storage_to_numpy
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark_mocap_updated')
 i = 2
 # subjects = ['subject' + str(i) for i in range(i,i+1)]
-subjects = ['subject' + str(i) for i in range(2,7)]
+subjects = ['subject' + str(i) for i in range(2,12)]
 
 trials = {
     'subject2': {
@@ -162,28 +162,29 @@ trials = {
     }
 
 # %% User-defined variables.
-mocap_simulation = True
+mocap_simulation = False
+v1_simulation = True
 
 # Settings for dynamic simulation.
 # motion_style = 'DJ'
 # cases = ['10']
 
-motion_style = 'Squats'
-repetitions = [1,2,3]
-cases = ['18']
+# motion_style = 'Squats'
+# repetitions = [1,2,3]
+# cases = ['18']
 
 # motion_style = 'STS'
 # repetitions = [1, 2, 3]
 # cases = ['74']
 
-# motion_style = 'walking'
-# motion_type = 'walking_formulation2'
-# cases = ['1']
+motion_style = 'walking'
+motion_type = 'walking_formulation2'
+cases = ['1']
 
 runProblem = True
 processInputs = True
 runSimulation = True
-solveProblem = True
+solveProblem = False
 analyzeResults = False
 plotResults = False
 
@@ -196,6 +197,8 @@ plotResults = False
 
 if mocap_simulation:
     os_folder_name = 'Mocap'
+elif v1_simulation:
+    os_folder_name = 'OpenSimData_v1'
 else:
     os_folder_name = 'OpenSimData'
 
@@ -1160,8 +1163,8 @@ for case in cases:
         # pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
         for count, trial_name in enumerate(list(trials[subject][motion_style].keys())):
             
-            # if count != 0:
-            #     continue
+            if count != 0:
+                continue
         
             # if count < 2:
             #     continue
@@ -1219,7 +1222,7 @@ for case in cases:
                                     if mocap_simulation:
                                         pathTrimmedMotionFile = os.path.join(dataFolder, subject, 'OpenSimData', 'Kinematics_trimmed', trial_name + '_videoAndMocap.mot')
                                     else:
-                                        pathTrimmedMotionFile = os.path.join(dataFolder, subject, 'OpenSimData', 'Kinematics_trimmed', trial_name.replace('_video', '_videoAndMocap') + '.mot')
+                                        pathTrimmedMotionFile = os.path.join(dataFolder, subject, os_folder_name, 'Kinematics_trimmed', trial_name.replace('_video', '_videoAndMocap') + '.mot')
                                     trimmed_motion_file = storage_to_numpy(pathTrimmedMotionFile)
                                     trimmed_time_window = [trimmed_motion_file['time'][0], trimmed_motion_file['time'][-1]]
 
@@ -1246,7 +1249,7 @@ for case in cases:
                                     if mocap_simulation:
                                         pathTrimmedMotionFile = os.path.join(dataFolder, subject, 'OpenSimData', 'Kinematics_trimmed', trial_name + '_videoAndMocap.mot')
                                     else:
-                                        pathTrimmedMotionFile = os.path.join(dataFolder, subject, 'OpenSimData', 'Kinematics_trimmed', trial_name.replace('_video', '_videoAndMocap') + '.mot')
+                                        pathTrimmedMotionFile = os.path.join(dataFolder, subject, os_folder_name, 'Kinematics_trimmed', trial_name.replace('_video', '_videoAndMocap') + '.mot')
                                     trimmed_motion_file = storage_to_numpy(pathTrimmedMotionFile)
                                     trimmed_time_window = [trimmed_motion_file['time'][0], trimmed_motion_file['time'][-1]]
         
@@ -1453,7 +1456,7 @@ for case in cases:
 
 
                     # plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['37', '44'], mainPlots=False, grfPlotOnly=False)
-                    plotResultsOpenSimAD(sessionDir, trial_name, os_folder_name, settings, cases=['0', '6', '10'], mainPlots=False, grfPlotOnly=False,
+                    plotResultsOpenSimAD(sessionDir, trial_name, os_folder_name, settings, cases=['1'], mainPlots=False, grfPlotOnly=False,
                                          momentArmsPlots=False, detailedMusclePlots=False)
                 
                 test=1
