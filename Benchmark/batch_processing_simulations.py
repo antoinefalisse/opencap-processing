@@ -42,7 +42,7 @@ from utils import storage_to_numpy
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark_mocap_updated')
 i = 2
 # subjects = ['subject' + str(i) for i in range(i,i+1)]
-subjects = ['subject' + str(i) for i in range(3,4)]
+subjects = ['subject' + str(i) for i in range(2,7)]
 
 trials = {
     'subject2': {
@@ -162,17 +162,15 @@ trials = {
     }
 
 # %% User-defined variables.
-filter_frequency = 6
+mocap_simulation = True
 
 # Settings for dynamic simulation.
-motion_style = 'DJ'
-cases = ['10']
-mocap_simulation = False
+# motion_style = 'DJ'
+# cases = ['10']
 
-
-# motion_style = 'Squats'
-# repetitions = [1,2,3]
-# cases = ['18']
+motion_style = 'Squats'
+repetitions = [1,2,3]
+cases = ['18']
 
 # motion_style = 'STS'
 # repetitions = [1, 2, 3]
