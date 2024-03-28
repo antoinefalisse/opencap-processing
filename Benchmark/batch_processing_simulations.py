@@ -41,8 +41,8 @@ from utils import storage_to_numpy
 # dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark_mocap_updated')
 i = 2
-subjects = ['subject' + str(i) for i in range(i,i+1)]
-# subjects = ['subject' + str(i) for i in range(7,12)]
+# subjects = ['subject' + str(i) for i in range(i,i+1)]
+subjects = ['subject' + str(i) for i in range(3,4)]
 
 trials = {
     'subject2': {
@@ -166,7 +166,7 @@ filter_frequency = 6
 
 # Settings for dynamic simulation.
 motion_style = 'DJ'
-cases = ['9']
+cases = ['10']
 mocap_simulation = False
 
 
@@ -1162,8 +1162,8 @@ for case in cases:
         # pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
         for count, trial_name in enumerate(list(trials[subject][motion_style].keys())):
             
-            if count != 0:
-                continue
+            # if count != 0:
+            #     continue
         
             # if count < 2:
             #     continue
@@ -1455,7 +1455,7 @@ for case in cases:
 
 
                     # plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['37', '44'], mainPlots=False, grfPlotOnly=False)
-                    plotResultsOpenSimAD(sessionDir, trial_name, os_folder_name, settings, cases=['0', '8', '9'], mainPlots=False, grfPlotOnly=False,
+                    plotResultsOpenSimAD(sessionDir, trial_name, os_folder_name, settings, cases=['0', '6', '10'], mainPlots=False, grfPlotOnly=False,
                                          momentArmsPlots=False, detailedMusclePlots=False)
                 
                 test=1

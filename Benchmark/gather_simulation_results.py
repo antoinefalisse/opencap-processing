@@ -141,7 +141,7 @@ trials = {
             'DJ1': {'start':None, 'end':None}, 'DJ4': {'start':None, 'end':None}, 'DJ5': {'start':None, 'end':None}, 'DJAsym3': {'start':None, 'end':None}, 'DJAsym4': {'start':None, 'end':None}, 'DJAsym5': {'start':None, 'end':None}}
         },
     }
-tempKeys = ['0']
+tempKeys = ['9']
 
 
 # %% User inputs
