@@ -41,7 +41,7 @@ from utils import storage_to_numpy
 # dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark_mocap_updated')
 i = 2
-subjects = ['subject' + str(i) for i in range(i,i+1)]
+subjects = ['subject' + str(i) for i in range(i,i+2)]
 # subjects = ['subject' + str(i) for i in range(7,12)]
 
 trials = {
@@ -166,8 +166,8 @@ filter_frequency = 6
 
 # Settings for dynamic simulation.
 motion_style = 'DJ'
-cases = ['0']
-mocap_simulation = True
+cases = ['9']
+mocap_simulation = False
 
 
 # motion_style = 'Squats'
@@ -1450,7 +1450,8 @@ for case in cases:
 
 
                     # plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['37', '44'], mainPlots=False, grfPlotOnly=False)
-                    plotResultsOpenSimAD(sessionDir, trial_name, os_folder_name, settings, cases=['0', '8'], mainPlots=False, grfPlotOnly=False)
+                    plotResultsOpenSimAD(sessionDir, trial_name, os_folder_name, settings, cases=['0', '8', '9'], mainPlots=False, grfPlotOnly=False,
+                                         momentArmsPlots=False, detailedMusclePlots=False)
                 
                 test=1
 
