@@ -216,7 +216,10 @@ for iSub, subject in enumerate(subjects):
             if not  os.path.isdir(pathOSData):
                 raise Exception('The data is not found in ' + dataDir + '. Download it from https://simtk.org/projects/opencap, and save to the the repository directory. E.g., Data/LabValidation')
 
-            trialNamesAll = [i + '_video' for i in trials[subject][motion_style]]
+            if mocap_simulation:
+                trialNamesAll = [i for i in trials[subject][motion_style]]
+            else:
+                trialNamesAll = [i + '_video' for i in trials[subject][motion_style]]
 
             for i in trialNamesAll:
                 if motion_type == 'walking':

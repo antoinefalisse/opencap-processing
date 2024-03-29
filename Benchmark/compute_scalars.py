@@ -180,12 +180,21 @@ if fieldStudy:
 else:
     subjects = list(trials.keys())
 
+    mocap_simulation = True
+    v1_simulation = False
+    if mocap_simulation:
+        os_folder_name = 'Mocap'
+    elif v1_simulation:
+        os_folder_name = 'OpenSimData_v1'
+    else:
+        os_folder_name = 'OpenSimData'
+
     # All
     risingOnlySTS = True
-    motion_types = motion_types = ['DJ', 'DJAsym', 'walking', 'walkingTS', 
-                                   'squats','squatsAsym','STS','STSweakLegs']
+    # motion_types = motion_types = ['DJ', 'DJAsym', 'walking', 'walkingTS', 
+    #                                'squats','squatsAsym','STS','STSweakLegs']
 
-    # motion_types = ['walking', 'walkingTS']
+    motion_types = ['walking', 'walkingTS']
     
     # motion_types = ['STS','STSweakLegs']
     # risingOnlySTS = True
@@ -230,7 +239,7 @@ for iSub,subject in enumerate(subjects):
                                        '{}_results.npy'.format(motion_type)),
                           allow_pickle=True).item()
         else:
-            osDir = os.path.join(dataDir, subject, 'OpenSimData')
+            osDir = os.path.join(dataDir, subject, os_folder_name)
             pathOSData = os.path.join(osDir, 'Dynamics')
             
             # Check for data folder

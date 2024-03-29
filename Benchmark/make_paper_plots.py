@@ -48,11 +48,20 @@ subjects = ['subject' + str(sub) for sub in range(2,12)]
 # Exclude subject3 and subject6
 # subjects = [sub for sub in subjects if sub not in ['subject4']]
 
+mocap_simulation = True
+v1_simulation = False
+if mocap_simulation:
+    os_folder_name = 'Mocap'
+elif v1_simulation:
+    os_folder_name = 'OpenSimData_v1'
+else:
+    os_folder_name = 'OpenSimData'
+
 
 #%% Process settings
 # all_motions = ['squats', 'squatsAsym', 'walking', 'walkingTS', 'DJ', 'DJAsym', 'STS', 'STSweakLegs']
-# all_motions = ['walking', 'walkingTS']
-all_motions = ['squats', 'squatsAsym', 'walking', 'walkingTS', 'STS', 'STSweakLegs', 'DJ', 'DJAsym']
+all_motions = ['walking', 'walkingTS']
+# all_motions = ['squats', 'squatsAsym', 'walking', 'walkingTS', 'STS', 'STSweakLegs', 'DJ', 'DJAsym']
 # all_motions = ['STS', 'STSweakLegs']
 # Also check line 614
 
@@ -102,7 +111,7 @@ while loadResultsNow:
             results = np.load(os.path.join(pathOSData,
                           'allActivityResults.npy'),allow_pickle=True).item()
         else:
-            osDir = os.path.join(dataDir, subject, 'OpenSimData')
+            osDir = os.path.join(dataDir, subject, os_folder_name)
             pathOSData = os.path.join(osDir, 'Dynamics')
             
             # Check for data folder
@@ -619,8 +628,8 @@ if saveErrors:
     dynamicQuants = ['torques_BWht','GRFs_BW','positions','torques_BWht_limbAveraged','GRFs_BW_limbAveraged']
     
     # acts = ['DJ','walking','squats','STS']
-    acts = ['walking','STS','squats', 'DJ']
-    # acts = ['walking']
+    # acts = ['walking','STS','squats', 'DJ']
+    acts = ['walking']
     metrics = ['mae_mean','rmse_mean','mape_mean','mape_rmse_mean']
     
     for dynamicQuant in dynamicQuants:

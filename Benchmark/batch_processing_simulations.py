@@ -40,9 +40,9 @@ from utils import storage_to_numpy
 # %% Paths.
 # dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark_mocap_updated')
-i = 2
+i = 11
 # subjects = ['subject' + str(i) for i in range(i,i+1)]
-subjects = ['subject' + str(i) for i in range(7,12)]
+subjects = ['subject' + str(i) for i in range(2,7)]
 
 trials = {
     'subject2': {
@@ -166,8 +166,8 @@ mocap_simulation = True
 v1_simulation = False
 
 # Settings for dynamic simulation.
-# motion_style = 'DJ'
-# cases = ['10']
+motion_style = 'DJ'
+cases = ['10']
 
 # motion_style = 'Squats'
 # repetitions = [1,2,3]
@@ -177,15 +177,15 @@ v1_simulation = False
 # repetitions = [1, 2, 3]
 # cases = ['74']
 
-motion_style = 'walking'
-motion_type = 'walking_formulation2'
-cases = ['1']
+# motion_style = 'walking'
+# motion_type = 'walking_formulation2'
+# cases = ['1']
 
 runProblem = True
 processInputs = True
 runSimulation = True
-solveProblem = False
-analyzeResults = True
+solveProblem = True
+analyzeResults = False
 plotResults = False
 
 # runProblem = False
@@ -1456,7 +1456,7 @@ for case in cases:
 
 
                     # plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['37', '44'], mainPlots=False, grfPlotOnly=False)
-                    plotResultsOpenSimAD(sessionDir, trial_name, os_folder_name, settings, cases=['0', '10'], mainPlots=False, grfPlotOnly=False,
+                    plotResultsOpenSimAD(sessionDir, trial_name, os_folder_name, settings, cases=['1'], mainPlots=False, grfPlotOnly=True,
                                          momentArmsPlots=False, detailedMusclePlots=False)
                 
                 test=1
