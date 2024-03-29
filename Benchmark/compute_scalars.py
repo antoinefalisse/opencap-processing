@@ -179,16 +179,20 @@ if fieldStudy:
     
 else:
     subjects = list(trials.keys())
-    # motion_types = motion_types = ['DJ', 'DJAsym', 'walking', 'walkingTS', 
-    #                                'squats','squatsAsym','STS','STSweakLegs']
+
+    # All
+    risingOnlySTS = True
+    motion_types = motion_types = ['DJ', 'DJAsym', 'walking', 'walkingTS', 
+                                   'squats','squatsAsym','STS','STSweakLegs']
+
     # motion_types = ['walking', 'walkingTS']
     
     # motion_types = ['STS','STSweakLegs']
     # risingOnlySTS = True
 
     # motion_types = ['squats','squatsAsym']
-
-    motion_types = ['DJ','DJAsym']
+    
+    # motion_types = ['DJ','DJAsym']
 
     # Likely fixed settings
     data_type = 'Video' # only set up for video now
@@ -1090,6 +1094,7 @@ for iSub,subject in enumerate(subjects):
             results_con[motion_type]['video'][variable_type]['rmse'] = np.zeros((nHeaders,1,nCases))
             results_con[motion_type]['video'][variable_type]['mae'] = np.zeros((nHeaders,1,nCases))
             results_con[motion_type]['video'][variable_type]['mape'] = np.zeros((nHeaders,1,nCases))
+            results_con[motion_type]['video'][variable_type]['mape_rmse'] = np.zeros((nHeaders,1,nCases))
             for iHeader in range(nHeaders):
                 for iCase in range(nCases): 
                    y_true = results_con[motion_type]['video'][variable_type]['ref'][iHeader,:,iCase]
@@ -1101,11 +1106,14 @@ for iSub,subject in enumerate(subjects):
                            y_true,y_pred)
                        results_con[motion_type]['video'][variable_type]['mape'][iHeader,0,iCase] = results_con[
                            motion_type]['video'][variable_type]['mae'][iHeader,0,iCase] / np.ptp(y_true) * 100
+                       results_con[motion_type]['video'][variable_type]['mape_rmse'][iHeader,0,iCase] = results_con[
+                           motion_type]['video'][variable_type]['rmse'][iHeader,0,iCase] / np.ptp(y_true) * 100
                    else:
                        # there are nans for activations that weren't measured
                        results_con[motion_type]['video'][variable_type]['rmse'][iHeader,0,iCase] = np.nan
                        results_con[motion_type]['video'][variable_type]['mae'][iHeader,0,iCase] = np.nan
                        results_con[motion_type]['video'][variable_type]['mape'][iHeader,0,iCase] = np.nan
+                       results_con[motion_type]['video'][variable_type]['mape_rmse'][iHeader,0,iCase] = np.nan
 
                 # Mean rmse and mae
                 results_con[motion_type]['video'][variable_type]['rmse_mean'] = np.mean(
@@ -1113,7 +1121,9 @@ for iSub,subject in enumerate(subjects):
                 results_con[motion_type]['video'][variable_type]['mae_mean'] = np.mean(
                    results_con[motion_type]['video'][variable_type]['mae'],axis=2)    
                 results_con[motion_type]['video'][variable_type]['mape_mean'] = np.mean(
-                   results_con[motion_type]['video'][variable_type]['mape'],axis=2)   
+                   results_con[motion_type]['video'][variable_type]['mape'],axis=2)
+                results_con[motion_type]['video'][variable_type]['mape_rmse_mean'] = np.mean(
+                   results_con[motion_type]['video'][variable_type]['mape_rmse'],axis=2) 
                   
         # %% Save concatenated results with scalars on a per-subject basis for loading and plotting later
         if saveResults:

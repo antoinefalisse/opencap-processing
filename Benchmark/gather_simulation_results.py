@@ -141,7 +141,16 @@ trials = {
             'DJ1': {'start':None, 'end':None}, 'DJ4': {'start':None, 'end':None}, 'DJ5': {'start':None, 'end':None}, 'DJAsym3': {'start':None, 'end':None}, 'DJAsym4': {'start':None, 'end':None}, 'DJAsym5': {'start':None, 'end':None}}
         },
     }
-tempKeys = ['9']
+
+mocap_simulation = True
+v1_simulation = False
+if mocap_simulation:
+    os_folder_name = 'Mocap'
+elif v1_simulation:
+    os_folder_name = 'OpenSimData_v1'
+else:
+    os_folder_name = 'OpenSimData'
+tempKeys = ['1']
 
 
 # %% User inputs
@@ -161,8 +170,8 @@ if fieldStudy:
 else:
     subjects = list(trials.keys())
     
-    # motion_style = 'walking'
-    # motion_types = ['walking', 'walkingTS']
+    motion_style = 'walking'
+    motion_types = ['walking', 'walkingTS']
     
     # motion_style = 'STS'
     # motion_types = ['STS','STSweakLegs']
@@ -170,8 +179,8 @@ else:
     # motion_style = 'Squats'
     # motion_types = ['squats','squatsAsym']
 
-    motion_style = 'DJ'
-    motion_types = ['DJ','DJAsym']
+    # motion_style = 'DJ'
+    # motion_types = ['DJ','DJAsym']
 
     # motion_types = ['DJ', 'DJAsym', 'walking', 'walkingTS', 'squats','squatsAsym','STS','STSweakLegs']
     
@@ -200,7 +209,7 @@ for iSub, subject in enumerate(subjects):
             
             trialNames = trialDict[subject][motion_type]
         else:            
-            osDir = os.path.join(dataDir, subject, 'OpenSimData')
+            osDir = os.path.join(dataDir, subject, os_folder_name)
             pathOSData = os.path.join(osDir, 'Dynamics')
             
             # Check for data folder

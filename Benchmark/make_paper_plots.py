@@ -146,6 +146,8 @@ while loadResultsNow:
                         (results[motType]['video'][varName]['mae_mean'].shape + (nSubjects,)))
                     results_all[motType][varName]['mape'] = np.zeros(
                         (results[motType]['video'][varName]['mape_mean'].shape + (nSubjects,)))
+                    results_all[motType][varName]['mape_rmse'] = np.zeros(
+                        (results[motType]['video'][varName]['mape_rmse_mean'].shape + (nSubjects,)))
                 results_all[motType]['scalars'] = {}
                 results_all[motType]['scalar_mean'] = {}
                 
@@ -181,6 +183,8 @@ while loadResultsNow:
                     motType]['video'][varName]['mae_mean']
                 results_all[motType][varName]['mape'][:,:,iSub] = results[
                     motType]['video'][varName]['mape_mean']
+                results_all[motType][varName]['mape_rmse'][:,:,iSub] = results[
+                    motType]['video'][varName]['mape_rmse_mean']
                 
                 # Mean and SD of curves and values
                 if iSub == nSubjects-1:
@@ -204,6 +208,8 @@ while loadResultsNow:
                         results_all[motType][varName]['mae'],axis=-1)
                     results_all[motType][varName]['mape_mean'] = np.mean(
                         results_all[motType][varName]['mape'],axis=-1)
+                    results_all[motType][varName]['mape_rmse_mean'] = np.mean(
+                        results_all[motType][varName]['mape_rmse'],axis=-1)
                     
                 
                 
@@ -559,7 +565,7 @@ r2['STS'], mae['STS'] = {}, {}
 # %% Average torque errors between limbs
 
 acts = results_all.keys()
-metrics = ['mae_mean','mape_mean','rmse_mean']
+metrics = ['mae_mean','mape_mean','rmse_mean','mape_rmse_mean']
 excludedBilateralDofs = ['elbow','arm','pro_sup','mtp']
 for act in acts:
     results_all[act]['torques_BWht_limbAveraged'] = {}
@@ -586,7 +592,7 @@ for act in acts:
              
 # %% Average GRF errors between limbs            
 acts = results_all.keys()
-metrics = ['mae_mean','mape_mean','rmse_mean']
+metrics = ['mae_mean','mape_mean','rmse_mean','mape_rmse_mean']
 for act in acts:
     results_all[act]['GRFs_BW_limbAveraged'] = {}
     head = results_all[act]['GRFs_BW']['headers']
@@ -615,7 +621,7 @@ if saveErrors:
     # acts = ['DJ','walking','squats','STS']
     acts = ['walking','STS','squats', 'DJ']
     # acts = ['walking']
-    metrics = ['mae_mean','rmse_mean','mape_mean']
+    metrics = ['mae_mean','rmse_mean','mape_mean','mape_rmse_mean']
     
     for dynamicQuant in dynamicQuants:
     
