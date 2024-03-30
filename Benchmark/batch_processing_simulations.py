@@ -40,9 +40,9 @@ from utils import storage_to_numpy
 # %% Paths.
 # dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark_mocap_updated')
-i = 11
-# subjects = ['subject' + str(i) for i in range(i,i+1)]
-subjects = ['subject' + str(i) for i in range(2,7)]
+i = 2
+subjects = ['subject' + str(i) for i in range(i,i+3)]
+# subjects = ['subject' + str(i) for i in range(2,7)]
 
 trials = {
     'subject2': {
@@ -162,8 +162,8 @@ trials = {
     }
 
 # %% User-defined variables.
-mocap_simulation = True
-v1_simulation = False
+mocap_simulation = False
+v1_simulation = True
 
 # Settings for dynamic simulation.
 motion_style = 'DJ'
