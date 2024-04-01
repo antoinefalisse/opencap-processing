@@ -41,8 +41,8 @@ from utils import storage_to_numpy
 # dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark_mocap_updated')
 i = 2
-# subjects = ['subject' + str(i) for i in range(i,i+3)]
-subjects = ['subject' + str(i) for i in range(11,12)]
+subjects = ['subject' + str(i) for i in range(i,i+2)]
+# subjects = ['subject' + str(i) for i in range(10,11)]
 
 trials = {
     'subject2': {
@@ -163,19 +163,19 @@ trials = {
 
 # %% User-defined variables.
 mocap_simulation = False
-v1_simulation = True
+v1_simulation = False
 
 # Settings for dynamic simulation.
 # motion_style = 'DJ'
 # cases = ['10']
 
-motion_style = 'Squats'
-repetitions = [4]
-cases = ['18']
+# motion_style = 'Squats'
+# repetitions = [0]
+# cases = ['18']
 
-# motion_style = 'STS'
-# repetitions = [1, 2, 3]
-# cases = ['75']
+motion_style = 'STS'
+repetitions = [1, 2, 3]
+cases = ['75']
 
 # motion_style = 'walking'
 # motion_type = 'walking_formulation2'
@@ -1172,8 +1172,8 @@ for case in cases:
         # pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
         for count, trial_name in enumerate(list(trials[subject][motion_style].keys())):
             
-            if count != 0:
-                continue
+            # if count != 1:
+            #     continue
         
             # if count < 2:
             #     continue
