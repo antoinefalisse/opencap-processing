@@ -191,10 +191,10 @@ else:
 
     # All
     risingOnlySTS = True
-    # motion_types = motion_types = ['DJ', 'DJAsym', 'walking', 'walkingTS', 
-    #                                'squats','squatsAsym','STS','STSweakLegs']
+    motion_types = motion_types = ['DJ', 'DJAsym', 'walking', 'walkingTS', 
+                                   'squats','squatsAsym','STS','STSweakLegs']
 
-    motion_types = ['walking', 'walkingTS']
+    # motion_types = ['walking', 'walkingTS']
     
     # motion_types = ['STS','STSweakLegs']
     # risingOnlySTS = True

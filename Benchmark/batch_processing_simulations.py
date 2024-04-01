@@ -41,8 +41,8 @@ from utils import storage_to_numpy
 # dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark_mocap_updated')
 i = 2
-subjects = ['subject' + str(i) for i in range(i,i+3)]
-# subjects = ['subject' + str(i) for i in range(2,7)]
+# subjects = ['subject' + str(i) for i in range(i,i+3)]
+subjects = ['subject' + str(i) for i in range(10,11)]
 
 trials = {
     'subject2': {
@@ -162,20 +162,20 @@ trials = {
     }
 
 # %% User-defined variables.
-mocap_simulation = False
-v1_simulation = True
+mocap_simulation = True
+v1_simulation = False
 
 # Settings for dynamic simulation.
-motion_style = 'DJ'
-cases = ['10']
+# motion_style = 'DJ'
+# cases = ['10']
 
 # motion_style = 'Squats'
 # repetitions = [1,2,3]
 # cases = ['18']
 
-# motion_style = 'STS'
-# repetitions = [1, 2, 3]
-# cases = ['74']
+motion_style = 'STS'
+repetitions = [1, 2, 3]
+cases = ['75']
 
 # motion_style = 'walking'
 # motion_type = 'walking_formulation2'
@@ -1151,6 +1151,15 @@ for case in cases:
             min_ratio_vGRF = True
             vGRFRatioTerm = 0.5
             startSTSnoDelay_to_endSTS = True
+        elif case == '75':
+            buffer_start = 0
+            buffer_end = 0
+            motion_type = 'sit_to_stand_formulation11'
+            periodicSTS = False
+            min_ratio_vGRF = True
+            vGRFRatioTerm = 0.5
+            startSTSnoDelay_to_endSTS = True
+            heel_vGRF_threshold = 0
         
     # %% Gait segmentation and kinematic analysis.
 
@@ -1163,8 +1172,8 @@ for case in cases:
         # pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
         for count, trial_name in enumerate(list(trials[subject][motion_style].keys())):
             
-            # if count != 1:
-            #     continue
+            if count != 1:
+                continue
         
             # if count < 2:
             #     continue
@@ -1176,8 +1185,8 @@ for case in cases:
 
             for rep in range(nReps):
                 
-                # if rep != 0:
-                #     continue
+                if rep != 0:
+                    continue
 
                 if 'repetitions' in locals():
                     repetition = repetitions[rep]   

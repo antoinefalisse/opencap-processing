@@ -150,7 +150,7 @@ elif v1_simulation:
     os_folder_name = 'OpenSimData_v1'
 else:
     os_folder_name = 'OpenSimData'
-tempKeys = ['1']
+
 
 
 # %% User inputs
@@ -170,17 +170,21 @@ if fieldStudy:
 else:
     subjects = list(trials.keys())
     
-    motion_style = 'walking'
-    motion_types = ['walking', 'walkingTS']
+    # motion_style = 'walking'
+    # motion_types = ['walking', 'walkingTS']
+    # tempKeys = ['1']
     
-    # motion_style = 'STS'
-    # motion_types = ['STS','STSweakLegs']
+    motion_style = 'STS'
+    motion_types = ['STS','STSweakLegs']
+    tempKeys = ['74']
 
     # motion_style = 'Squats'
     # motion_types = ['squats','squatsAsym']
+    # tempKeys = ['18']
 
     # motion_style = 'DJ'
     # motion_types = ['DJ','DJAsym']
+    # tempKeys = ['10']
 
     # motion_types = ['DJ', 'DJAsym', 'walking', 'walkingTS', 'squats','squatsAsym','STS','STSweakLegs']
     
