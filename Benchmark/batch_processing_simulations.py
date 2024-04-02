@@ -42,7 +42,7 @@ from utils import storage_to_numpy
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark_mocap_updated')
 i = 2
 subjects = ['subject' + str(i) for i in range(i,i+2)]
-# subjects = ['subject' + str(i) for i in range(10,11)]
+# subjects = ['subject' + str(i) for i in range(9,10)]
 
 trials = {
     'subject2': {
@@ -170,7 +170,7 @@ v1_simulation = False
 # cases = ['10']
 
 # motion_style = 'Squats'
-# repetitions = [0]
+# repetitions = [4]
 # cases = ['18']
 
 motion_style = 'STS'

@@ -45,7 +45,7 @@ trials = {
             # Case 2
             # 'walking1': {'start':-1.8, 'end':1.56}, 'walking2': {'start':-1.8, 'end':1.59}, 'walking3': {'start':-1.7, 'end':1.61}, 
             # 'walkingTS2': {'start':-2.5, 'end':1.97}, 'walkingTS3': {'start':-2, 'end':1.96}, 'walkingTS4': {'start':-2.2, 'end':1.7}},
-             # Case 12
+              # Case 12
             # 'walking2': {'start':-1.8, 'end':1.46}, 'walking3': {'start':-1.7, 'end':1.48}, 
             # 'walkingTS3': {'start':-2, 'end':2.00}},
         'STS':     {'STS1': {'start':None, 'end':None}, 'STSweakLegs1': {'start':None, 'end':None}},
@@ -172,19 +172,19 @@ else:
     
     # motion_style = 'walking'
     # motion_types = ['walking', 'walkingTS']
-    # tempKeys = ['1']
+    # settings_case = '1'
     
-    motion_style = 'STS'
-    motion_types = ['STS','STSweakLegs']
-    tempKeys = ['74']
+    # motion_style = 'STS'
+    # motion_types = ['STS','STSweakLegs']
+    # settings_case = '74'
 
-    # motion_style = 'Squats'
-    # motion_types = ['squats','squatsAsym']
-    # tempKeys = ['18']
+    motion_style = 'Squats'
+    motion_types = ['squats','squatsAsym']
+    settings_case = '18'
 
     # motion_style = 'DJ'
     # motion_types = ['DJ','DJAsym']
-    # tempKeys = ['10']
+    # settings_case = '10'
 
     # motion_types = ['DJ', 'DJAsym', 'walking', 'walkingTS', 'squats','squatsAsym','STS','STSweakLegs']
     
@@ -244,6 +244,13 @@ for iSub, subject in enumerate(subjects):
             if motion_type == 'STS' or motion_type == 'STSweakLegs' or motion_type == 'squats' or motion_type == 'squatsAsym':
                 trialNames = [i + '_rep' + str(j) for i in trialNames_temp for j in range(1,4)]
 
+            # Exceptions for mocap, subject 9, squats1_rep4 instead of squats1_rep3
+            if mocap_simulation:
+                if subject == 'subject9' and motion_type == 'squats':
+                    # replace squats1_rep3 with squats1_rep4
+                    trialNames = [i if i != 'squats1_rep3' else 'squats1_rep4' for i in trialNames]
+                
+
             # Continue if trialNames is empty
             if not trialNames:
                 continue
@@ -263,24 +270,16 @@ for iSub, subject in enumerate(subjects):
         
         # %% Load optimal trajectories
         optimaltrajectories = {}
-        for tName in trialNames:
-                       
+        for tName in trialNames:                       
             try:
                 c_tr = np.load(os.path.join(pathOSData,tName,
                                             'optimaltrajectories.npy'),
                                allow_pickle=True).item()
                 # TODO
-                optimaltrajectories[tName] = c_tr[tempKeys[0]]
+                optimaltrajectories[tName] = c_tr[settings_case]
             except:
                 print('No optimal trajectories found for {} - {}'.format(subject,tName))
-                continue
-            # TODO
-            # tempKeys = list(c_tr.keys())
-            
-            
-            # case_toPlot = list(c_tr[tempKeys[0]].keys())[0].replace('_videoAndMocap','')
-            
-            
+                continue           
         
         # %% process settings
         cases = list(optimaltrajectories.keys())

@@ -9,8 +9,8 @@ do
     sshpass -p 'Stanford!' rsync -avz --ignore-existing clarkadmin@171.65.102.146:Documents/MyRepositories_Antoine/opencap-processing-fork/opencap-processing/Data/Benchmark_mocap_updated/$n/ "/mnt/c/Users/antoi/Documents/MyRepositories/opencap-processing-fork/Data/Benchmark_mocap_updated/$n"
     sshpass -p 'Stanford!1' rsync -avz --ignore-existing clarkadmin@171.65.102.45:Documents/MyRepositories_Antoine/opencap-processing-fork/Data/Benchmark_mocap_updated/$n/ "/mnt/c/Users/antoi/Documents/MyRepositories/opencap-processing-fork/Data/Benchmark_mocap_updated/$n"
     
-    # sshpass -p 'Stanford!' rsync -avz --ignore-existing "/mnt/c/Users/antoi/Documents/MyRepositories/opencap-processing-fork/Data/Benchmark_mocap_updated/$n/" clarkadmin@171.65.102.146:Documents/MyRepositories_Antoine/opencap-processing-fork/opencap-processing/Data/Benchmark_mocap_updated/$n 
-    # sshpass -p 'Stanford!1' rsync -avz --ignore-existing "/mnt/c/Users/antoi/Documents/MyRepositories/opencap-processing-fork/Data/Benchmark_mocap_updated/$n/" clarkadmin@171.65.102.45:Documents/MyRepositories_Antoine/opencap-processing-fork/Data/Benchmark_mocap_updated/$n 
+    sshpass -p 'Stanford!' rsync -avz --ignore-existing "/mnt/c/Users/antoi/Documents/MyRepositories/opencap-processing-fork/Data/Benchmark_mocap_updated/$n/" clarkadmin@171.65.102.146:Documents/MyRepositories_Antoine/opencap-processing-fork/opencap-processing/Data/Benchmark_mocap_updated/$n 
+    sshpass -p 'Stanford!1' rsync -avz --ignore-existing "/mnt/c/Users/antoi/Documents/MyRepositories/opencap-processing-fork/Data/Benchmark_mocap_updated/$n/" clarkadmin@171.65.102.45:Documents/MyRepositories_Antoine/opencap-processing-fork/Data/Benchmark_mocap_updated/$n 
 
     
 
