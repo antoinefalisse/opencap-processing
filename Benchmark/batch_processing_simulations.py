@@ -42,7 +42,7 @@ from utils import storage_to_numpy
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark_mocap_updated')
 i = 2
 subjects = ['subject' + str(i) for i in range(i,i+2)]
-# subjects = ['subject' + str(i) for i in range(9,10)]
+# subjects = ['subject' + str(i) for i in range(2,12)]
 
 trials = {
     'subject2': {
@@ -166,16 +166,16 @@ mocap_simulation = False
 v1_simulation = False
 
 # Settings for dynamic simulation.
-# motion_style = 'DJ'
-# cases = ['10']
+motion_style = 'DJ'
+cases = ['14']
 
 # motion_style = 'Squats'
 # repetitions = [4]
 # cases = ['18']
 
-motion_style = 'STS'
-repetitions = [1, 2, 3]
-cases = ['75']
+# motion_style = 'STS'
+# repetitions = [1, 2, 3]
+# cases = ['75']
 
 # motion_style = 'walking'
 # motion_type = 'walking_formulation2'
@@ -238,6 +238,24 @@ for case in cases:
             reserve_hip_rotation = 30
         elif case == '10':
             motion_type = 'drop_jump'
+            reserve_hip_rotation = 30
+            weight_activation = 10
+        elif case == '11':
+            motion_type = 'drop_jump_formulation1'
+            reserve_hip_rotation = 30
+            weight_activation = 10
+        elif case == '12':
+            motion_type = 'drop_jump_formulation1'
+            reserve_hip_rotation = 30
+            weight_activation = 10
+            weight_pelvis_tilt = 100
+        elif case == '13':
+            motion_type = 'drop_jump_formulation1'
+            reserve_hip_rotation = 30
+            weight_activation = 10
+            weight_pelvis_tilt = 50
+        elif case == '14':
+            motion_type = 'drop_jump_formulation2'
             reserve_hip_rotation = 30
             weight_activation = 10
         
@@ -1172,7 +1190,7 @@ for case in cases:
         # pathData = os.path.join(dataFolder, subject, 'OpenSimData', 'Video', 'mmpose_0.8', '2-cameras', 'v0.63', 'IK', 'LaiArnoldModified2017_poly_withArms_weldHand')
         for count, trial_name in enumerate(list(trials[subject][motion_style].keys())):
             
-            # if count != 1:
+            # if count != 3:
             #     continue
         
             # if count < 2:
@@ -1465,7 +1483,7 @@ for case in cases:
 
 
                     # plotResultsOpenSimAD(sessionDir, trial_name, settings, cases=['37', '44'], mainPlots=False, grfPlotOnly=False)
-                    plotResultsOpenSimAD(sessionDir, trial_name, os_folder_name, settings, cases=['1'], mainPlots=False, grfPlotOnly=True,
+                    plotResultsOpenSimAD(sessionDir, trial_name, os_folder_name, settings, cases=['14'], mainPlots=False, grfPlotOnly=False,
                                          momentArmsPlots=False, detailedMusclePlots=False)
                 
                 test=1

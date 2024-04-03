@@ -151,8 +151,6 @@ elif v1_simulation:
 else:
     os_folder_name = 'OpenSimData'
 
-
-
 # %% User inputs
 fieldStudy = False # True to process field study results, false to process LabValidation results
 saveResults = True
@@ -174,13 +172,13 @@ else:
     # motion_types = ['walking', 'walkingTS']
     # settings_case = '1'
     
-    # motion_style = 'STS'
-    # motion_types = ['STS','STSweakLegs']
-    # settings_case = '74'
+    motion_style = 'STS'
+    motion_types = ['STS','STSweakLegs']
+    settings_case = '75'
 
-    motion_style = 'Squats'
-    motion_types = ['squats','squatsAsym']
-    settings_case = '18'
+    # motion_style = 'Squats'
+    # motion_types = ['squats','squatsAsym']
+    # settings_case = '18'
 
     # motion_style = 'DJ'
     # motion_types = ['DJ','DJAsym']
