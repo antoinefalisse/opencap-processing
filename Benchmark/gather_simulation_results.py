@@ -172,17 +172,17 @@ else:
     # motion_types = ['walking', 'walkingTS']
     # settings_case = '1'
     
-    motion_style = 'STS'
-    motion_types = ['STS','STSweakLegs']
-    settings_case = '75'
+    # motion_style = 'STS'
+    # motion_types = ['STS','STSweakLegs']
+    # settings_case = '75'
 
     # motion_style = 'Squats'
     # motion_types = ['squats','squatsAsym']
     # settings_case = '18'
 
-    # motion_style = 'DJ'
-    # motion_types = ['DJ','DJAsym']
-    # settings_case = '10'
+    motion_style = 'DJ'
+    motion_types = ['DJ','DJAsym']
+    settings_case = '14'
 
     # motion_types = ['DJ', 'DJAsym', 'walking', 'walkingTS', 'squats','squatsAsym','STS','STSweakLegs']
     

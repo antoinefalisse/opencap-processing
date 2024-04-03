@@ -41,7 +41,7 @@ from utils import storage_to_numpy
 # dataFolder = os.path.join(baseDir, 'Data', 'Benchmark')
 dataFolder = os.path.join(baseDir, 'Data', 'Benchmark_mocap_updated')
 i = 2
-subjects = ['subject' + str(i) for i in range(i,i+2)]
+subjects = ['subject' + str(i) for i in range(i,i+1)]
 # subjects = ['subject' + str(i) for i in range(2,12)]
 
 trials = {
@@ -163,7 +163,7 @@ trials = {
 
 # %% User-defined variables.
 mocap_simulation = False
-v1_simulation = False
+v1_simulation = True
 
 # Settings for dynamic simulation.
 motion_style = 'DJ'
