@@ -168,9 +168,9 @@ if fieldStudy:
 else:
     subjects = list(trials.keys())
     
-    # motion_style = 'walking'
-    # motion_types = ['walking', 'walkingTS']
-    # settings_case = '1'
+    motion_style = 'walking'
+    motion_types = ['walking', 'walkingTS']
+    settings_case = '1'
     
     # motion_style = 'STS'
     # motion_types = ['STS','STSweakLegs']
@@ -180,9 +180,9 @@ else:
     # motion_types = ['squats','squatsAsym']
     # settings_case = '18'
 
-    motion_style = 'DJ'
-    motion_types = ['DJ','DJAsym']
-    settings_case = '14'
+    # motion_style = 'DJ'
+    # motion_types = ['DJ','DJAsym']
+    # settings_case = '14'
 
     # motion_types = ['DJ', 'DJAsym', 'walking', 'walkingTS', 'squats','squatsAsym','STS','STSweakLegs']
     
@@ -192,6 +192,8 @@ data_type = 'Video'
 poseDetector = 'HRNet' # HRNet, OpenPose_default, or OpenPose_default
 cameraSetup = '2-cameras' # 2-cameras, 3-cameras, 4-cameras
 invert_left_right = False
+
+print('Processing {} data'.format(motion_style))
 
 for iSub, subject in enumerate(subjects):
     
@@ -252,7 +254,7 @@ for iSub, subject in enumerate(subjects):
             # Continue if trialNames is empty
             if not trialNames:
                 continue
-            print("{} trials found: {}".format(len(trialNames),trialNames))
+            # print("{} trials found: {}".format(len(trialNames),trialNames))
                     
             # print(trialNames)
             
@@ -281,6 +283,10 @@ for iSub, subject in enumerate(subjects):
         
         # %% process settings
         cases = list(optimaltrajectories.keys())
+        # Sanity check to make sure we are using results with updated torque normalization
+        if os_folder_name == 'OpenSimData':
+            if not 'height_m' in optimaltrajectories[cases[0]]:
+                raise ValueError("Error: height_m not found in optimaltrajectories")
             
         # %% Visualize results
         plt.close('all')

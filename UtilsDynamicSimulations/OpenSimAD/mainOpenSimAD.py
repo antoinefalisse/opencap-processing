@@ -564,6 +564,7 @@ def run_tracking(baseDir, dataDir, settings, os_folder_name='OpenSimData', case=
     # Ground pelvis coordinates.
     groundPelvisJoints = ['pelvis_tilt', 'pelvis_list', 'pelvis_rotation',
                           'pelvis_tx', 'pelvis_ty', 'pelvis_tz']
+    groundPelvisJointsForces = ['pelvis_tx', 'pelvis_ty', 'pelvis_tz']
     
     # Lumbar coordinates (for torque actuators).    
     lumbarJoints = ['lumbar_extension', 'lumbar_bending', 'lumbar_rotation']
@@ -2882,9 +2883,19 @@ def run_tracking(baseDir, dataDir, settings, os_folder_name='OpenSimData', case=
         GRF_BW_all_opt = GRF_all_opt['all'] / BW * 100
         GRF_BW_all_opt_filt = GRF_all_opt_filt / BW * 100
         GRM_BWht_all_opt = GRM_all_opt['all'] / BW_ht * 100
-        torques_BWht_opt = torques_opt / BW_ht * 100
+        torques_BWht_opt = np.zeros(torques_opt.shape)
+        for c_j, c_j_name in enumerate(joints):
+            if c_j_name in groundPelvisJointsForces:
+                torques_BWht_opt[c_j, :] = torques_opt[c_j, :] / BW * 100
+            else:
+                torques_BWht_opt[c_j, :] = torques_opt[c_j, :] / BW_ht * 100        
         if torques_ref_available:
-            torques_BWht_ref = torques_ref / BW_ht * 100
+            torques_BWht_ref = np.zeros(torques_ref.shape)
+            for c_j, c_j_name in enumerate(joints):
+                if c_j_name in groundPelvisJointsForces:
+                    torques_BWht_ref[c_j, :] = torques_ref[c_j, :] / BW * 100
+                else:
+                    torques_BWht_ref[c_j, :] = torques_ref[c_j, :] / BW_ht * 100
         if GRF_ref_available:
             GRF_BW_ref = GRF_ref / BW * 100
             GRM_BWht_ref = GRM_ref / BW_ht * 100
@@ -2917,11 +2928,17 @@ def run_tracking(baseDir, dataDir, settings, os_folder_name='OpenSimData', case=
                                            'optimaltrajectories.npy')): 
                 optimaltrajectories = {}
         else:  
+            # TEMP
+            # os.rename(os.path.join(pathResults, 'optimaltrajectories.npy'),
+            #             os.path.join(pathResults, 'optimaltrajectories_bugPelvisResNorm.npy'))
+            # optimaltrajectories = {}
             optimaltrajectories = np.load(
                     os.path.join(pathResults, 'optimaltrajectories.npy'),
                     allow_pickle=True)   
             optimaltrajectories = optimaltrajectories.item()
         optimaltrajectories[case] = {
+            'mass_kg': settings['mass_kg'],
+            'height_m': settings['height_m'],
             'coordinate_values_toTrack': refData_offset_nsc,
             'coordinate_values': Qs_opt_nsc,
             'coordinate_speeds_toTrack': refData_Qds_nsc,
