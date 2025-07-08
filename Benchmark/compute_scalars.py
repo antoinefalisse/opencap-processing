@@ -180,8 +180,8 @@ if fieldStudy:
 else:
     subjects = list(trials.keys())
 
-    mocap_simulation = True
-    v1_simulation = False
+    mocap_simulation = False
+    v1_simulation = True
     if mocap_simulation:
         os_folder_name = 'Mocap'
     elif v1_simulation:
@@ -339,7 +339,7 @@ for iSub,subject in enumerate(subjects):
         c_type = 'video'
         for case in cases:
             for variable_type in results:
-                if variable_type == 'GRFs_BW_peaks' or variable_type == 'GRFs_peaks':
+                if variable_type == 'GRFs_BW_peaks' or variable_type == 'GRFs_peaks' or variable_type == 'GRFs_BW_peaks_unit':
                     continue
                 if 'toTrack' in results_sel[c_type][variable_type][case]:
                     results_sel[c_type][variable_type][case]['toTrack'] = (results_sel[c_type][variable_type][case]['toTrack'][:,selInds[case]])              
@@ -351,7 +351,7 @@ for iSub,subject in enumerate(subjects):
         results_int['mocap'] = {}
         results_int['video'] = {}
         for variable_type in results:
-            if variable_type == 'GRFs_BW_peaks' or variable_type == 'GRFs_peaks':
+            if variable_type == 'GRFs_BW_peaks' or variable_type == 'GRFs_peaks' or variable_type == 'GRFs_BW_peaks_unit':
                 continue
             results_int['mocap'][variable_type] = {}
             results_int['video'][variable_type] = {}
@@ -390,7 +390,7 @@ for iSub,subject in enumerate(subjects):
         results_con[motion_type]['video'] = {}
         
         for variable_type in results:
-            if variable_type == 'GRFs_BW_peaks' or variable_type == 'GRFs_peaks':
+            if variable_type == 'GRFs_BW_peaks' or variable_type == 'GRFs_peaks' or variable_type == 'GRFs_BW_peaks_unit':
                 continue
             results_con[motion_type]['mocap'][variable_type] = {}
             results_con[motion_type]['video'][variable_type] = {}
@@ -446,7 +446,7 @@ for iSub,subject in enumerate(subjects):
         
         # %% Mean and std
         for variable_type in results:
-            if variable_type == 'GRFs_BW_peaks' or variable_type == 'GRFs_peaks':
+            if variable_type == 'GRFs_BW_peaks' or variable_type == 'GRFs_peaks' or variable_type == 'GRFs_BW_peaks_unit':
                 continue
             if results_con[motion_type]['mocap'][variable_type]['ref'].size != 0:
                 results_con[motion_type]['mocap'][variable_type]['ref_mean'] = np.mean(results_con[motion_type]['mocap'][variable_type]['ref'], axis=2)
@@ -1097,7 +1097,7 @@ for iSub,subject in enumerate(subjects):
         #%% Compute RMSEs, MAEs, MAE as % range
         nCases = len(cases)
         for variable_type in results:
-            if variable_type == 'GRFs_BW_peaks' or variable_type == 'GRFs_peaks':
+            if variable_type == 'GRFs_BW_peaks' or variable_type == 'GRFs_peaks' or variable_type == 'GRFs_BW_peaks_unit':
                 continue
             nHeaders = len(results_con[motion_type]['video'][variable_type]['headers']) 
             results_con[motion_type]['video'][variable_type]['rmse'] = np.zeros((nHeaders,1,nCases))

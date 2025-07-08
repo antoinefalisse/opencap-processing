@@ -48,8 +48,8 @@ subjects = ['subject' + str(sub) for sub in range(2,12)]
 # Exclude subject3 and subject6
 # subjects = [sub for sub in subjects if sub not in ['subject4']]
 
-mocap_simulation = True
-v1_simulation = False
+mocap_simulation = False
+v1_simulation = True
 if mocap_simulation:
     os_folder_name = 'Mocap'
 elif v1_simulation:
@@ -132,11 +132,11 @@ while loadResultsNow:
             for motType in motTypes:
                 if 'walking' in motType:
                     # if not subject in subjects_noMCF:
-                    varNames = ['positions', 'velocities', 'accelerations', 'torques', 'torques_BWht', 'GRFs', 'GRFs_BW', 'GRMs', 'GRMs_BWht', 'activations', 'KAMs', 'KAMs_BWht', 'MCFs', 'MCFs_BW']
+                    varNames = ['positions', 'velocities', 'accelerations', 'torques', 'torques_BWht', 'torques_BWht_unit', 'GRFs', 'GRFs_BW', 'GRFs_BW_unit', 'GRMs', 'GRMs_BWht', 'activations', 'KAMs', 'KAMs_BWht', 'MCFs', 'MCFs_BW']
                 elif 'DJ' in motType:
-                    varNames = ['positions', 'velocities', 'accelerations', 'torques', 'torques_BWht', 'GRFs', 'GRFs_BW', 'GRMs', 'GRMs_BWht', 'activations', 'KAMs', 'KAMs_BWht']
+                    varNames = ['positions', 'velocities', 'accelerations', 'torques', 'torques_BWht', 'torques_BWht_unit', 'GRFs', 'GRFs_BW', 'GRFs_BW_unit', 'GRMs', 'GRMs_BWht', 'activations', 'KAMs', 'KAMs_BWht']
                 else:
-                    varNames = ['positions', 'velocities', 'accelerations', 'torques', 'torques_BWht', 'GRFs', 'GRFs_BW', 'GRMs', 'GRMs_BWht', 'activations']
+                    varNames = ['positions', 'velocities', 'accelerations', 'torques', 'torques_BWht', 'torques_BWht_unit', 'GRFs', 'GRFs_BW', 'GRFs_BW_unit', 'GRMs', 'GRMs_BWht', 'activations']
                 results_all[motType] = {}
                 for varName in varNames:
                     results_all[motType][varName] = {}
@@ -170,11 +170,11 @@ while loadResultsNow:
         #%% Concatenate across subjects
         for motType in motTypes:
             if 'walking' in motType:
-                varNames = ['positions', 'velocities', 'accelerations', 'torques', 'torques_BWht', 'GRFs', 'GRFs_BW', 'GRMs', 'GRMs_BWht', 'activations', 'KAMs', 'KAMs_BWht', 'MCFs', 'MCFs_BW']
+                varNames = ['positions', 'velocities', 'accelerations', 'torques', 'torques_BWht', 'torques_BWht_unit', 'GRFs', 'GRFs_BW', 'GRFs_BW_unit', 'GRMs', 'GRMs_BWht', 'activations', 'KAMs', 'KAMs_BWht', 'MCFs', 'MCFs_BW']
             elif 'DJ' in motType:
-                varNames = ['positions', 'velocities', 'accelerations', 'torques', 'torques_BWht', 'GRFs', 'GRFs_BW', 'GRMs', 'GRMs_BWht', 'activations', 'KAMs', 'KAMs_BWht']
+                varNames = ['positions', 'velocities', 'accelerations', 'torques', 'torques_BWht', 'torques_BWht_unit', 'GRFs', 'GRFs_BW', 'GRFs_BW_unit', 'GRMs', 'GRMs_BWht', 'activations', 'KAMs', 'KAMs_BWht']
             else:
-                varNames = ['positions', 'velocities', 'accelerations', 'torques', 'torques_BWht', 'GRFs', 'GRFs_BW', 'GRMs', 'GRMs_BWht', 'activations']
+                varNames = ['positions', 'velocities', 'accelerations', 'torques', 'torques_BWht', 'torques_BWht_unit', 'GRFs', 'GRFs_BW', 'GRFs_BW_unit', 'GRMs', 'GRMs_BWht', 'activations']
             for varName in varNames:
                 # Curves
                 results_all[motType][varName]['ref'][:,:,iSub] = results[
@@ -598,6 +598,29 @@ for act in acts:
              results_all[act]['torques_BWht_limbAveraged'][met][i+nMP+1] = results_all[
                  act]['torques_BWht'][met][head.index(sHN)]
              results_all[act]['torques_BWht_limbAveraged']['headers'][i+nMP+1] = sHN
+
+for act in acts:
+    results_all[act]['torques_BWht_unit_limbAveraged'] = {}
+    head = results_all[act]['torques_BWht_unit']['headers']
+    biHeadNames = [dof[:-2] for dof in head if dof[-2:] == '_l' and not any([eBD in dof for eBD in excludedBilateralDofs])]
+    matchingPairs = [[head.index(bN+'_r'),head.index(bN+'_l')] for bN in biHeadNames]
+    singHeadNames = [dof for dof in head[1:] if dof[-2:] not in ['_r','_l']]
+    singHeadNames = [n for n in singHeadNames if 'lumbar' in n]
+    nMP = len(matchingPairs)
+    
+    for met in metrics:
+        results_all[act]['torques_BWht_unit_limbAveraged'][met]= np.zeros(((len(singHeadNames)+len(biHeadNames)+1),1))
+        results_all[act]['torques_BWht_unit_limbAveraged']['headers'] = np.zeros((len(singHeadNames)+len(biHeadNames)+1)).tolist()
+        results_all[act]['torques_BWht_unit_limbAveraged']['headers'][0] = 'time'
+        for i,mP in enumerate(matchingPairs):
+            results_all[act]['torques_BWht_unit_limbAveraged'][met][i+1] = np.mean(
+                [results_all[act]['torques_BWht_unit'][met][mP[0]],
+                 results_all[act]['torques_BWht_unit'][met][mP[1]]])
+            results_all[act]['torques_BWht_unit_limbAveraged']['headers'][i+1] = biHeadNames[i]
+        for i,sHN in enumerate(singHeadNames):
+             results_all[act]['torques_BWht_unit_limbAveraged'][met][i+nMP+1] = results_all[
+                 act]['torques_BWht_unit'][met][head.index(sHN)]
+             results_all[act]['torques_BWht_unit_limbAveraged']['headers'][i+nMP+1] = sHN
              
 # %% Average GRF errors between limbs            
 acts = results_all.keys()
@@ -623,9 +646,30 @@ for act in acts:
                  results_all[act]['GRFs_BW'][met][mP[1]]])
             results_all[act]['GRFs_BW_limbAveraged']['headers'][i+1] = biHeadReplacedNames[biHeadNames[i]]
 
+for act in acts:
+    results_all[act]['GRFs_BW_unit_limbAveraged'] = {}
+    head = results_all[act]['GRFs_BW_unit']['headers']
+    biHeadNames = [dof for dof in head if 'left' in dof]
+    matchingPairs = [[head.index(bN),head.index(np.char.replace(bN, 'left', 'right', count = 1))] for bN in biHeadNames]
+    nMP = len(matchingPairs)
+    biHeadReplacedNames = {'ground_force_left_vy':'GRF_vertical',
+                           'ground_force_left_vx':'GRF_anterior',
+                           'ground_force_left_vz':'GRF_medial'}
+    
+    
+    for met in metrics:
+        results_all[act]['GRFs_BW_unit_limbAveraged'][met]= np.zeros(((len(biHeadNames)+1),1))
+        results_all[act]['GRFs_BW_unit_limbAveraged']['headers'] = np.zeros((len(biHeadNames)+1)).tolist()
+        results_all[act]['GRFs_BW_unit_limbAveraged']['headers'][0] = 'time'
+        for i,mP in enumerate(matchingPairs):
+            results_all[act]['GRFs_BW_unit_limbAveraged'][met][i+1] = np.mean(
+                [results_all[act]['GRFs_BW_unit'][met][mP[0]],
+                 results_all[act]['GRFs_BW_unit'][met][mP[1]]])
+            results_all[act]['GRFs_BW_unit_limbAveraged']['headers'][i+1] = biHeadReplacedNames[biHeadNames[i]]
+
 # %% Save errors
 if saveErrors:
-    dynamicQuants = ['torques_BWht','GRFs_BW','positions','torques_BWht_limbAveraged','GRFs_BW_limbAveraged']
+    dynamicQuants = ['torques_BWht','GRFs_BW','positions','torques_BWht_limbAveraged','GRFs_BW_limbAveraged', 'torques_BWht_unit','GRFs_BW_unit','torques_BWht_unit_limbAveraged','GRFs_BW_unit_limbAveraged']
     
     # acts = ['DJ','walking','squats','STS']
     acts = ['walking','STS','squats', 'DJ']
@@ -661,8 +705,7 @@ if saveErrors:
             
         with pd.ExcelWriter(fileName) as writer:  
             for df,met in zip(dfList,metrics):
-                df.to_excel(writer, sheet_name=met)
-            
+                df.to_excel(writer, sheet_name=met)            
 
 # %% Aggregated figures
 SMALL_SIZE = 8

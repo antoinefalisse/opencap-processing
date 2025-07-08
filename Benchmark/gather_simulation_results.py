@@ -142,8 +142,8 @@ trials = {
         },
     }
 
-mocap_simulation = True
-v1_simulation = False
+mocap_simulation = False
+v1_simulation = True
 if mocap_simulation:
     os_folder_name = 'Mocap'
 elif v1_simulation:
@@ -168,9 +168,9 @@ if fieldStudy:
 else:
     subjects = list(trials.keys())
     
-    motion_style = 'walking'
-    motion_types = ['walking', 'walkingTS']
-    settings_case = '1'
+    # motion_style = 'walking'
+    # motion_types = ['walking', 'walkingTS']
+    # settings_case = '1'
     
     # motion_style = 'STS'
     # motion_types = ['STS','STSweakLegs']
@@ -180,9 +180,9 @@ else:
     # motion_types = ['squats','squatsAsym']
     # settings_case = '18'
 
-    # motion_style = 'DJ'
-    # motion_types = ['DJ','DJAsym']
-    # settings_case = '14'
+    motion_style = 'DJ'
+    motion_types = ['DJ','DJAsym']
+    settings_case = '14'
 
     # motion_types = ['DJ', 'DJAsym', 'walking', 'walkingTS', 'squats','squatsAsym','STS','STSweakLegs']
     
@@ -647,14 +647,17 @@ for iSub, subject in enumerate(subjects):
         fig.align_ylabels()
         
         # %% Joint torques BWht
-        torques_BWht = {}
+        torques_BWht, torques_BWht_unit = {}, {}
         for case in cases:
-            torques_BWht[case] = {}    
+            torques_BWht[case], torques_BWht_unit[case] = {}, {}
             # trial = list(optimaltrajectories[case]['time'].keys())[0]
             time = optimaltrajectories[case]['time'][0,:-1].T    
             torques_BWht[case]['ref'] = np.zeros((NJoints+1, time.shape[0]))
             torques_BWht[case]['sim'] = np.zeros((NJoints+1, time.shape[0]))
-            torques_BWht[case]['headers'] = ['time']  
+            torques_BWht[case]['headers'] = ['time']
+            torques_BWht_unit[case]['ref'] = np.zeros((NJoints+1, time.shape[0]))
+            torques_BWht_unit[case]['sim'] = np.zeros((NJoints+1, time.shape[0]))
+            torques_BWht_unit[case]['headers'] = ['time']  
         
         fig, axs = plt.subplots(int(ny), int(ny), sharex=True)
         # for trial in trials:
@@ -669,6 +672,8 @@ for iSub, subject in enumerate(subjects):
                     
                     torques_BWht[case]['ref'][0:1, :] = np.reshape(time, (1, time.shape[0]))
                     torques_BWht[case]['sim'][0:1, :] = np.reshape(time, (1, time.shape[0]))
+                    torques_BWht_unit[case]['ref'][0:1, :] = np.reshape(time, (1, time.shape[0]))
+                    torques_BWht_unit[case]['sim'][0:1, :] = np.reshape(time, (1, time.shape[0]))
                     
                     if invert_left_right:
                         if joints[i] in jointsOpposite:
@@ -709,9 +714,12 @@ for iSub, subject in enumerate(subjects):
                         ax.plot(time, c_curve_sim, c=next(color), label='video-based DC ' + case)
                     if 'torques_BWht_ref' in optimaltrajectories[case]:
                         torques_BWht[case]['ref'][i+1:i+2, :] = c_curve_ref.T
+                        torques_BWht_unit[case]['ref'][i+1:i+2, :] = c_curve_ref.T / 100
                     torques_BWht[case]['sim'][i+1:i+2, :] = c_curve_sim.T
+                    torques_BWht_unit[case]['sim'][i+1:i+2, :] = c_curve_sim.T / 100
                     torques_BWht[case]['headers'].append(joints[i])
-                    
+                    torques_BWht_unit[case]['headers'].append(joints[i])
+
                 ax.set_title(joints[i])
                 handles, labels = ax.get_legend_handles_labels()
                 plt.legend(handles, labels, loc='upper right')
@@ -809,16 +817,19 @@ for iSub, subject in enumerate(subjects):
         fig.align_ylabels()
         
         # %% GRFs normalized
-        GRFs_BW = {}
-        GRFs_BW_peaks = {}
+        GRFs_BW, GRFs_BW_unit = {}, {}
+        GRFs_BW_peaks, GRFs_BW_peaks_unit = {}, {}
         for case in cases:
-            GRFs_BW[case] = {}
-            GRFs_BW_peaks[case] = {}
+            GRFs_BW[case], GRFs_BW_unit[case] = {}, {}
+            GRFs_BW_peaks[case], GRFs_BW_peaks_unit[case] = {}, {}
             # trial = list(optimaltrajectories[case]['time'].keys())[0]
             time = optimaltrajectories[case]['time'][0,:-1].T    
             GRFs_BW[case]['ref'] = np.zeros((NGRF+1, time.shape[0]))
             GRFs_BW[case]['sim'] = np.zeros((NGRF+1, time.shape[0]))
-            GRFs_BW[case]['headers'] = ['time'] 
+            GRFs_BW[case]['headers'] = ['time']
+            GRFs_BW_unit[case]['ref'] = np.zeros((NGRF+1, time.shape[0]))
+            GRFs_BW_unit[case]['sim'] = np.zeros((NGRF+1, time.shape[0]))
+            GRFs_BW_unit[case]['headers'] = ['time'] 
         
         GRF_labels = optimaltrajectories[cases[0]]['GRF_labels']
         NGRF = len(GRF_labels)
@@ -836,6 +847,8 @@ for iSub, subject in enumerate(subjects):
                     
                     GRFs_BW[case]['ref'][0:1, :] = np.reshape(time, (1, time.shape[0]))
                     GRFs_BW[case]['sim'][0:1, :] = np.reshape(time, (1, time.shape[0]))
+                    GRFs_BW_unit[case]['ref'][0:1, :] = np.reshape(time, (1, time.shape[0]))
+                    GRFs_BW_unit[case]['sim'][0:1, :] = np.reshape(time, (1, time.shape[0]))
                     
                     if invert_left_right:
                         if GRF_labels[i] in grfOpposite or GRF_labels[i] in grfInverse:
@@ -883,11 +896,15 @@ for iSub, subject in enumerate(subjects):
                         
                     if 'GRF_BW_ref' in optimaltrajectories[case]:
                         GRFs_BW[case]['ref'][i+1:i+2, :] = c_curve_ref.T
+                        GRFs_BW_unit[case]['ref'][i+1:i+2, :] = c_curve_ref.T / 100
                     GRFs_BW[case]['sim'][i+1:i+2, :] = c_curve_sim.T
+                    GRFs_BW_unit[case]['sim'][i+1:i+2, :] = c_curve_sim.T / 100
                     GRFs_BW[case]['headers'].append(GRF_labels[i])
+                    GRFs_BW_unit[case]['headers'].append(GRF_labels[i])
                     
                     if 'GRF_BW_ref_peaks' in optimaltrajectories[case]:
-                        GRFs_BW_peaks[case]['ref'] = c_peak_ref                        
+                        GRFs_BW_peaks[case]['ref'] = c_peak_ref
+                        GRFs_BW_peaks_unit[case]['ref'] = c_peak_ref / 100              
                     
                 ax.set_title(GRF_labels[i])
                 handles, labels = ax.get_legend_handles_labels()
@@ -966,14 +983,17 @@ for iSub, subject in enumerate(subjects):
         fig.align_ylabels()
         
         # %% GRMs_BWht
-        GRMs_BWht = {}
+        GRMs_BWht, GRMs_BWht_unit = {}, {}
         for case in cases:
-            GRMs_BWht[case] = {}    
+            GRMs_BWht[case], GRMs_BWht_unit[case] = {}, {}    
             # trial = list(optimaltrajectories[case]['time'].keys())[0]
             time = optimaltrajectories[case]['time'][0,:-1].T    
             GRMs_BWht[case]['ref'] = np.zeros((NGRF+1, time.shape[0]))
             GRMs_BWht[case]['sim'] = np.zeros((NGRF+1, time.shape[0]))
-            GRMs_BWht[case]['headers'] = ['time'] 
+            GRMs_BWht[case]['headers'] = ['time']
+            GRMs_BWht_unit[case]['ref'] = np.zeros((NGRF+1, time.shape[0]))
+            GRMs_BWht_unit[case]['sim'] = np.zeros((NGRF+1, time.shape[0]))
+            GRMs_BWht_unit[case]['headers'] = ['time']
         
         GRF_labels = optimaltrajectories[cases[0]]['GRF_labels']
         NGRF = len(GRF_labels)
@@ -991,6 +1011,8 @@ for iSub, subject in enumerate(subjects):
                     
                     GRMs_BWht[case]['ref'][0:1, :] = np.reshape(time, (1, time.shape[0]))
                     GRMs_BWht[case]['sim'][0:1, :] = np.reshape(time, (1, time.shape[0]))
+                    GRMs_BWht_unit[case]['ref'][0:1, :] = np.reshape(time, (1, time.shape[0]))
+                    GRMs_BWht_unit[case]['sim'][0:1, :] = np.reshape(time, (1, time.shape[0]))
                     
                     if invert_left_right:
                         if GRF_labels[i] in grmInverse:
@@ -1022,10 +1044,13 @@ for iSub, subject in enumerate(subjects):
                             c_curve_ref = optimaltrajectories[case]['GRM_BWht_ref'][i:i+1,:].T
                             ax.plot(time, c_curve_ref, c='black', label='measured GRM ' + case)
                             GRMs_BWht[case]['ref'][i+1:i+2, :] = c_curve_ref.T
+                            GRMs_BWht_unit[case]['ref'][i+1:i+2, :] = c_curve_ref.T / 100
                         c_curve_sim = optimaltrajectories[case]['GRM_BWht'][i:i+1,:].T
                         ax.plot(time, c_curve_sim, c=next(color), label='video-based DC ' + case)                    
                     GRMs_BWht[case]['sim'][i+1:i+2, :] = c_curve_sim.T
+                    GRMs_BWht_unit[case]['sim'][i+1:i+2, :] = c_curve_sim.T / 100
                     GRMs_BWht[case]['headers'].append(GRF_labels[i])
+                    GRMs_BWht_unit[case]['headers'].append(GRF_labels[i])
                 ax.set_title(GRF_labels[i])
                 handles, labels = ax.get_legend_handles_labels()
                 plt.legend(handles, labels, loc='upper right')
@@ -1192,15 +1217,18 @@ for iSub, subject in enumerate(subjects):
         
         # %% KAM
         if not fieldStudy and ('walking' in motion_type or 'DJ' in motion_type):
-            KAMs_BWht = {}
+            KAMs_BWht, KAMs_BWht_unit = {}, {}
             NKams = len(JR_labels)
             for case in cases:
-                KAMs_BWht[case] = {}    
+                KAMs_BWht[case], KAMs_BWht_unit[case] = {}, {}
                 # trial = list(optimaltrajectories[case]['time'].keys())[0]
                 time = optimaltrajectories[case]['time'][0,:-1].T    
                 KAMs_BWht[case]['ref'] = np.zeros((NKams+1, time.shape[0]))
                 KAMs_BWht[case]['sim'] = np.zeros((NKams+1, time.shape[0]))
-                KAMs_BWht[case]['headers'] = ['time'] 
+                KAMs_BWht[case]['headers'] = ['time']
+                KAMs_BWht_unit[case]['ref'] = np.zeros((NKams+1, time.shape[0]))
+                KAMs_BWht_unit[case]['sim'] = np.zeros((NKams+1, time.shape[0]))
+                KAMs_BWht_unit[case]['headers'] = ['time']
             
             # GRF_labels = optimaltrajectories[cases[0]]['GRF_labels']
             
@@ -1218,6 +1246,8 @@ for iSub, subject in enumerate(subjects):
                         
                         KAMs_BWht[case]['ref'][0:1, :] = np.reshape(time, (1, time.shape[0]))
                         KAMs_BWht[case]['sim'][0:1, :] = np.reshape(time, (1, time.shape[0]))
+                        KAMs_BWht_unit[case]['ref'][0:1, :] = np.reshape(time, (1, time.shape[0]))
+                        KAMs_BWht_unit[case]['sim'][0:1, :] = np.reshape(time, (1, time.shape[0]))
                         
                         # invert_left_right = cases_toPlot[case]['invert_left_right']
                         if invert_left_right:
@@ -1263,8 +1293,11 @@ for iSub, subject in enumerate(subjects):
                             
                         if 'KAM_BWht_ref' in optimaltrajectories[case]:
                             KAMs_BWht[case]['ref'][i+1:i+2, :] = c_curve_ref.T
+                            KAMs_BWht_unit[case]['ref'][i+1:i+2, :] = c_curve_ref.T / 100
                         KAMs_BWht[case]['sim'][i+1:i+2, :] = c_curve_sim.T
+                        KAMs_BWht_unit[case]['sim'][i+1:i+2, :] = c_curve_sim.T / 100
                         KAMs_BWht[case]['headers'].append(JR_labels[i])
+                        KAMs_BWht_unit[case]['headers'].append(JR_labels[i])
                         
                     ax.set_xlabel('Time (s)')
                     ax.set_title(JR_labels[i])
@@ -1360,15 +1393,18 @@ for iSub, subject in enumerate(subjects):
         
         # %% MCF
         if not fieldStudy and 'walking' in motion_type:
-            MCFs_BW = {}
+            MCFs_BW, MCFs_BW_unit = {}, {}
             NMCFs = len(MCF_labels)
             for case in cases:
-                MCFs_BW[case] = {}    
+                MCFs_BW[case], MCFs_BW_unit[case] = {}, {}  
                 # trial = list(optimaltrajectories[case]['time'].keys())[0]
                 time = optimaltrajectories[case]['time'][0,:-1].T    
                 MCFs_BW[case]['ref'] = np.zeros((NMCFs+1, time.shape[0]))
                 MCFs_BW[case]['sim'] = np.zeros((NMCFs+1, time.shape[0]))
-                MCFs_BW[case]['headers'] = ['time'] 
+                MCFs_BW[case]['headers'] = ['time']
+                MCFs_BW_unit[case]['ref'] = np.zeros((NMCFs+1, time.shape[0]))
+                MCFs_BW_unit[case]['sim'] = np.zeros((NMCFs+1, time.shape[0]))
+                MCFs_BW_unit[case]['headers'] = ['time'] 
             
             # GRF_labels = optimaltrajectories[cases[0]]['GRF_labels']
             
@@ -1386,6 +1422,8 @@ for iSub, subject in enumerate(subjects):
                         
                         MCFs_BW[case]['ref'][0:1, :] = np.reshape(time, (1, time.shape[0]))
                         MCFs_BW[case]['sim'][0:1, :] = np.reshape(time, (1, time.shape[0]))
+                        MCFs_BW_unit[case]['ref'][0:1, :] = np.reshape(time, (1, time.shape[0]))
+                        MCFs_BW_unit[case]['sim'][0:1, :] = np.reshape(time, (1, time.shape[0]))
                         
                         # invert_left_right = cases_toPlot[case]['invert_left_right']
                         if invert_left_right:
@@ -1431,8 +1469,11 @@ for iSub, subject in enumerate(subjects):
                             
                         if 'MCF_BW_ref' in optimaltrajectories[case]:
                             MCFs_BW[case]['ref'][i+1:i+2, :] = c_curve_ref.T
+                            MCFs_BW_unit[case]['ref'][i+1:i+2, :] = c_curve_ref.T / 100
                         MCFs_BW[case]['sim'][i+1:i+2, :] = c_curve_sim.T
+                        MCFs_BW_unit[case]['sim'][i+1:i+2, :] = c_curve_sim.T / 100
                         MCFs_BW[case]['headers'].append(MCF_labels[i])
+                        MCFs_BW_unit[case]['headers'].append(MCF_labels[i])
                         
                     ax.set_xlabel('Time (s)')
                     ax.set_title(MCF_labels[i])
@@ -1461,19 +1502,25 @@ for iSub, subject in enumerate(subjects):
         results['accelerations'] = accelerations
         results['torques'] = torques
         results['torques_BWht'] = torques_BWht
+        results['torques_BWht_unit'] = torques_BWht_unit
         results['GRFs'] = GRFs
         results['GRFs_peaks'] = GRFs_peaks
         results['GRFs_BW'] = GRFs_BW
         results['GRFs_BW_peaks'] = GRFs_BW_peaks
+        results['GRFs_BW_unit'] = GRFs_BW_unit
+        results['GRFs_BW_peaks_unit'] = GRFs_BW_peaks_unit
         results['GRMs'] = GRMs
         results['GRMs_BWht'] = GRMs_BWht
+        results['GRMs_BWht_unit'] = GRMs_BWht_unit
         results['activations'] = activations
         if not fieldStudy and ('walking' in motion_type or 'DJ' in motion_type):
             results['KAMs'] = KAMs
             results['KAMs_BWht'] = KAMs_BWht
+            results['KAMs_BWht_unit'] = KAMs_BWht_unit
             if 'walking' in motion_type:
                 results['MCFs'] = MCFs
                 results['MCFs_BW'] = MCFs_BW
+                results['MCFs_BW_unit'] = MCFs_BW_unit
         
         # save results
         if saveResults:
