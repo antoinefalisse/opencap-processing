@@ -1046,7 +1046,7 @@ class gait_analysis(kinematics):
                        
         # Detect peaks, check if they're in the right order, if not reduce prominence.
         # the peaks can be less prominent with pathological or slower gait patterns
-        prominences = [0.3, 0.25, 0.2]
+        prominences = [0.3, 0.25, 0.2, 0.15, 0.1, 0.05]
         
         for i,prom in enumerate(prominences):
             rHS,lHS,rTO,lTO = detect_gait_peaks(r_calc_rel_x=r_calc_rel_x,
