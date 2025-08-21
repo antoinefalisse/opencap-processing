@@ -12,11 +12,11 @@ if ACTIVITY_ANALYSES not in sys.path:
 from gait_analysis import gait_analysis
 from utils import get_session_json, get_trial_id, download_trial
 from utilsPlotting import plot_dataframe_with_shading
-from umohada_data import get_data
+from unomaha_data import get_data
 from datetime import datetime
 
 # %% Paths.
-data_folder = os.path.join(PROJECT_ROOT, 'Data', 'Umohada')
+data_folder = os.path.join(PROJECT_ROOT, 'Data', 'Unomaha')
 os.makedirs(data_folder, exist_ok=True)
 
 # %% Data analysis
@@ -51,8 +51,8 @@ for session_id in data:
     trial_info = {}
     count = 0
     for trial in session_json['trials']:
-        if count >= 5:
-            break
+        # if count >= 1:
+        #     break
         # Extract trial information.
         trial_name = trial['name']
         if trial_name == 'neutral' or trial_name == 'calibration':
@@ -101,6 +101,7 @@ for session_id in data:
         headers = ['Session ID', 'Session Name', 'Trial ID', 'Trial Name', 'Date', 'Time', 'Side', '# Gait Cycles']
         for scalar_name in sorted(list(scalar_names)):
             headers.append(scalar_name)
+        headers.extend(['Ipsilateral Time Heel Strike Start', 'Ipsilateral Time Toe Off', 'Ipsilateral Time Heel Strike End', 'Contralateral Time Toe Off', 'Contralateral Time Heel Strike'])
         writer.writerow(headers)
 
         for trial_id in list(gait.keys()):
@@ -118,4 +119,17 @@ for session_id in data:
                             row.append(gait_scalars[trial_id][leg][scalar_name]['value'][leg])
                         else:
                             row.append(gait_scalars[trial_id][leg][scalar_name]['value'])
-                writer.writerow(row)
+                if n_cycles == 'NA':
+                    writer.writerow(row)
+                else:
+                    for n_cycle in range(n_cycles):
+                        ipsi = gait_events[trial_id][leg]['ipsilateralTime'][n_cycles-n_cycle-1, :].tolist()
+                        contra = gait_events[trial_id][leg]['contralateralTime'][n_cycles-n_cycle-1, :].tolist()
+                        gait_event_info = ipsi + contra                        
+                        if n_cycle == 0:                            
+                            row.extend(gait_event_info)
+                            writer.writerow(row)
+                        else:
+                            new_row = [''] * (len(row))
+                            new_row[-len(gait_event_info):] = gait_event_info 
+                            writer.writerow(new_row)
